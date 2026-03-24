@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivian's Signal — AI Intelligence for Founders</title>
+<meta name="description" content="The AI intelligence I actually read — curated for founders who don't have time to scroll, but can't afford to miss what matters.">
+<meta property="og:title" content="Vivian's Signal">
+<meta property="og:description" content="The AI intelligence I actually read — curated for founders.">
+<meta property="og:image" content="https://vivianai.cn/vivian-portrait-og.jpg">
+<meta property="og:url" content="https://vivianai.cn/signal">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #6e6e73;
+    --gray-2: #86868b;
+    --gray-3: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --blue: #0071e3;
+    --white: #fff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--white);
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 22px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 12px;
+    color: var(--gray-1);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--black); }
+  .nav-links a.active { color: var(--black); font-weight: 700; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 130px 22px 60px;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -3px;
+    margin-bottom: 20px;
+    color: var(--black);
+  }
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, #0071e3 0%, #34c759 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--gray-1);
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 12px;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--black);
+    letter-spacing: -1px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--gray-2);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .scroll-hint {
+    margin-top: 36px;
+    font-size: 20px;
+    color: var(--gray-3);
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar {
+    position: sticky;
+    top: 48px;
+    z-index: 90;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 12px 22px;
+  }
+  .filter-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .filter-inner::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--gray-3);
+    background: var(--white);
+    color: var(--gray-1);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover {
+    border-color: var(--gray-2);
+    color: var(--black);
+  }
+  .filter-btn.active {
+    background: var(--black);
+    color: var(--white);
+    border-color: var(--black);
+  }
+  .filter-count {
+    font-size: 11px;
+    color: var(--gray-2);
+    margin-left: auto;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+
+  /* ===== CARD GRID ===== */
+  .grid-section {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 22px 80px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--gray-bg);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--blue);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  }
+  .card:hover::before {
+    opacity: 1;
+  }
+  .card-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+  .card-tag.strategy { color: #0071e3; }
+  .card-tag.product { color: #af52de; }
+  .card-tag.founders { color: #ff9500; }
+  .card-tag.china-ai { color: #ff3b30; }
+  .card-tag.frontier { color: #34c759; }
+  .card-tag.tools { color: #5856d6; }
+
+  .card-summary {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--black);
+    margin-bottom: 12px;
+    flex-grow: 1;
+  }
+  .card-title-original {
+    font-size: 13px;
+    color: var(--gray-2);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--gray-2);
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  .card-source {
+    font-weight: 600;
+    color: var(--gray-1);
+  }
+  .card-arrow {
+    font-size: 16px;
+    color: var(--gray-3);
+    transition: all 0.2s;
+  }
+  .card:hover .card-arrow {
+    color: var(--blue);
+    transform: translateX(3px);
+  }
+
+  /* ===== FEATURED CARD ===== */
+  .card.featured {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d30 100%);
+    padding: 40px;
+    flex-direction: row;
+    gap: 32px;
+    align-items: center;
+  }
+  .card.featured .card-tag {
+    color: rgba(255,255,255,0.5);
+  }
+  .card.featured .card-summary {
+    color: var(--white);
+    font-size: 22px;
+  }
+  .card.featured .card-title-original {
+    color: rgba(255,255,255,0.4);
+  }
+  .card.featured .card-meta {
+    border-top-color: rgba(255,255,255,0.1);
+  }
+  .card.featured .card-source {
+    color: rgba(255,255,255,0.6);
+  }
+  .card.featured .card-date {
+    color: rgba(255,255,255,0.3);
+  }
+  .card.featured .card-arrow {
+    color: rgba(255,255,255,0.3);
+  }
+  .card.featured:hover .card-arrow {
+    color: var(--blue);
+  }
+  .card.featured::before {
+    display: none;
+  }
+  .featured-content {
+    flex: 1;
+  }
+  .featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--blue);
+    background: rgba(0,113,227,0.12);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 48px 22px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .footer-text {
+    font-size: 13px;
+    color: var(--gray-2);
+    line-height: 1.8;
+  }
+  .footer-text a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+  .footer-text a:hover { text-decoration: underline; }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.6s ease forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(1) { animation-delay: 0s; }
+  .card:nth-child(2) { animation-delay: 0.05s; }
+  .card:nth-child(3) { animation-delay: 0.1s; }
+  .card:nth-child(4) { animation-delay: 0.15s; }
+  .card:nth-child(5) { animation-delay: 0.2s; }
+  .card:nth-child(6) { animation-delay: 0.25s; }
+  .card:nth-child(7) { animation-delay: 0.3s; }
+  .card:nth-child(8) { animation-delay: 0.35s; }
+  .card:nth-child(9) { animation-delay: 0.4s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 734px) {
+    .hero h1 {
+      font-size: 40px;
+      letter-spacing: -2px;
+    }
+    .hero-sub {
+      font-size: 16px;
+    }
+    .hero-stats {
+      gap: 28px;
+    }
+    .stat-num {
+      font-size: 28px;
+    }
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .card.featured {
+      flex-direction: column;
+      padding: 28px;
+    }
+    .card.featured .card-summary {
+      font-size: 18px;
+    }
+    .nav-links {
+      gap: 16px;
+    }
+    .filter-inner {
+      gap: 6px;
+    }
+  }
+
+  /* ===== "WHY" TOOLTIP ===== */
+  .card-why {
+    font-size: 12px;
+    color: var(--gray-2);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 8px;
+    display: none;
+  }
+  .card:hover .card-why {
+    display: block;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: 80px 22px;
+    display: none;
+  }
+  .empty-state.show {
+    display: block;
+  }
+  .empty-state p {
+    font-size: 17px;
+    color: var(--gray-2);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">Vivian的AI进化论</a>
+    <ul class="nav-links">
+      <li><a href="/">服务</a></li>
+      <li><a href="/signal" class="active">Signal</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Curated by Vivian</div>
+  <h1>Vivian's <em>Signal</em></h1>
+  <p class="hero-sub">The AI intelligence I actually read — curated for founders who don't have time to scroll, but can't afford to miss what matters.</p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="count-total">0</div>
+      <div class="stat-label">Insights</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">Weekly</div>
+      <div class="stat-label">Updated</div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓</div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="strategy">🎯 Strategy</button>
+    <button class="filter-btn" data-filter="product">💡 Product</button>
+    <button class="filter-btn" data-filter="founders">🎤 Founders</button>
+    <button class="filter-btn" data-filter="china-ai">🇨🇳 China AI</button>
+    <button class="filter-btn" data-filter="frontier">🔬 Frontier</button>
+    <button class="filter-btn" data-filter="tools">🔧 Tools</button>
+    <span class="filter-count" id="filter-count"></span>
+  </div>
+</div>
+
+<!-- CARD GRID -->
+<section class="grid-section">
+  <div class="card-grid" id="card-grid">
+    <!-- Cards will be injected by JS -->
+  </div>
+  <div class="empty-state" id="empty-state">
+    <p>No signals in this category yet. Stay tuned.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p class="footer-text">
+    Curated by <a href="/">Vivian</a> · 一号位AI进化论<br>
+    I read so you don't have to. But you should.
+  </p>
+</footer>
+
+<script>
+// ===== DATA =====
+const signals = [
+  // ===== FEATURED =====
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"The Atlantic 封面长文：美国没准备好迎接 AI 对就业的冲击",titleOriginal:"America Isn\u2019t Ready for What AI Will Do to Jobs",source:"The Atlantic",date:"2026-02-14",url:"https://www.theatlantic.com/magazine/archive/2026/03/ai-automation-replace-jobs/681652/",why:"采访数十位经济学家和CEO，系统论证AI对就业的结构性冲击，政界却无人重视",featured:true},
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"红杉资本宣告：2026 就是 AGI 元年",titleOriginal:"2026: This is AGI",source:"Sequoia Capital",date:"2026-01-15",url:"https://sequoiacap.com/article/2026-this-is-agi/",why:"顶级VC重新定义AGI为\u2018能自己搞定事情的能力\u2019\u2014\u2014不是科幻，是当下商业现实",featured:true},
+  {category:"tools",categoryLabel:"TOOLS",summary:"Claude Code 实现 7 小时全自主编程，Spotify 迁移时间缩短 90%",titleOriginal:"Enabling Claude Code to work more autonomously",source:"Anthropic",date:"2026-02",url:"https://www.anthropic.com/news/enabling-claude-code-to-work-more-autonomously",why:"AI编程从辅助变为自主执行，企业技术团队可直接复制此模式",featured:true},
+
+  // ===== STRATEGY =====
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"白领最坏情况正在成形：本科生失业率创历史新高",titleOriginal:"The Worst-Case Future for White-Collar Workers",source:"The Atlantic / Annie Lowrey",date:"2026-02-19",url:"https://www.theatlantic.com/economy/archive/2026/02/ai-white-collar-jobs-unemployment/681789/",why:"本科生占失业者25%创纪录，高中生反而比大学生更快找到工作"},
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"Anthropic 发布 AI 就业冲击指数：程序员 75% 任务可被覆盖",titleOriginal:"Anthropic Economic Index: Labor Market Impacts of AI",source:"Anthropic Research",date:"2026-03-05",url:"https://www.anthropic.com/research/anthropic-economic-index-january-2026-report",why:"首次用真实AI使用数据量化岗位风险，22-25岁年轻人招聘已在放缓"},
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"Goldman Sachs：七千亿砸下去，AI 对宏观经济贡献接近零",titleOriginal:"Goldman finds \u2018no meaningful relationship between AI and productivity\u2019",source:"Fortune / Goldman Sachs",date:"2026-03-03",url:"https://fortune.com/2026/03/03/goldman-earnings-ai-anxiety-no-meaningful-impact-productivity-economy-30-percent-in-2-areas/",why:"宏观无感但特定场景提效30%\u2014\u2014AI价值在于精准落地，不是全面铺开"},
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"微软 AI 负责人：18 个月内所有白领工作将被自动化",titleOriginal:"Microsoft AI chief gives it 18 months\u2014for all white-collar work to be automated",source:"Fortune / Mustafa Suleyman",date:"2026-02-13",url:"https://fortune.com/2026/02/13/when-will-ai-kill-white-collar-office-jobs-18-months-microsoft-mustafa-suleyman/",why:"微软AI掌门人给出最激进时间表：会计、法律、营销、项目管理全部自动化"},
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"Deloitte：66% 企业靠 AI 提效，但仅 20% 实现收入增长",titleOriginal:"The State of AI in the Enterprise 2026",source:"Deloitte",date:"2026-01",url:"https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html",why:"省钱容易赚钱难，95%的GenAI试点未能投产\u2014\u2014企业需要的不是更多实验，是落地"},
+  {category:"strategy",categoryLabel:"STRATEGY",summary:"Forrester：AI Agent 将终结 SaaS 按座收费时代",titleOriginal:"Predictions 2026: AI Agents Changing Business Models",source:"Forrester",date:"2026-01",url:"https://www.forrester.com/blogs/predictions-2026-ai-agents-changing-business-models-and-workplace-culture-impact-enterprise-software/",why:"企业软件从\u2018人用工具\u2019变成\u2018容纳AI数字员工\u2019，采购逻辑要变"},
+
+  // ===== FOUNDERS =====
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"黄仁勋 GTC：AI Agent 是 35 万亿市场，物理 AI 是 50 万亿",titleOriginal:"Nvidia GTC 2026: CEO Jensen Huang keynote",source:"Jensen Huang / NVIDIA",date:"2026-03-17",url:"https://www.cnbc.com/2026/03/16/nvidia-gtc-2026-ceo-jensen-huang-keynote-blackwell-vera-rubin.html",why:"黄仁勋定义未来两大战场，数据中心正式成为\u2018AI工厂\u2019"},
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"Sam Altman：超级智能 2028 年出现，数据中心智力将超全人类",titleOriginal:"Sam Altman at AI Impact Summit 2026",source:"Sam Altman / OpenAI",date:"2026-02",url:"https://www.ciol.com/news/100-million-users-a-2-year-agi-timeline-5-key-takeaways-from-sam-altmans-ai-impact-summit-address-11132893",why:"OpenAI掌门人给出最明确时间线：2028年底数据中心智力超过所有人类"},
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"Dario Amodei：50% 白领岗位将在 1-5 年内被颠覆",titleOriginal:"Anthropic CEO Dario Amodei Davos 2026 Interview",source:"Dario Amodei / Anthropic",date:"2026-01-22",url:"https://tamiltech.in/article/anthropic-ceo-dario-amodei-davos-2026-interview-agi-predictions",why:"Anthropic CEO在达沃斯直言，公司内已有工程师完全不写代码、全靠Claude"},
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"Satya Nadella：2026 是 AI 从噱头变实用的转折年",titleOriginal:"From \u2018AI Slop\u2019 to substance: Satya Nadella says 2026 will be pivotal",source:"Satya Nadella / Microsoft",date:"2026-01-04",url:"https://www.businesstoday.in/technology/news/story/from-ai-slop-to-substance-satya-nadella-says-2026-will-be-a-pivotal-point-for-artificial-intelligence-509335-2026-01-04",why:"微软CEO定调：2026不会因新发明被记住，而是AI真正融入日常工作的元年"},
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"马斯克砸 250 亿建 Terafab 芯片超级工厂",titleOriginal:"Elon Musk launches Terafab, a $25B Austin chip megafactory",source:"Elon Musk / Tesla & xAI",date:"2026-03-23",url:"https://techstartups.com/2026/03/23/elon-musk-launches-terafab-a-25-billion-austin-chip-megafactory-to-power-tesla-xai-and-spacex-ai-and-robotics-ambitions/",why:"不再等英伟达供货，自建芯片工厂\u2014\u2014AI竞赛已从软件卷到硬件自主可控"},
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"李彦宏 2026 OKR 曝光：AI 进入价值兑现期",titleOriginal:"独家丨2026李彦宏OKR：AI进入兑现期",source:"澎湃新闻 / 李彦宏",date:"2026-02-10",url:"https://m.thepaper.cn/newsDetail_forward_32575422",why:"百度AI营收已达400亿，中国AI第一梯队正式进入\u2018用收入说话\u2019阶段"},
+  {category:"founders",categoryLabel:"FOUNDERS",summary:"傅盛：12 人团队 45 天替代 50 人 8 个月的工作量",titleOriginal:"对话傅盛：\u2018龙虾\u2019是AI的iPhone时刻",source:"新浪财经 / 傅盛",date:"2026-03-16",url:"https://finance.sina.cn/stock/jdts/2026-03-16/detail-inhreknu9907496.d.html",why:"用AI数字员工处理300+行政流程，中小企业AI落地的活教材"},
+
+  // ===== PRODUCT =====
+  {category:"product",categoryLabel:"PRODUCT",summary:"Cursor 年收入突破 20 亿美元，3 个月翻倍，估值 293 亿",titleOriginal:"Cursor has reportedly surpassed $2B in annualized revenue",source:"TechCrunch / Bloomberg",date:"2026-03-02",url:"https://techcrunch.com/2026/03/02/cursor-has-reportedly-surpassed-2b-in-annualized-revenue/",why:"AI编程工具赛道出现赢家通吃效应，企业需重新评估软件开发投入模式"},
+  {category:"product",categoryLabel:"PRODUCT",summary:"SaaS 估值崩塌：强势公司从 7-8 倍营收跌至 3-4 倍",titleOriginal:"Seven Reasons SaaS Valuations Are Crumbling in the Age of AI",source:"David Cummings",date:"2026-02-07",url:"https://davidcummings.org/2026/02/07/seven-reasons-saas-valuations-are-crumbling-in-the-age-of-ai/",why:"AI让软件构建成本趋近于零，传统SaaS护城河正在瓦解"},
+  {category:"product",categoryLabel:"PRODUCT",summary:"a16z：下一波 AI 应用将零提示词，主动观察用户并介入",titleOriginal:"Notes on AI Apps in 2026",source:"Andreessen Horowitz (a16z)",date:"2026-02",url:"https://a16z.com/notes-on-ai-apps-in-2026/",why:"AI应用从被动响应转向主动代理，产品形态将从工具变为助手"},
+  {category:"product",categoryLabel:"PRODUCT",summary:"氛围编程市场达 47 亿美元，63% 用户是非程序员",titleOriginal:"Top Vibe Coding Statistics & Trends [2026]",source:"Second Talent",date:"2026-03",url:"https://www.secondtalent.com/resources/vibe-coding-statistics/",why:"非技术人员正在大规模自建软件，企业招聘策略和团队结构需要调整"},
+  {category:"product",categoryLabel:"PRODUCT",summary:"Karpathy：氛围编程已过时，专业开发进入 Agent 工程时代",titleOriginal:"Vibe coding is pass\u00e9. Karpathy has a new name for the future.",source:"The New Stack",date:"2026-03",url:"https://thenewstack.io/vibe-coding-is-passe/",why:"氛围编程的提出者推出升级概念Agentic Engineering，从玩具走向生产力"},
+  {category:"product",categoryLabel:"PRODUCT",summary:"商业模式从订阅制转向按结果收费，AI 重新定义 SaaS",titleOriginal:"AI Product Strategy 2026: Roadmap for Founders & Startups",source:"Presta",date:"2026-01",url:"https://wearepresta.com/ai-product-strategy-2026-the-founders-guide-to-ai-native-growth/",why:"Outcome-as-a-Service正在取代按席位收费，创始人需尽早测试"},
+  {category:"product",categoryLabel:"PRODUCT",summary:"SaaS 真正威胁不是 AI，是 AI 催生的百万新创业公司",titleOriginal:"The Real Threat to SaaS Valuations Isn\u2019t AI \u2014 It\u2019s a Million New Startups",source:"David Cummings",date:"2026-01-24",url:"https://davidcummings.org/2026/01/24/the-real-threat-to-saas-valuations-isnt-ai-its-a-million-new-startups/",why:"AI大幅降低创业门槛，每个垂直市场都会涌入大量竞争者"},
+
+  // ===== CHINA AI =====
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"DeepSeek V4 发布：百万 token + 多模态，用华为芯片训练",titleOriginal:"DeepSeek Poised to Unveil Latest AI Model",source:"PYMNTS / SCMP",date:"2026-02-15",url:"https://www.pymnts.com/artificial-intelligence-2/2026/deepseek-poised-to-unveil-latest-ai-model/",why:"用国产芯片跑出世界级模型，中国AI已有独立技术路线"},
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"豆包月活 3.15 亿登顶国内，全球仅次于 ChatGPT",titleOriginal:"2026年2月AI产品榜：豆包月活3.15亿",source:"PChome / 字节跳动",date:"2026-03-01",url:"https://article.pchome.net/news/11353.html",why:"字节用分发优势碾压一切，AI应用用户争夺战已有明确赢家"},
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"智谱、MiniMax 港股背靠背上市，MiniMax 首日暴涨 110%",titleOriginal:"智谱与MiniMax港股上市",source:"21经济网",date:"2026-01-09",url:"https://www.21jingji.com/article/20260114/herald/e4dd26bc84b9bedb8be24d7c28e819ed.html",why:"中国AI公司进入资本化阶段，从烧钱转向商业验证"},
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"Kimi 近 20 天收入超去年全年，估值飙至 180 亿美元",titleOriginal:"独家｜近20天收入超去年全年！月之暗面成最快十角兽",source:"澎湃新闻",date:"2026-03-14",url:"https://m.thepaper.cn/newsDetail_forward_32636837",why:"AI产品可以爆发式增长，海外收入超国内说明中国AI出海已成现实"},
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"阿里千问 3.5：3970 亿参数性能超万亿参数前代",titleOriginal:"最强开源大模型：397B千问3.5超越Gemini 3",source:"量子位 / 阿里",date:"2026-02-17",url:"https://www.qbitai.com/2026/02/380433.html",why:"小模型打败大模型成趋势，企业部署AI的硬件成本将大幅下降"},
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"中国大模型全球 Token 消耗份额逼近三成",titleOriginal:"中国大模型一年狂飙421%，全球AI格局变天",source:"新浪财经",date:"2026-03-02",url:"https://finance.sina.com.cn/stock/t/2026-03-02/doc-inhpqvaq5350351.shtml",why:"中国模型从跟跑变成全球供应商，定价权在转移"},
+  {category:"china-ai",categoryLabel:"CHINA AI",summary:"豆包内测 AI 电商：APP 内可直接下单，AI+交易闭环成型",titleOriginal:"豆包内测AI电商功能",source:"搜狐科技",date:"2026-02-25",url:"https://m.sohu.com/a/994529899_115088",why:"AI从聊天工具变成交易入口，字节率先打通AI到电商的闭环"},
+
+  // ===== FRONTIER =====
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"OpenAI 发布 GPT-5.4：百万 token 上下文，错误率降 33%",titleOriginal:"Introducing GPT-5.4",source:"OpenAI",date:"2026-03-05",url:"https://openai.com/index/introducing-gpt-5-4/",why:"模型能力每几个月跳一个台阶，企业AI方案需持续跟进"},
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"Claude Opus 4.6：百万上下文 + 14.5 小时任务续航",titleOriginal:"Anthropic\u2019s latest Claude models are a big leap forward",source:"Anthropic",date:"2026-02-05",url:"https://its.northeastern.edu/2026/02/26/anthropics-latest-claude-models-are-here-and-theyre-a-big-leap-forward/",why:"14.5小时任务续航意味着AI从\u2018助手\u2019变成\u2018员工\u2019，组织用人逻辑要变"},
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"OpenAI o3/o4-mini：推理模型首次能自主调用所有工具",titleOriginal:"Introducing OpenAI o3 and o4-mini",source:"OpenAI",date:"2026-03-21",url:"https://openai.com/index/introducing-o3-and-o4-mini/",why:"推理+工具使用=真正的AI Agent，能搜索、跑代码、分析文件一条龙"},
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"Anthropic 推出 Claude Cowork：AI 直接在电脑上帮你干活",titleOriginal:"Anthropic Expands Claude\u2019s Computer Agent with Cowork",source:"ADTmag / Anthropic",date:"2026-01-20",url:"https://adtmag.com/articles/2026/01/20/anthropic-expands-claude-computer-agent-with-cowork.aspx",why:"AI从对话框走向操作系统，能替你点击、填表、操作软件"},
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"Google Gemini 3：推理 + 多模态 + Agent 三合一",titleOriginal:"Gemini 3 Series",source:"Google AI",date:"2026-03-01",url:"https://ai.google.dev/gemini-api/docs/models",why:"Google把搜索、办公、广告全线接入Gemini 3，企业工具底层在被AI重写"},
+  {category:"frontier",categoryLabel:"FRONTIER",summary:"Sora 2 嵌入 ChatGPT：一句话生成电影级视频",titleOriginal:"Sora 2 is here",source:"OpenAI",date:"2026-03-14",url:"https://openai.com/index/sora-2/",why:"视频生产成本归零，预计年底75%营销视频将由AI生成"},
+
+  // ===== TOOLS =====
+  {category:"tools",categoryLabel:"TOOLS",summary:"高盛部署数百个 Devin 实例，工程效率提升 3-4 倍",titleOriginal:"Meet Devin: Employee #1 in Goldman Sachs\u2019 Hybrid Workforce",source:"IBM Think / Fortune",date:"2026-01",url:"https://www.ibm.com/think/news/goldman-sachs-first-ai-employee-devin",why:"顶级金融机构率先落地AI工程师，混合人机团队已成现实"},
+  {category:"tools",categoryLabel:"TOOLS",summary:"Google AI Studio 推出全栈氛围编程：提示词直接出生产级应用",titleOriginal:"Full-stack vibe coding in Google AI Studio",source:"Google Blog",date:"2026-03-18",url:"https://blog.google/innovation-and-ai/technology/developers-tools/full-stack-vibe-coding-google-ai-studio/",why:"非技术创始人可直接用自然语言构建带数据库的完整应用"},
+  {category:"tools",categoryLabel:"TOOLS",summary:"Meta 20 亿收购 Manus，发布桌面端 AI Agent 操控本地电脑",titleOriginal:"Meta\u2019s Manus launches \u2018My Computer\u2019",source:"9to5Mac / CNBC",date:"2026-03-17",url:"https://9to5mac.com/2026/03/17/metas-manus-launches-my-computer-to-turn-your-mac-into-an-ai-agent/",why:"AI Agent从云端走向桌面，企业办公自动化进入全新阶段"},
+  {category:"tools",categoryLabel:"TOOLS",summary:"Claude Cowork 接管企业办公：自主操作 Gmail、Drive、DocuSign",titleOriginal:"Claude Code transformed programming. Now Cowork is coming for the enterprise.",source:"VentureBeat",date:"2026-03",url:"https://venturebeat.com/orchestration/anthropic-says-claude-code-transformed-programming-now-claude-cowork-is",why:"AI不再局限于编程，邮件、文档、合同审核都可自主完成"},
+  {category:"tools",categoryLabel:"TOOLS",summary:"n8n 成为企业 AI 工作流自动化首选：400+ 集成，开源免费",titleOriginal:"Top AI Workflow Automation Tools for 2026",source:"n8n Blog",date:"2026-01",url:"https://blog.n8n.io/best-ai-workflow-automation-tools/",why:"开源+可视化，非技术团队也能搭建复杂AI工作流"},
+  {category:"tools",categoryLabel:"TOOLS",summary:"Cursor 进入 JetBrains 生态，Salesforce 2 万工程师全面采用",titleOriginal:"Cursor AI in 2026: The $29B AI Coding Tool",source:"Medium / Cursor",date:"2026-03",url:"https://cursor.com/changelog",why:"AI编程IDE渗透所有主流开发环境，没用的企业已在效率上落后"}
+];
+
+// ===== RENDER =====
+const grid = document.getElementById('card-grid');
+const countEl = document.getElementById('count-total');
+const filterCountEl = document.getElementById('filter-count');
+const emptyState = document.getElementById('empty-state');
+
+function renderCards(filter = 'all') {
+  const filtered = filter === 'all' ? signals : signals.filter(s => s.category === filter);
+
+  grid.innerHTML = '';
+  emptyState.classList.toggle('show', filtered.length === 0);
+  filterCountEl.textContent = filter === 'all'
+    ? `${signals.length} signals`
+    : `${filtered.length} of ${signals.length}`;
+
+  filtered.forEach((s, i) => {
+    const card = document.createElement('a');
+    card.href = s.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.className = `card fade-in${s.featured ? ' featured' : ''}`;
+    card.style.animationDelay = `${i * 0.05}s`;
+
+    if (s.featured) {
+      card.innerHTML = `
+        <div class="featured-content">
+          <div class="featured-badge">✦ Editor's Pick</div>
+          <div class="card-tag ${s.category}">${s.categoryLabel}</div>
+          <div class="card-summary">${s.summary}</div>
+          <div class="card-title-original">${s.titleOriginal}</div>
+          <div class="card-meta">
+            <span><span class="card-source">${s.source}</span> · <span class="card-date">${s.date}</span></span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      `;
+    } else {
+      card.innerHTML = `
+        <div class="card-tag ${s.category}">${s.categoryLabel}</div>
+        <div class="card-summary">${s.summary}</div>
+        <div class="card-title-original">${s.titleOriginal}</div>
+        <div class="card-why">${s.why || ''}</div>
+        <div class="card-meta">
+          <span><span class="card-source">${s.source}</span> · ${s.date}</span>
+          <span class="card-arrow">→</span>
+        </div>
+      `;
+    }
+    grid.appendChild(card);
+  });
+}
+
+// ===== FILTER =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCards(btn.dataset.filter);
+  });
+});
+
+// ===== INIT =====
+countEl.textContent = signals.length;
+renderCards();
+</script>
+
+</body>
+</html>
