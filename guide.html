@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 上手指南 — Vivian的AI进化论</title>
+<meta name="description" content="给创始人的极简版：一个下午，搭好你的 AI 员工团队。从零开始到跑通第一个场景。">
+<meta property="og:title" content="Claude Code 上手指南 — 给创始人的极简版">
+<meta property="og:description" content="一个下午，搭好你的 AI 员工团队。从零开始到跑通第一个场景。">
+<meta property="og:image" content="https://vivianai.cn/vivian-portrait-og.jpg">
+<meta property="og:url" content="https://vivianai.cn/guide">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #6e6e73;
+    --gray-2: #86868b;
+    --gray-3: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --blue: #0071e3;
+    --white: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--white);
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 980px; margin: 0 auto; padding: 0 22px;
+    height: 48px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand { font-size: 14px; font-weight: 700; color: var(--black); letter-spacing: 0.5px; text-decoration: none; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 12px; color: var(--gray-1); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--black); }
+
+  /* HERO */
+  .hero {
+    padding: 120px 22px 56px; text-align: center; max-width: 760px; margin: 0 auto;
+  }
+  .hero-eyebrow { font-size: 14px; font-weight: 600; color: var(--blue); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .hero h1 {
+    font-size: 44px; font-weight: 900; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #1d1d1f 40%, #0071e3 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub { font-size: 19px; color: var(--gray-1); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+  .hero-sub strong { color: var(--black); font-weight: 600; }
+
+  /* CONTENT */
+  .content { max-width: 680px; margin: 0 auto; padding: 0 22px 80px; }
+
+  /* STEP SECTION */
+  .step-section { margin-bottom: 64px; }
+  .step-header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
+    padding-bottom: 16px; border-bottom: 2px solid var(--black);
+  }
+  .step-num {
+    font-family: 'Inter', sans-serif; font-size: 48px; font-weight: 900;
+    color: var(--black); opacity: 0.08; line-height: 1;
+  }
+  .step-title { font-size: 28px; font-weight: 800; color: var(--black); }
+  .step-time { font-size: 14px; color: var(--gray-2); font-weight: 500; margin-left: auto; }
+
+  /* SUB SECTION */
+  .sub-section { margin-bottom: 36px; }
+  .sub-title {
+    font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sub-icon { font-size: 22px; }
+  .sub-desc { font-size: 15px; color: var(--gray-1); line-height: 1.7; margin-bottom: 16px; }
+  .sub-desc strong { color: var(--black); font-weight: 600; }
+
+  /* INSTALL STEPS */
+  .install-steps { list-style: none; counter-reset: install; }
+  .install-steps li {
+    counter-increment: install;
+    padding: 16px 20px; margin-bottom: 8px;
+    background: var(--gray-bg); border-radius: 12px;
+    font-size: 15px; color: var(--black); line-height: 1.6;
+  }
+  .install-steps li::before {
+    content: counter(install); font-family: 'Inter', sans-serif;
+    font-weight: 800; color: var(--blue); margin-right: 12px; font-size: 14px;
+  }
+  .install-steps li .detail { font-size: 13px; color: var(--gray-2); margin-top: 6px; display: block; }
+  .install-steps li a { color: var(--blue); text-decoration: none; font-weight: 500; }
+  .install-steps li a:hover { text-decoration: underline; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #1d1d1f; color: #e8e8e8; border-radius: 12px;
+    padding: 20px 24px; font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px; line-height: 1.6; overflow-x: auto; margin: 12px 0 16px;
+  }
+  .code-block .prompt { color: #86868b; }
+  .code-block .cmd { color: #6ee7b7; }
+
+  /* FOLDER TREE */
+  .folder-tree {
+    background: var(--gray-bg); border-radius: 12px; padding: 20px 24px;
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+    line-height: 1.8; color: var(--gray-1); margin: 12px 0 16px;
+  }
+  .folder-tree .folder { color: var(--black); font-weight: 600; }
+  .folder-tree .comment { color: var(--gray-2); }
+
+  /* CALLOUT */
+  .callout {
+    background: rgba(0,113,227,0.06); border-left: 3px solid var(--blue);
+    border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 24px 0;
+    font-size: 15px; color: var(--black); line-height: 1.7;
+  }
+  .callout strong { color: var(--blue); }
+  .callout-title { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+
+  /* TEMPLATE BLOCK */
+  .template-block {
+    background: var(--gray-bg); border-radius: 12px; padding: 24px;
+    font-size: 14px; line-height: 1.8; margin: 12px 0; color: var(--gray-1);
+  }
+  .template-block .field { color: var(--black); font-weight: 600; }
+  .template-block .placeholder { color: var(--blue); opacity: 0.7; }
+
+  /* SCENARIO CARDS */
+  .scenario-grid { display: grid; gap: 12px; margin: 16px 0; }
+  .scenario-card {
+    background: var(--gray-bg); border-radius: 16px; padding: 24px;
+    transition: transform 0.2s;
+  }
+  .scenario-card:hover { transform: scale(1.01); }
+  .scenario-label { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+  .scenario-prompt {
+    font-size: 14px; color: var(--gray-1); line-height: 1.6;
+    padding: 12px 16px; background: var(--white); border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  /* TABLE */
+  .guide-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 14px;
+  }
+  .guide-table th {
+    text-align: left; padding: 12px 16px; font-weight: 700;
+    color: var(--black); border-bottom: 2px solid var(--black);
+    font-size: 13px;
+  }
+  .guide-table td {
+    padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.06);
+    color: var(--gray-1); line-height: 1.5;
+  }
+  .guide-table td:first-child { color: var(--black); font-weight: 600; }
+  .guide-table code {
+    background: var(--gray-bg); padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', monospace; font-size: 13px;
+  }
+
+  /* COMMAND TABLE */
+  .cmd-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  .cmd-table td { padding: 10px 16px; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 14px; }
+  .cmd-table td:first-child {
+    font-family: 'SF Mono', monospace; font-weight: 600; color: var(--blue);
+    white-space: nowrap; width: 180px;
+  }
+  .cmd-table td:last-child { color: var(--gray-1); }
+
+  /* TIP BOX */
+  .tip-box {
+    background: linear-gradient(135deg, rgba(0,113,227,0.04), rgba(0,113,227,0.08));
+    border-radius: 16px; padding: 24px; margin: 24px 0; text-align: center;
+  }
+  .tip-box p { font-size: 15px; color: var(--black); line-height: 1.6; margin: 4px 0; }
+  .tip-box strong { color: var(--blue); }
+  .tip-box .tip-emoji { font-size: 24px; margin-bottom: 8px; }
+
+  /* INSTRUCTION FORMAT */
+  .format-block {
+    background: var(--gray-bg); border-radius: 16px; padding: 28px;
+    margin: 16px 0; font-size: 15px; line-height: 1.8;
+  }
+  .format-label { color: var(--blue); font-weight: 700; }
+  .format-content { color: var(--gray-1); }
+  .format-summary {
+    margin-top: 16px; font-size: 15px; font-weight: 700; color: var(--black);
+    padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* FAQ */
+  .faq-section { margin-bottom: 64px; }
+  .faq-item { padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .faq-q { font-size: 16px; font-weight: 700; color: var(--black); margin-bottom: 8px; }
+  .faq-a { font-size: 15px; color: var(--gray-1); line-height: 1.7; }
+  .faq-a strong { color: var(--black); }
+
+  /* SUMMARY */
+  .summary-box {
+    background: linear-gradient(135deg, #1d1d1f 0%, #0f3460 100%);
+    border-radius: 20px; padding: 48px 36px; text-align: center;
+    margin: 48px 0;
+  }
+  .summary-box p {
+    font-size: 18px; font-weight: 600; color: var(--white); line-height: 1.7;
+    max-width: 520px; margin: 0 auto;
+  }
+  .summary-box .highlight { color: #6ee7b7; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center; padding: 48px 22px; border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .footer p { font-size: 14px; color: var(--gray-2); line-height: 1.6; }
+  .footer a { color: var(--blue); text-decoration: none; font-weight: 500; }
+
+  /* BACK TO TOP */
+  .back-top {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 14px; color: var(--blue); font-weight: 500;
+    text-decoration: none; margin-top: 32px;
+  }
+  .back-top:hover { opacity: 0.7; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 32px; letter-spacing: -1px; }
+    .hero-sub { font-size: 16px; }
+    .step-header { flex-wrap: wrap; }
+    .step-num { font-size: 36px; }
+    .step-title { font-size: 22px; }
+    .step-time { margin-left: 0; width: 100%; }
+    .nav-links { gap: 16px; }
+    .guide-table { font-size: 13px; }
+    .guide-table td, .guide-table th { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Vivian的AI进化论</a>
+    <ul class="nav-links">
+      <li><a href="/">首页</a></li>
+      <li><a href="/guide">指南</a></li>
+      <li><a href="/signal">Signal</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">QUICK START GUIDE</p>
+  <h1>Claude Code 上手指南</h1>
+  <p class="hero-sub">给创始人的极简版——<strong>一个下午，搭好你的 AI 员工团队</strong>。从零开始，到跑通第一个场景。</p>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- STEP 1 -->
+<div class="step-section">
+  <div class="step-header">
+    <span class="step-num">01</span>
+    <span class="step-title">搭系统</span>
+    <span class="step-time">1-2 小时</span>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">🧠</span> 安装 Claude Code（大脑）</div>
+    <p class="sub-desc">Claude Code 是你的 AI 大脑——不是聊天机器人，是能读你文件、执行任务、自主跑完整条流水线的 AI 助手。</p>
+    <ol class="install-steps">
+      <li><strong>安装 Node.js</strong>（Claude Code 的运行环境）<span class="detail">打开 <a href="https://nodejs.org" target="_blank">nodejs.org</a>，下载 LTS 版本，双击安装，一路"下一步"</span></li>
+      <li><strong>安装 Claude Code</strong><span class="detail">打开「终端」（Mac 按 Cmd + 空格，输入"终端"回车），粘贴下面的命令：</span></li>
+    </ol>
+    <div class="code-block"><span class="prompt">$</span> <span class="cmd">npm install -g @anthropic-ai/claude-code</span></div>
+    <ol class="install-steps" start="3">
+      <li><strong>登录</strong><span class="detail">终端输入 <code>claude</code>，按提示用 Anthropic 账号登录。订阅 Claude Pro（$20/月）或 Max（$100/月，推荐，不限量）</span></li>
+    </ol>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">💾</span> 安装 Obsidian（记忆）</div>
+    <p class="sub-desc">Obsidian 是你的本地知识库——所有文件、笔记、资料都在这里，AI 从这里读取上下文。</p>
+    <ol class="install-steps">
+      <li>打开 <a href="https://obsidian.md" target="_blank">obsidian.md</a>，下载安装</li>
+      <li>创建一个新仓库（Vault），起个名字，选个文件夹</li>
+      <li>建议的文件夹结构（先建这 5 个就够）：</li>
+    </ol>
+    <div class="folder-tree">
+      <span class="folder">我的AI工作台/</span><br>
+      ├── <span class="folder">01-关于我/</span> <span class="comment">← 你的身份、业务、偏好</span><br>
+      ├── <span class="folder">02-客户/</span> <span class="comment">← 客户资料、沟通记录</span><br>
+      ├── <span class="folder">03-内容/</span> <span class="comment">← 公众号、朋友圈、演讲稿</span><br>
+      ├── <span class="folder">04-会议/</span> <span class="comment">← 录音转写、纪要</span><br>
+      └── <span class="folder">output/</span> <span class="comment">← AI 生成的所有东西放这里</span>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">🗣️</span> 安装闪电说（嘴巴）</div>
+    <p class="sub-desc">闪电说让你用语音指挥 AI——说话就能下指令，不用打字。</p>
+    <ol class="install-steps">
+      <li>Mac App Store 搜「闪电说」，安装</li>
+      <li>设置一个快捷键，按住说话，松开自动转文字输入到 Claude Code</li>
+    </ol>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">🔗</span> 安装 Claudian（神经）</div>
+    <p class="sub-desc">Claudian 是 Obsidian 插件，把 Obsidian（记忆）和 Claude Code（大脑）连起来，让你在笔记界面直接跟 AI 对话。</p>
+    <ol class="install-steps">
+      <li>Obsidian → 设置 → 第三方插件 → 搜索「Claudian」→ 安装并启用</li>
+      <li>配置好 Claude Code 路径即可</li>
+    </ol>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">👥</span> 搭建你的智能体（AI 员工）</div>
+    <p class="sub-desc">智能体就是你用提示词"训练"出来的 AI 员工——每个员工有自己的技能和 SOP。先从一个开始，用顺了再加第二个、第三个。</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">五件套到位</div>
+    <strong>大脑</strong>（Claude Code）+ <strong>记忆</strong>（Obsidian）+ <strong>神经</strong>（Claudian）+ <strong>嘴巴</strong>（闪电说）+ <strong>AI 员工</strong>（智能体）
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-section">
+  <div class="step-header">
+    <span class="step-num">02</span>
+    <span class="step-title">喂上下文</span>
+    <span class="step-time">30 分钟</span>
+  </div>
+
+  <p class="sub-desc" style="margin-bottom:24px;">这是最关键的一步。<strong>没有上下文的 AI = 一个聪明但什么都不知道的陌生人。</strong></p>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">📋</span> 写 CLAUDE.md（工作规矩）</div>
+    <p class="sub-desc">在你的 Obsidian 仓库根目录新建一个文件，叫 CLAUDE.md：</p>
+    <div class="template-block">
+      <span class="field"># 关于我</span><br><br>
+      <span class="field">## 基本信息</span><br>
+      - 姓名：<span class="placeholder">【你的名字】</span><br>
+      - 公司：<span class="placeholder">【公司名】</span><br>
+      - 业务：<span class="placeholder">【一句话描述你做什么】</span><br><br>
+      <span class="field">## 我的工作风格</span><br>
+      - 做事直接给结果，不问"需要调整吗"<br>
+      - 输出内容口语化，像说话一样<br>
+      - 涉及对外发布的内容，先让我确认<br><br>
+      <span class="field">## 我常做的事情</span><br>
+      - <span class="placeholder">【例：写公众号文章，风格口语化，800-1200 字】</span><br>
+      - <span class="placeholder">【例：整理会议纪要，丢录音转写文件进来】</span><br>
+      - <span class="placeholder">【例：客户调研，给公司名自动出背景报告】</span><br><br>
+      <span class="field">## 文件管理</span><br>
+      - 生成的文件保存到 output/ 文件夹<br>
+      - 不覆盖已有文件，新版本另存
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">📝</span> 写 USER.md（你的简历）</div>
+    <p class="sub-desc">让 AI 深度认识你——写得越详细，AI 输出越像"你的人"：</p>
+    <div class="template-block">
+      <span class="field"># 关于我</span><br><br>
+      <span class="field">## 职业经历</span><br>
+      <span class="placeholder">【写你的关键经历，2-3 段】</span><br><br>
+      <span class="field">## 核心能力</span><br>
+      <span class="placeholder">【你最擅长什么】</span><br><br>
+      <span class="field">## 当前业务重点</span><br>
+      <span class="placeholder">【你现在最关注的事】</span><br><br>
+      <span class="field">## 沟通风格</span><br>
+      <span class="placeholder">【你喜欢什么语气、什么格式】</span>
+    </div>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title"><span class="sub-icon">💎</span> 开始积累数字资产</div>
+    <p class="sub-desc">从今天开始：</p>
+    <ol class="install-steps">
+      <li><strong>开会就录音</strong>，转写丢进 Obsidian</li>
+      <li><strong>沟通就存档</strong>，客户聊天记录整理进去</li>
+      <li><strong>经验就写下来</strong>，踩过的坑、做过的决定都记下</li>
+    </ol>
+    <div class="callout">上下文越丰富，AI 越像你的数字分身。</div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-section">
+  <div class="step-header">
+    <span class="step-num">03</span>
+    <span class="step-title">跑通一个场景</span>
+    <span class="step-time">30 分钟</span>
+  </div>
+
+  <p class="sub-desc" style="margin-bottom:24px;">不要一上来就想"全面 AI 化"。<strong>找一个你每天都做、且重复性高的事</strong>，先把它跑通。</p>
+  <p class="sub-desc" style="margin-bottom:24px;">打开终端，<code>cd</code> 到你的 Obsidian 仓库，输入 <code>claude</code>，然后试试：</p>
+
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <div class="scenario-label">场景 A · AI 帮你准备客户见面</div>
+      <div class="scenario-prompt">"帮我准备明天和 XX 公司创始人的见面。搜索他们公司的公开信息，分析业务模式，给我 3 个聊天话题和 2 个可能的合作方向。"</div>
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-label">场景 B · AI 帮你整理会议纪要</div>
+      <div class="scenario-prompt">"读一下 04-会议/ 里最新的录音转写文件，整理成结构化纪要，提取行动项，保存到 output/"</div>
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-label">场景 C · AI 帮你写内容</div>
+      <div class="scenario-prompt">"帮我写一篇公众号，主题是 XX。800 字左右，口语化，像跟朋友聊天。"</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    跑完第一个场景，你就会"啊哈"——<strong>从"问 AI 一个问题"到"让 AI 跑一个任务"，体感完全不同。</strong>
+  </div>
+</div>
+
+<!-- DAILY USE -->
+<div class="step-section">
+  <div class="step-header">
+    <span class="step-num">04</span>
+    <span class="step-title">日常使用</span>
+    <span class="step-time">记住这 5 个就够</span>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title">最常用的操作</div>
+    <table class="guide-table">
+      <thead><tr><th>操作</th><th>怎么做</th><th>什么时候用</th></tr></thead>
+      <tbody>
+        <tr><td>换行不发送</td><td><code>Option + 回车</code></td><td>想写多行再一起发</td></tr>
+        <tr><td>粘贴截图</td><td><code>Ctrl + V</code></td><td>给 AI 看图片、报错截图</td></tr>
+        <tr><td>暂停 AI</td><td>按一次 <code>Esc</code></td><td>AI 跑偏了，先停下来</td></tr>
+        <tr><td>后悔药</td><td>双击 <code>Esc</code></td><td>AI 改错了，撤回</td></tr>
+        <tr><td>插嘴不打断</td><td><code>/btw 你的问题</code></td><td>AI 在跑任务，你想问个不相关的事</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-section">
+    <div class="sub-title">最常用的命令</div>
+    <table class="cmd-table">
+      <tr><td>/btw</td><td>插嘴不打断，问完自动消失</td></tr>
+      <tr><td>/compact</td><td>AI 变笨了就按这个，压缩对话释放空间</td></tr>
+      <tr><td>/clear</td><td>换个话题，清空重来</td></tr>
+      <tr><td>claude --continue</td><td>昨天没聊完，今天接着聊</td></tr>
+    </table>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-emoji">💡</div>
+    <p>记不住没关系，记住三个就够：</p>
+    <p><strong>/btw</strong> — 插嘴不打断</p>
+    <p><strong>双击 Esc</strong> — 后悔药</p>
+    <p><strong>/compact</strong> — 聊久了变笨就按这个</p>
+  </div>
+</div>
+
+<!-- INSTRUCTION FORMAT -->
+<div class="step-section">
+  <div class="step-header">
+    <span class="step-num">05</span>
+    <span class="step-title">给 AI 下指令的最佳格式</span>
+    <span class="step-time"></span>
+  </div>
+
+  <div class="format-block">
+    <span class="format-label">【任务】</span><span class="format-content">帮我准备明天和 XX 客户的会议资料</span><br><br>
+    <span class="format-label">【背景】</span><span class="format-content">这是一家做教育的公司，50 人规模，创始人对 AI 有兴趣</span><br><br>
+    <span class="format-label">【要求】</span><br>
+    <span class="format-content">- 搜索公司公开信息</span><br>
+    <span class="format-content">- 预判 AI 可以用在哪些环节</span><br>
+    <span class="format-content">- 输出一份沟通策略建议</span><br><br>
+    <span class="format-label">【输出到】</span><span class="format-content">02-客户/XX/</span>
+    <p class="format-summary">四要素：任务 + 背景 + 具体要求 + 输出位置 — 齐全了，AI 执行准确率翻倍。</p>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="step-header">
+    <span class="step-num">?</span>
+    <span class="step-title">常见问题</span>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">AI 越聊越"笨"，开始忘事？</div>
+    <div class="faq-a">对话太长了。输入 <code>/compact</code> 压缩一下，或者开新对话。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">AI 改错了文件怎么办？</div>
+    <div class="faq-a">双击 Esc，选"回退代码，保留对话"——文件恢复原样，但 AI 记住这条路走不通。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">需要会写代码吗？</div>
+    <div class="faq-a">不需要。Claude Code 虽然叫"Code"，但它本质是一个能执行任务的 AI 助手。你用自然语言跟它说话就行。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">数据安全吗？</div>
+    <div class="faq-a">你的文件在本地电脑上，AI 处理时数据经过 Anthropic 服务器（就像打电话声音经过运营商线路），但 Anthropic 承诺<strong>不会用订阅用户的数据训练模型</strong>。极高保密需求可以私有部署。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">一个月多少钱？</div>
+    <div class="faq-a">Claude Max 订阅 $100/月（不限量使用，推荐）。相当于一个不睡觉、不请假、秒级响应的全职员工，月薪 700 块人民币。</div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-box">
+  <p>给 AI 一个身份（CLAUDE.md），一份简历（USER.md），一堆资料（Obsidian 知识库）——它就从每次从零开始的陌生人，变成<span class="highlight">越用越懂你的数字搭档</span>。</p>
+</div>
+
+<!-- FOOTER CTA -->
+<div style="text-align:center;padding:32px 0 16px;">
+  <p style="font-size:16px;color:var(--gray-1);margin-bottom:8px;">更多实战案例和智能体搭建方法</p>
+  <p style="font-size:18px;font-weight:700;color:var(--black);">关注公众号「Vivian的AI进化论」</p>
+  <p style="font-size:15px;color:var(--gray-2);margin-top:12px;">有问题随时微信找我 — Vivian</p>
+</div>
+
+<a class="back-top" href="#" style="display:block;text-align:center;">↑ 回到顶部</a>
+
+</div><!-- end content -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p><a href="/">Vivian的AI进化论</a> · <a href="/guide">指南</a> · <a href="/signal">Signal</a></p>
+  <p style="margin-top:8px;">© 2026 Vivian · 上海反差科技有限公司</p>
+</footer>
+
+</body>
+</html>
