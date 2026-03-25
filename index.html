@@ -80,6 +80,37 @@
   }
   .nav-links a:hover { color: var(--black); }
 
+  /* Hamburger button - hidden on desktop */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--black);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .nav-hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
   /* ===== HERO ===== */
   .hero {
     padding: 140px 22px 80px;
@@ -890,11 +921,28 @@
 
   /* ===== MOBILE RESPONSIVE ===== */
   @media (max-width: 768px) {
-    /* Nav */
+    /* Nav - mobile hamburger menu */
     .nav-inner { height: 44px; padding: 0 16px; }
     .nav-brand { font-size: 13px; }
-    .nav-links { gap: 16px; }
-    .nav-links a { font-size: 11px; }
+    .nav-hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 44px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { border-top: 1px solid rgba(0,0,0,0.04); }
+    .nav-links li:first-child { border-top: none; }
+    .nav-links a { font-size: 14px; display: block; padding: 12px 20px; color: var(--black); }
 
     /* Hero */
     .hero { padding: 100px 20px 48px; }
@@ -1015,6 +1063,9 @@
   <nav class="nav">
     <div class="nav-inner">
       <div class="nav-brand">Vivian的AI进化论</div>
+      <button class="nav-hamburger" aria-label="菜单" onclick="this.classList.toggle('active');document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
       <ul class="nav-links">
         <li><a href="#services">服务</a></li>
         <li><a href="#club">俱乐部</a></li>
@@ -1419,6 +1470,14 @@
   </footer>
 
 <script>
+// Mobile nav: close menu on link click
+document.querySelectorAll('.nav-links a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.remove('open');
+    document.querySelector('.nav-hamburger').classList.remove('active');
+  });
+});
+
 // QR 弹窗
 function openQR() {
   document.getElementById('qrModal').classList.add('show');
