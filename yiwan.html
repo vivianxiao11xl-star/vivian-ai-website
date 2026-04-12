@@ -806,17 +806,16 @@ function closeChat() {
   </div>
 </div>
 
+<script src="yiwan/faq-data.js"></script>
 <script>
 // ===== FAQ SEARCH ENGINE =====
-let faqData = [];
-
-// Load FAQ data
-fetch('yiwan/faq-data.json')
-  .then(r => r.json())
-  .then(data => { faqData = data; })
-  .catch(() => { console.log('FAQ data not loaded'); });
+// faqData is loaded synchronously from faq-data.js (82 items)
 
 function searchFaq(query) {
+  if (!faqData || faqData.length === 0) {
+    document.getElementById('chatResults').innerHTML = '<div class="faq-no-result">知识库加载中，请刷新页面重试</div>';
+    return;
+  }
   const input = document.getElementById('chatInput');
   if (typeof query === 'string') {
     input.value = query;
@@ -832,17 +831,19 @@ function searchFaq(query) {
     return;
   }
 
-  container.innerHTML = results.map(r => `
-    <div class="faq-result">
+  container.innerHTML = results.map(r => {
+    const esc = s => s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '';
+    const quoteText = r.quote ? esc(r.quote.replace(/^[""\u201c]+|[""\u201d]+$/g, '')) : '';
+    return `<div class="faq-result">
       <div class="faq-result-meta">
-        <span class="faq-result-speaker">${r.speaker}</span>
-        <span class="faq-result-module">${r.module}</span>
+        <span class="faq-result-speaker">${esc(r.speaker)}</span>
+        <span class="faq-result-module">${esc(r.module)}</span>
       </div>
-      <div class="faq-result-q">${r.question}</div>
-      <div class="faq-result-a">${r.answer}</div>
-      ${r.quote ? `<div class="faq-result-quote">"${r.quote}"</div>` : ''}
-    </div>
-  `).join('');
+      <div class="faq-result-q">${esc(r.question)}</div>
+      <div class="faq-result-a">${esc(r.answer)}</div>
+      ${quoteText ? `<div class="faq-result-quote">${esc(r.speaker)}："${quoteText}"</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 function matchFaq(query) {
