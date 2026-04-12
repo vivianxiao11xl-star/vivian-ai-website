@@ -790,31 +790,75 @@ function doSearch(query) {
 
 function search(query) {
   var q = query.toLowerCase();
-  var terms = q.split(/[\s,，、]+/);
-  var valid = [];
-  for (var i = 0; i < terms.length; i++) {
-    if (terms[i].length > 0) valid.push(terms[i]);
-  }
-  if (valid.length === 0) return [];
 
+  // Step 1: extract search fragments from query
+  // Split by spaces/punctuation first
+  var parts = q.split(/[\s,，、。？！：；""''·\-—]+/);
+  var frags = [];
+
+  for (var p = 0; p < parts.length; p++) {
+    var part = parts[p];
+    if (!part) continue;
+
+    // Short terms (1-4 chars): use as-is
+    if (part.length <= 4) {
+      if (part.length >= 1) frags.push(part);
+      continue;
+    }
+
+    // Longer terms: generate 2,3,4-char n-grams
+    for (var n = 2; n <= 4; n++) {
+      for (var i = 0; i <= part.length - n; i++) {
+        frags.push(part.substring(i, i + n));
+      }
+    }
+    // Also keep the full term for exact matching
+    frags.push(part);
+  }
+
+  // Deduplicate
+  var seen = {};
+  var unique = [];
+  for (var i = 0; i < frags.length; i++) {
+    if (!seen[frags[i]]) {
+      seen[frags[i]] = true;
+      unique.push(frags[i]);
+    }
+  }
+
+  // Step 2: also check if known keywords from FAQ appear in query
+  var knownHits = {};
+  for (var i = 0; i < faqData.length; i++) {
+    var item = faqData[i];
+    // Check speaker name in query
+    if (q.indexOf(item.speaker.toLowerCase()) !== -1) {
+      knownHits[i] = (knownHits[i] || 0) + 15;
+    }
+    // Check each keyword in query
+    var kws = item.keywords || [];
+    for (var k = 0; k < kws.length; k++) {
+      if (kws[k].length >= 2 && q.indexOf(kws[k].toLowerCase()) !== -1) {
+        knownHits[i] = (knownHits[i] || 0) + 12;
+      }
+    }
+  }
+
+  // Step 3: score each FAQ item
   var scored = [];
   for (var i = 0; i < faqData.length; i++) {
     var item = faqData[i];
-    var score = 0;
-    var all = (item.question + ' ' + item.answer + ' ' + item.speaker + ' ' + item.module + ' ' + (item.keywords || []).join(' ') + ' ' + (item.quote || '')).toLowerCase();
+    var score = knownHits[i] || 0;
+    var qText = item.question.toLowerCase();
+    var aText = item.answer.toLowerCase();
+    var allText = qText + ' ' + aText + ' ' + (item.quote || '').toLowerCase();
 
-    for (var j = 0; j < valid.length; j++) {
-      var t = valid[j];
-      if (all.indexOf(t) !== -1) {
-        // Weight by where it matched
-        if (item.question.toLowerCase().indexOf(t) !== -1) score += 10;
-        if (item.speaker.toLowerCase().indexOf(t) !== -1) score += 8;
-        var kw = item.keywords || [];
-        for (var k = 0; k < kw.length; k++) {
-          if (kw[k].toLowerCase().indexOf(t) !== -1) { score += 6; break; }
-        }
-        if (item.answer.toLowerCase().indexOf(t) !== -1) score += 4;
-        if (item.module.toLowerCase().indexOf(t) !== -1) score += 3;
+    for (var j = 0; j < unique.length; j++) {
+      var f = unique[j];
+      if (f.length < 2) continue;
+      if (allText.indexOf(f) !== -1) {
+        var w = f.length; // longer matches score higher
+        if (qText.indexOf(f) !== -1) score += w * 3;
+        else if (aText.indexOf(f) !== -1) score += w * 1;
       }
     }
     if (score > 0) scored.push({score: score, item: item});
