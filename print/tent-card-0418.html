@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>一号位AI俱乐部 · 桌牌 V8 · 暖金点缀版</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #e8e8ed;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+  }
+
+  .tent-card {
+    width: 280mm;
+    height: 190mm;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .tent-card:last-child { page-break-after: auto; }
+
+  .fold-line {
+    width: 100%;
+    height: 0;
+    border-top: 1px dashed #d2d2d7;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .fold-line::after {
+    content: "✂ 对折";
+    position: absolute;
+    left: 50%;
+    top: -7px;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 0 10px;
+    font-size: 8px;
+    color: #d2d2d7;
+    letter-spacing: 2px;
+  }
+
+  /* ========== 卡面 ========== */
+  .card-face {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+  }
+  .card-face.flipped { transform: rotate(180deg); }
+
+  /* 顶部品牌色带 — V8 金点缀：深灰 → 蓝 → 暖金 */
+  .brand-bar {
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg,
+      #1d1d1f 0%,
+      #0071e3 65%,
+      #FFC857 100%);
+    flex-shrink: 0;
+  }
+
+  /* 主体内容区 — 居中 */
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+    position: relative;
+  }
+
+  /* 俱乐部标识 */
+  .club-mark {
+    font-size: 10px;
+    color: #86868b;
+    letter-spacing: 4px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .club-mark .cohort {
+    color: #0071e3;
+    font-weight: 600;
+    margin-left: 6px;
+  }
+
+  /* 名字 — 绝对主角 */
+  .name {
+    font-size: 58px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: 12px;
+    line-height: 1.1;
+  }
+
+  /* 公司 */
+  .company {
+    font-size: 17px;
+    font-weight: 400;
+    color: #86868b;
+    letter-spacing: 3px;
+    margin-top: 14px;
+  }
+
+  /* 底部区 */
+  .card-footer {
+    padding: 14px 60px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  /* 四级身份递进 */
+  .identity-path {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+  .identity-row {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .identity-time {
+    color: #86868b;
+    width: 38px;
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .identity-title {
+    color: #1d1d1f;
+    font-weight: 500;
+  }
+  .identity-title.active {
+    color: #0071e3;
+    font-weight: 600;
+  }
+
+  /* V8 右下角 — Founding Fellow 改暖金 */
+  .footer-right {
+    font-size: 8.5px;
+    color: #86868b;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    text-align: right;
+    line-height: 1.55;
+  }
+  .footer-right .founding {
+    display: block;
+    color: #C89028;              /* 金色深版：印刷更稳，屏幕偏亮的 FFC857 印出来会淡 */
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    font-size: 9.5px;
+    margin-bottom: 2px;
+  }
+
+  /* ========== 打印 ========== */
+  @media print {
+    body { background: none; padding: 0; gap: 0; }
+    .tent-card {
+      box-shadow: none;
+      width: 297mm;
+      height: 210mm;
+    }
+    .no-print { display: none !important; }
+  }
+
+  /* 工具栏 */
+  .toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #1d1d1f;
+    color: #f5f5f7;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    font-size: 14px;
+  }
+  .toolbar .badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #0071e3, #FFC857);
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-left: 12px;
+    font-weight: 500;
+  }
+  .toolbar .sub {
+    opacity: 0.4;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  .toolbar .tip {
+    font-size: 11px;
+    color: #86868b;
+    margin-left: 16px;
+  }
+  .toolbar button {
+    background: #0071e3;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .toolbar button:hover { background: #0077ED; }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <div>
+    <strong>一号位AI俱乐部 · 桌牌 V8 · 暖金点缀版</strong>
+    <span class="badge">V8</span>
+    <span class="sub">17 张 + 6 张备用 · 统一四级路径</span>
+    <span class="tip">Apple 冷蓝 + 暖金 #FFC857 · 金色只用 2 处</span>
+  </div>
+  <button onclick="window.print()">打印</button>
+</div>
+<div style="height:56px" class="no-print"></div>
+
+<script>
+// 全员 17 位 · 统一四级路径模板
+// role: "CEO"    → 创始人 / 联创 / CEO / 总经理
+// role: "Leader" → 运营总监 / 副总 / 部长 / 博主 / 专家 / 观摩等
+const attendees = [
+  { name: "肖荔",   company: "Vivian的AI进化论", role: "CEO" },
+  { name: "晴空",   company: "回声科技",         role: "CEO" },
+  { name: "尹亚楠", company: "蒙台梭利教育",     role: "CEO" },
+  { name: "曹赟",   company: "雪狼户外",         role: "CEO" },
+  { name: "尤燕波", company: "雪狼户外",         role: "Leader" },
+  { name: "胡民杰", company: "野迹鸣",           role: "CEO" },
+  { name: "何健",   company: "渊学通教育集团",   role: "CEO" },
+  { name: "聪聪",   company: "渊学通教育集团",   role: "CEO" },
+  { name: "张冬慧", company: "Lipro 如然智能",   role: "CEO" },
+  { name: "黄青松", company: "科圣达",           role: "CEO" },
+  { name: "吴少梅", company: "科圣达",           role: "Leader" },
+  { name: "叶婷",   company: "妈咪宝",           role: "CEO" },
+  { name: "林霞",   company: "妈咪宝",           role: "Leader" },
+  { name: "胡红芳", company: "妈咪宝",           role: "Leader" },
+  { name: "蔡万富", company: "名流",             role: "Leader" },
+  { name: "蔡一鸣", company: "名流",             role: "Leader" },
+  { name: "王龙",   company: "经纬亿万",         role: "Leader" },
+  // 6 张全空白备用（姓名 + 公司都现场填写）
+  { name: "",       company: "",                 role: "Leader" },
+  { name: "",       company: "",                 role: "Leader" },
+  { name: "",       company: "",                 role: "Leader" },
+  { name: "",       company: "",                 role: "Leader" },
+  { name: "",       company: "",                 role: "Leader" },
+  { name: "",       company: "",                 role: "Leader" }
+];
+
+function attendeeFaceHTML(m, flipped) {
+  const finalTitle = m.role === "CEO"
+    ? "Certified AI-Native CEO"
+    : "Certified AI-Native Leader";
+  return `
+    <div class="card-face ${flipped ? 'flipped' : ''}">
+      <div class="brand-bar"></div>
+      <div class="card-body">
+        <div class="club-mark">一号位 AI 俱乐部<span class="cohort">· COHORT 01</span></div>
+        <div class="name">${m.name}</div>
+        <div class="company">${m.company}</div>
+      </div>
+      <div class="card-footer">
+        <div class="identity-path">
+          <div class="identity-row">
+            <span class="identity-time">今天</span>
+            <span class="identity-title">AI 驾驭者</span>
+          </div>
+          <div class="identity-row">
+            <span class="identity-time">明天</span>
+            <span class="identity-title active">AI 经营家 · 启程者</span>
+          </div>
+          <div class="identity-row">
+            <span class="identity-time">一年后</span>
+            <span class="identity-title">${finalTitle}</span>
+          </div>
+        </div>
+        <div class="footer-right">
+          <span class="founding">Founding Fellow</span>
+          Cohort 01 · April 2026
+        </div>
+      </div>
+    </div>`;
+}
+
+document.body.insertAdjacentHTML('beforeend',
+  attendees.map(m => `
+    <div class="tent-card">
+      ${attendeeFaceHTML(m, true)}
+      <div class="fold-line"></div>
+      ${attendeeFaceHTML(m, false)}
+    </div>`).join('')
+);
+</script>
+</body>
+</html>
