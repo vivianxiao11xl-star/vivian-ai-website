@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 经营家 · 启程者 证书 · Cohort 01</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --brand-blue: #0071e3;
+    --brand-blue-light: #2997ff;
+    --brand-dark: #1d1d1f;
+    --warm-gold: #C9A961;
+    --warm-gold-soft: #D4B87A;
+    --warm-gold-bg: rgba(201,169,97,0.08);
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-muted: #86868b;
+    --bg-cert: #ffffff;
+    --border-subtle: #d2d2d7;
+    --bg-back: #f5f5f7;
+  }
+
+  body {
+    font-family: 'Noto Sans SC', 'Inter', -apple-system, 'PingFang SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #e8e8ed;
+    padding: 30px;
+  }
+
+  /* ========== 工具栏 ========== */
+  .toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--brand-dark);
+    color: #f5f5f7;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    font-size: 14px;
+  }
+  .toolbar .badge {
+    display: inline-block;
+    background: var(--brand-blue);
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-left: 12px;
+    font-weight: 500;
+  }
+  .toolbar .sub {
+    opacity: 0.4;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  .toolbar button {
+    background: var(--brand-blue);
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .toolbar button:hover { background: #0077ED; }
+
+  /* ========== 证书页通用 ========== */
+  .cert-page {
+    width: 297mm;
+    height: 210mm;
+    background: var(--bg-cert);
+    margin: 0 auto 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
+  .cert-page:last-child { page-break-after: auto; }
+
+  /* ============================= */
+  /*         证书正面 FRONT         */
+  /* ============================= */
+  .cert-front {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* 顶部金色装饰线 */
+  .cert-front .top-accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--warm-gold) 0%, var(--warm-gold-soft) 50%, var(--warm-gold) 100%);
+    flex-shrink: 0;
+  }
+
+  /* 头部区域：Logo + 标题 */
+  .cert-header {
+    text-align: center;
+    padding: 28px 60px 0;
+    flex-shrink: 0;
+  }
+
+  .cert-club-name {
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .cert-title-cn {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    letter-spacing: 6px;
+    margin-bottom: 4px;
+  }
+
+  .cert-title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--brand-blue);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  /* 分割线 */
+  .cert-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--warm-gold);
+    margin: 18px auto;
+  }
+
+  /* 主体区域 */
+  .cert-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 80px;
+    text-align: center;
+  }
+
+  .cert-award-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+
+  .cert-name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    letter-spacing: 10px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .cert-description {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 2;
+    max-width: 520px;
+    letter-spacing: 0.5px;
+  }
+
+  /* 四级路径缩略 */
+  .cert-path-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    padding: 10px 24px;
+    background: var(--warm-gold-bg);
+    border-radius: 6px;
+    border: 1px solid rgba(201,169,97,0.15);
+  }
+
+  .path-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-subtle);
+    flex-shrink: 0;
+  }
+  .path-dot.done { background: var(--warm-gold); }
+  .path-dot.active {
+    background: var(--brand-blue);
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+    width: 10px;
+    height: 10px;
+  }
+
+  .path-arrow {
+    font-size: 10px;
+    color: var(--border-subtle);
+  }
+
+  .path-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .path-label.active {
+    color: var(--brand-blue);
+    font-weight: 600;
+  }
+
+  .path-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* 底部信息区 */
+  .cert-footer {
+    padding: 0 60px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .cert-number {
+    text-align: left;
+  }
+  .cert-number .num {
+    font-family: 'Archivo Black', 'Inter', sans-serif;
+    font-size: 18px;
+    color: var(--brand-dark);
+    letter-spacing: 2px;
+  }
+  .cert-number .cohort {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .cert-signature {
+    text-align: center;
+    min-width: 180px;
+  }
+  .cert-signature .sign-line {
+    width: 160px;
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 0 auto 8px;
+  }
+  .cert-signature .sign-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+  }
+  .cert-signature .sign-title {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  .cert-date-area {
+    text-align: right;
+  }
+  .cert-date-area .date {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--brand-dark);
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+  .cert-date-area .location {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  /* 底部金色装饰线 */
+  .cert-front .bottom-accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--warm-gold) 0%, var(--warm-gold-soft) 50%, var(--warm-gold) 100%);
+    flex-shrink: 0;
+  }
+
+  /* 角落装饰 */
+  .corner-decor {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+  }
+  .corner-decor.tl { top: 20px; left: 20px; border-top: 1px solid var(--warm-gold); border-left: 1px solid var(--warm-gold); }
+  .corner-decor.tr { top: 20px; right: 20px; border-top: 1px solid var(--warm-gold); border-right: 1px solid var(--warm-gold); }
+  .corner-decor.bl { bottom: 20px; left: 20px; border-bottom: 1px solid var(--warm-gold); border-left: 1px solid var(--warm-gold); }
+  .corner-decor.br { bottom: 20px; right: 20px; border-bottom: 1px solid var(--warm-gold); border-right: 1px solid var(--warm-gold); }
+
+  /* ============================= */
+  /*         证书背面 BACK          */
+  /* ============================= */
+  .cert-back {
+    background: var(--bg-back);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+  }
+
+  .cert-back .top-accent {
+    height: 4px;
+    background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-blue-light) 100%);
+    flex-shrink: 0;
+  }
+
+  .back-header {
+    text-align: center;
+    padding: 28px 60px 0;
+    flex-shrink: 0;
+  }
+
+  .back-title {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    letter-spacing: 4px;
+  }
+
+  .back-title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: var(--brand-blue);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .back-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px 60px 0;
+    gap: 0;
+  }
+
+  /* 每级路径卡片 */
+  .level-card {
+    display: flex;
+    align-items: stretch;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    min-height: 0;
+  }
+
+  .level-indicator {
+    width: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 10px 0;
+    gap: 2px;
+  }
+  .level-indicator .lv-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 14px;
+    color: #fff;
+    line-height: 1;
+  }
+  .level-indicator .lv-label {
+    font-size: 7px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .level-card:nth-child(1) .level-indicator { background: #86868b; }
+  .level-card:nth-child(2) .level-indicator { background: var(--brand-blue); }
+  .level-card:nth-child(3) .level-indicator { background: var(--warm-gold); }
+  .level-card:nth-child(4) .level-indicator { background: var(--brand-dark); }
+
+  .level-content {
+    flex: 1;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .level-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .level-name-en {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .level-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+  }
+
+  .level-right {
+    width: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 20px;
+    border-left: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+
+  .level-right .meta-row {
+    font-size: 9px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 6px;
+    line-height: 1.7;
+  }
+  .level-right .meta-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  /* 当前级别高亮 */
+  .level-card.current {
+    border: 2px solid var(--brand-blue);
+    box-shadow: 0 2px 12px rgba(0,113,227,0.1);
+  }
+  .level-card.current .level-name {
+    color: var(--brand-blue);
+  }
+  .level-card.current::after {
+    content: "← 你在这里";
+    position: absolute;
+    right: -75px;
+    font-size: 10px;
+    color: var(--brand-blue);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .back-footer {
+    padding: 12px 60px 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .back-footer p {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    line-height: 1.8;
+  }
+
+  /* 连接线 */
+  .level-connector {
+    display: flex;
+    justify-content: center;
+    height: 8px;
+    position: relative;
+  }
+  .level-connector::before {
+    content: "";
+    width: 1px;
+    height: 100%;
+    background: var(--border-subtle);
+  }
+
+  /* ========== 打印 ========== */
+  @media print {
+    body { background: none; padding: 0; }
+    .cert-page {
+      box-shadow: none;
+      margin: 0;
+    }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <div>
+    <strong>AI 经营家 · 启程者 证书</strong>
+    <span class="badge">V1</span>
+    <span class="sub">正面 + 背面 × 13 份 · 双面打印</span>
+  </div>
+  <button onclick="window.print()">打印</button>
+</div>
+<div style="height:56px" class="no-print"></div>
+
+<script>
+const students = [
+  { name: "曹赟" },
+  { name: "尤燕波" },
+  { name: "胡民杰" },
+  { name: "何健" },
+  { name: "聪聪" },
+  { name: "张冬慧" },
+  { name: "黄青松" },
+  { name: "吴少梅" },
+  { name: "叶婷" },
+  { name: "林霞" },
+  { name: "蔡万富" },
+  { name: "蔡一鸣" },
+  { name: "王龙" }
+];
+
+function frontHTML(s) {
+  return `
+  <div class="cert-page">
+    <div class="cert-front">
+      <div class="top-accent"></div>
+
+      <div class="corner-decor tl"></div>
+      <div class="corner-decor tr"></div>
+      <div class="corner-decor bl"></div>
+      <div class="corner-decor br"></div>
+
+      <div class="cert-header">
+        <div class="cert-club-name">一号位 AI 俱乐部 &nbsp;·&nbsp; NO.1 AI CLUB</div>
+        <div class="cert-title-cn">AI 经营家 · 启程者</div>
+        <div class="cert-title-en">Founding Fellow &nbsp;·&nbsp; Cohort 01</div>
+      </div>
+
+      <div class="cert-divider"></div>
+
+      <div class="cert-body">
+        <div class="cert-award-text">兹 授 予</div>
+        <div class="cert-name">${s.name}</div>
+        <div class="cert-description">
+          作为首批加入「一号位 AI 经营家」社群的创始学员<br>
+          你已完成从"个人使用 AI"到"用 AI 经营企业"的认知转身<br>
+          并作为 Cohort 01 · Founding Fellow，获得进入这条路径的起点身份
+        </div>
+
+        <div class="cert-path-mini">
+          <div class="path-item">
+            <div class="path-dot done"></div>
+            <span class="path-label">Lv.1 驾驭者</span>
+          </div>
+          <span class="path-arrow">→</span>
+          <div class="path-item">
+            <div class="path-dot active"></div>
+            <span class="path-label active">Lv.2 启程者 ✦</span>
+          </div>
+          <span class="path-arrow">→</span>
+          <div class="path-item">
+            <div class="path-dot"></div>
+            <span class="path-label">Lv.3 践行者</span>
+          </div>
+          <span class="path-arrow">→</span>
+          <div class="path-item">
+            <div class="path-dot"></div>
+            <span class="path-label">Lv.4 AI-Native CEO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-footer">
+        <div class="cert-number">
+          <div class="num">Cohort 01</div>
+          <div class="cohort">Founding Fellow</div>
+        </div>
+
+        <div class="cert-signature">
+          <div class="sign-line"></div>
+          <div class="sign-name">肖荔（Vivian）</div>
+          <div class="sign-title">Vivian 的 AI 进化论 · 一号位 AI 俱乐部</div>
+        </div>
+
+        <div class="cert-date-area">
+          <div class="date">2026.04.19</div>
+          <div class="location">上海 · V聚场</div>
+        </div>
+      </div>
+
+      <div class="bottom-accent"></div>
+    </div>
+  </div>`;
+}
+
+function backHTML() {
+  return `
+  <div class="cert-page">
+    <div class="cert-back">
+      <div class="top-accent"></div>
+
+      <div class="back-header">
+        <div class="back-title">AI 经营家 · 四级成长路径</div>
+        <div class="back-title-en">The AI-Native CEO Certification Path</div>
+      </div>
+
+      <div class="back-body">
+        <div class="level-card">
+          <div class="level-indicator">
+            <span class="lv-num">01</span>
+            <span class="lv-label">Level</span>
+          </div>
+          <div class="level-content">
+            <div class="level-name">AI 驾驭者</div>
+            <div class="level-name-en">AI Power User</div>
+            <div class="level-desc">个人能用 AI 跑起来 — 完成驾驭系统四件套搭建（记忆 + 知识库 + 工作流 + Skill）</div>
+          </div>
+          <div class="level-right">
+            <div class="meta-row"><span class="meta-label">认证时机</span> 工作坊 Day 1</div>
+            <div class="meta-row"><span class="meta-label">判定方式</span> 现场投屏授予</div>
+          </div>
+        </div>
+
+        <div class="level-connector"></div>
+
+        <div class="level-card current" style="position:relative;">
+          <div class="level-indicator">
+            <span class="lv-num">02</span>
+            <span class="lv-label">Level</span>
+          </div>
+          <div class="level-content">
+            <div class="level-name">AI 经营家 · 启程者</div>
+            <div class="level-name-en">Founding Fellow · Cohort 01</div>
+            <div class="level-desc">完成从"个人用 AI"到"用 AI 经营企业"的认知转身 — 搭建智能体 + 完成经营画像自我定义</div>
+          </div>
+          <div class="level-right">
+            <div class="meta-row"><span class="meta-label">认证时机</span> 工作坊 Day 2</div>
+            <div class="meta-row"><span class="meta-label">判定方式</span> 实物证书 + 编号</div>
+          </div>
+        </div>
+
+        <div class="level-connector"></div>
+
+        <div class="level-card">
+          <div class="level-indicator">
+            <span class="lv-num">03</span>
+            <span class="lv-label">Level</span>
+          </div>
+          <div class="level-content">
+            <div class="level-name">AI 经营家 · 践行者</div>
+            <div class="level-name-en">Certified Practitioner</div>
+            <div class="level-desc">在自己组织里跑出 AI 落地的第一批真实成果 — 一条业务流程被 AI 重画 / 3 名员工拿到驾驭者 / KPI 新增编排力指标</div>
+          </div>
+          <div class="level-right">
+            <div class="meta-row"><span class="meta-label">认证时机</span> 90 天内申请</div>
+            <div class="meta-row"><span class="meta-label">判定方式</span> 证据包审核</div>
+          </div>
+        </div>
+
+        <div class="level-connector"></div>
+
+        <div class="level-card">
+          <div class="level-indicator">
+            <span class="lv-num">04</span>
+            <span class="lv-label">Level</span>
+          </div>
+          <div class="level-content">
+            <div class="level-name">Certified AI-Native CEO</div>
+            <div class="level-name-en">认证 AI 经营家</div>
+            <div class="level-desc">组织已被 AI 彻底重塑 — 人均管理 Agent ≥ 3 / Agent 承担流程 ≥ 40% / 岗位说明书 100% 重写</div>
+          </div>
+          <div class="level-right">
+            <div class="meta-row"><span class="meta-label">认证时机</span> 6-12 个月年度认证</div>
+            <div class="meta-row"><span class="meta-label">判定方式</span> 组织数据全审</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-footer">
+        <p>
+          本证书由「Vivian 的 AI 进化论 · 一号位 AI 俱乐部」签发<br>
+          Cohort 01 · 2026 年 4 月 · 上海<br>
+          这不是终点，是你 AI 经营家生涯的起点
+        </p>
+      </div>
+    </div>
+  </div>`;
+}
+
+// 渲染：每个学员 = 正面 + 背面（方便双面打印）
+const container = document.createElement('div');
+students.forEach(s => {
+  container.innerHTML += frontHTML(s);
+  container.innerHTML += backHTML();
+});
+document.body.insertAdjacentHTML('beforeend', container.innerHTML);
+</script>
+
+</body>
+</html>
