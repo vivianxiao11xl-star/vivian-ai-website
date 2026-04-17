@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>礼物卡 · 录音 Skill · A Gift From Vivian</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+  @page {
+    size: 148mm 105mm;
+    margin: 0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', 'Inter', -apple-system, 'PingFang SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #e8e8ed;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    padding: 30px;
+  }
+
+  /* ========== 工具栏 ========== */
+  .toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #1d1d1f;
+    color: #f5f5f7;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    font-size: 14px;
+  }
+  .toolbar .badge {
+    display: inline-block;
+    background: #B5883B;
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    margin-left: 12px;
+    font-weight: 500;
+  }
+  .toolbar .sub {
+    opacity: 0.4;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  .toolbar button {
+    background: #0071e3;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ========== 卡片通用 ========== */
+  .gift-card {
+    width: 148mm;
+    height: 105mm;
+    background: #F5F5F7;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .gift-card:last-child { page-break-after: auto; }
+
+  /* ============================= */
+  /*           正面 FRONT           */
+  /* ============================= */
+  .card-front {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 22px 14px;
+    position: relative;
+  }
+
+  /* 顶部金色眉标 */
+  .gift-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    color: #B5883B;
+    letter-spacing: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* 致：名字 */
+  .gift-to {
+    font-size: 10px;
+    color: #86868b;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+  }
+  .gift-name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+  }
+
+  /* 主标语 */
+  .gift-headline {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  /* 副标语 */
+  .gift-sub {
+    font-size: 11px;
+    color: #6e6e73;
+    line-height: 1.8;
+    letter-spacing: 1px;
+  }
+
+  /* 底部 QR 区 */
+  .gift-qr-area {
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .gift-qr-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .gift-qr-label {
+    font-size: 9px;
+    color: #0071e3;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+  }
+  .gift-qr-url {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    color: #86868b;
+    letter-spacing: 1px;
+  }
+
+  .gift-qr-img {
+    width: 28mm;
+    height: 28mm;
+    background: #fff;
+    padding: 2mm;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .gift-qr-img img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ============================= */
+  /*           反面 BACK            */
+  /* ============================= */
+  .card-back {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 28px;
+    text-align: center;
+    background: #F5F5F7;
+  }
+
+  .back-quote {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1d1d1f;
+    line-height: 2;
+    letter-spacing: 1.5px;
+    max-width: 300px;
+    margin-bottom: 12px;
+  }
+
+  .back-author {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: #86868b;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .back-cta {
+    font-size: 10px;
+    color: #0071e3;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  /* 品牌标识 */
+  .back-brand {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 7px;
+    color: #d2d2d7;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ========== 打印 ========== */
+  @media print {
+    body { background: none; padding: 0; gap: 0; }
+    .gift-card { box-shadow: none; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <div>
+    <strong>礼物卡 · 录音 Skill</strong>
+    <span class="badge">V1</span>
+    <span class="sub">正面 + 反面 × 20 张 · A6 双面打印</span>
+  </div>
+  <button onclick="window.print()">打印</button>
+</div>
+<div style="height:56px" class="no-print"></div>
+
+<script>
+const QR_BASE64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABmgAAAZoAQAAAAC+And1AAAMQ0lEQVR4nO3dwW7jOBQF0VIh///LHMwmRgRSljtpJF3MWQS2SEoy3pI3fMcgREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREreZheP5+vGx8lj8uk0eTl6d8ryDaq1kRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRLJ5wWW+/GswgCzPf/H5OPlZ7z0BtXaSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSImUSInskRe4zgY8RpcpgVmQ4Hj5QIHj8g3StZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZES2Sgv8GnLWMCNjgO710ZKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKfn/NzyUlb59ZPIsAnM4SOJ0HcDqCYHa/z5ASKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZGN8gLj+R3ubvKfWhHMggTXCYPtaiMlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlskde4Hi++HSgwLL3wI3DCGaxgIO9ayMlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUnKMv3fr//+cbn+dDfjtR/DB76/5uaRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESn5/zc8lJbJRP4JZJ4HT1+spj9FHF4LryTPH5JH92kiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJbJQXOD7u6p9OAbgRJDiNjucb/8cncgVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiVSIiWyRz+CY7XT/4d9Bpbb/deHFozJ/U7zqrWREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREsnnBY5VVOA0ZWm5yf8YfSlhMG6+Vas2UiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUvL7a34uKZES2eh8Af6sAcHdgVnqYJYNuHHwQLA2UiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlb9fDs1396+MGlo0Klpv8s6eNyf2uWxEEayMlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlslFe4Lj8j//rzfvZeQDX8YHltYexUW2kREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkRDbKC9wIDSxbB5x2/2e9Bx6ugwTjfeD6kIFWbaRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESvzuF/hSUiIlUiIlUnKMG3NWA8u119mA6xvM1o73gd/zBf5VUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlks8LHB+/Lqfc3e4/3eVGIuC4vMEmtZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZES2eh8geP902wbf7wSFbgOA8zu93DdhaBaGymREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimRffsRjOejdxMGN84SOFYvNPaojZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZT43S/wpaRESqRESqRESt5eX3JKBMxSAnfX3jiqYLx/nWUN0rWREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREimREsnnBY7L0wKW5wYszwM4zTs9aPbc62u/5wv8g6RESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESqRESmSj8wXG+6dZVGD5f/6zcMHsoIDHteWtHpatDaq1kRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRIpkRLZvB/BuBkBYBUuWDY0eEwZH+fNHt6vjZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIid/9Al9KSqRESqRESqRE9sgLHKtEwHXbgVkHgxuTr68xyST0ayMlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUnKMzyy+GSmYDSyXnV7omNxlk9pIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIiZRIieTPFzierxufaFnA84TB8XF0bFkbKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZESKZE9+hGM1cDsP/5v9B44rThu9h546aSBVm2kREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkxO9+gS8lJVIiJVIiJVIiJbJHXuC6scBs9OT6QIFlwmB5bTx/ZKs2UiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIlUiIb5QVet4wU3O1gcPo69q2NlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEjJ22cWLzf5H1/vdjWYZQPGZN5j7cjXRkqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREpko7zAuHmb2U7/0iwCcAoDnAIH110IqrWREimREimREimREimREimREimREimREimREimREimREimREimREimREinxu1/gS0mJlEiJlEiJlEiJlEjJMdvav7E9/9K5AbO1xysNDcbHT5vURkqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREqkREoknxf4Z0mJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlEiJlPjdL/ClpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpERKpMTvfoEv9R/+XP/bYaSYoAAAAABJRU5ErkJggg==";
+
+const members = [
+  { name: "曹赟" },
+  { name: "尤燕波" },
+  { name: "胡民杰" },
+  { name: "何健" },
+  { name: "聪聪" },
+  { name: "张冬慧" },
+  { name: "王明军" },
+  { name: "黄青松" },
+  { name: "吴少梅" },
+  { name: "叶婷" },
+  { name: "胡红芳" },
+  { name: "蔡万富" },
+  { name: "蔡一鸣" },
+  { name: "晴空" },
+  { name: "尹亚楠" },
+  { name: "王龙" },
+  { name: "昊凡" },
+  { name: "王柳鸿" },
+  { name: null },
+  { name: null }
+];
+
+function frontHTML(m) {
+  const nameDisplay = m.name ? m.name : "＿＿＿＿";
+  return `
+  <div class="gift-card">
+    <div class="card-front">
+      <div class="gift-tag">A Gift From Vivian</div>
+      <div class="gift-to">致：</div>
+      <div class="gift-name">${nameDisplay}</div>
+      <div class="gift-headline">"没留痕 = 没发生"</div>
+      <div class="gift-sub">
+        给你的公司装一个外置大脑<br>
+        让时间替你打工
+      </div>
+      <div class="gift-qr-area">
+        <div class="gift-qr-left">
+          <div class="gift-qr-label">扫码领取 · 录音 Skill</div>
+          <div class="gift-qr-url">vivianai.cn/gift</div>
+        </div>
+        <div class="gift-qr-img">
+          <img src="${QR_BASE64}" alt="QR Code">
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function backHTML() {
+  return `
+  <div class="gift-card">
+    <div class="card-back">
+      <div class="back-quote">
+        "你脑子里记得的<br>
+        叫个人经验。<br><br>
+        AI 记得的<br>
+        才叫公司的记忆。"
+      </div>
+      <div class="back-author">— Vivian</div>
+      <div class="back-cta">🎙️ 录音 Skill · 5 分钟装好</div>
+      <div class="back-brand">Vivian的AI进化论 · April 2026</div>
+    </div>
+  </div>`;
+}
+
+const container = document.createElement('div');
+members.forEach(m => {
+  container.innerHTML += frontHTML(m);
+  container.innerHTML += backHTML();
+});
+document.body.insertAdjacentHTML('beforeend', container.innerHTML);
+</script>
+
+</body>
+</html>
