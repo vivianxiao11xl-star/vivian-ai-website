@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>现场切片 · 两天 18 位启程者 — 一号位 AI 工作坊</title>
+<title>温暖瞬间 · 两天 18 位启程者 — 一号位 AI 工作坊</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -85,7 +85,7 @@
     background: linear-gradient(135deg, #ff7a59, #e35d2d);
   }
   .nav-links { display: flex; gap: 28px; list-style: none; }
-  .nav-links a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 500; transition: color 0.2s; white-space: nowrap; }
   .nav-links a:hover { color: #fff; }
 
   /* ===== HERO ===== */
@@ -137,7 +137,12 @@
     column-gap: 12px;
   }
   @media (max-width: 1100px) { .gallery { column-count: 2; } }
-  @media (max-width: 640px)  { .gallery { column-count: 1; } }
+  /* On mobile, drop CSS columns entirely — iOS Safari has rendering bugs
+     when column-count combines with loading="lazy" on images */
+  @media (max-width: 640px)  {
+    .gallery { column-count: auto; column-gap: 0; display: block; }
+    .m-item { break-inside: auto; }
+  }
 
   .m-item {
     break-inside: avoid;
@@ -232,7 +237,17 @@
     .hero h1 { font-size: 36px; }
     .hero-lead { font-size: 15px; }
     .hero-stat-num { font-size: 28px; }
-    .nav-links { gap: 16px; }
+    /* Mobile nav: keep links reachable via horizontal scroll */
+    .nav-inner { gap: 10px; padding: 0 16px; }
+    .nav-links {
+      gap: 14px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-links a { font-size: 12px; }
   }
 </style>
 </head>
@@ -268,7 +283,7 @@
 
 <!-- ===== HERO ===== -->
 <header class="hero">
-  <div class="hero-eyebrow">📸 MOMENTS · 两天的切片</div>
+  <div class="hero-eyebrow">📸 MOMENTS · 温暖瞬间</div>
   <h1>那两天，我们在一起的样子。</h1>
   <p class="hero-lead">
     镜头里没有金句、没有反转——只有 18 个人围坐在一起，被同一件事照亮的瞬间。<br>
@@ -285,19 +300,19 @@
     </div>
     <div class="hero-stat">
       <div class="hero-stat-num">35</div>
-      <div class="hero-stat-label">现场切片</div>
+      <div class="hero-stat-label">温暖瞬间</div>
     </div>
   </div>
 </header>
 
 <!-- ===== GALLERY ===== -->
 <section class="gallery" id="gallery">
-    <figure class="m-item"><img src="photos/photo-01.jpg" alt="工作坊现场 01" loading="lazy"></figure>
-    <figure class="m-item"><img src="photos/photo-02.jpg" alt="工作坊现场 02" loading="lazy"></figure>
-    <figure class="m-item"><img src="photos/photo-03.jpg" alt="工作坊现场 03" loading="lazy"></figure>
-    <figure class="m-item"><img src="photos/photo-04.jpg" alt="工作坊现场 04" loading="lazy"></figure>
-    <figure class="m-item"><img src="photos/photo-05.jpg" alt="工作坊现场 05" loading="lazy"></figure>
-    <figure class="m-item"><img src="photos/photo-06.jpg" alt="工作坊现场 06" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-01.jpg" alt="工作坊现场 01" loading="eager"></figure>
+    <figure class="m-item"><img src="photos/photo-02.jpg" alt="工作坊现场 02" loading="eager"></figure>
+    <figure class="m-item"><img src="photos/photo-03.jpg" alt="工作坊现场 03" loading="eager"></figure>
+    <figure class="m-item"><img src="photos/photo-04.jpg" alt="工作坊现场 04" loading="eager"></figure>
+    <figure class="m-item"><img src="photos/photo-05.jpg" alt="工作坊现场 05" loading="eager"></figure>
+    <figure class="m-item"><img src="photos/photo-06.jpg" alt="工作坊现场 06" loading="eager"></figure>
     <figure class="m-item"><img src="photos/photo-07.jpg" alt="工作坊现场 07" loading="lazy"></figure>
     <figure class="m-item"><img src="photos/photo-08.jpg" alt="工作坊现场 08" loading="lazy"></figure>
     <figure class="m-item"><img src="photos/photo-09.jpg" alt="工作坊现场 09" loading="lazy"></figure>
