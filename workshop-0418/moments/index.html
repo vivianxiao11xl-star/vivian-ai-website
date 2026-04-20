@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>现场切片 · 两天 18 位启程者 — 一号位 AI 工作坊</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --cream: #fafaf9;
+    --blue-deep: #0050a8;
+    --blue: #0071e3;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: #0a0a0a;
+  }
+
+  /* ===== PASSWORD GATE ===== */
+  .gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #eff6ff 0%, #fafaf9 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .gate.hidden { display: none; }
+  .gate-eyebrow {
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase;
+  }
+  .gate h2 {
+    font-size: 32px; font-weight: 800; margin-bottom: 10px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0050a8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .gate p { font-size: 15px; color: var(--gray-3); margin-bottom: 36px; text-align: center; }
+  .gate-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .gate-input {
+    width: 240px; padding: 13px 18px; border-radius: 12px;
+    border: 1px solid var(--gray-4); font-size: 15px;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit; background: #fff;
+  }
+  .gate-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,113,227,0.14); }
+  .gate-btn {
+    padding: 13px 28px; border-radius: 12px; border: none;
+    background: var(--blue); color: #fff; font-size: 15px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gate-error { color: #ef4444; font-size: 13px; margin-top: 14px; display: none; text-align: center; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: #f5f5f7;
+    letter-spacing: 0.3px; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, #ff7a59, #e35d2d);
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 120px 24px 60px;
+    max-width: 900px; margin: 0 auto;
+    text-align: center;
+    color: #f5f5f7;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: #ff9f7a;
+    background: rgba(255,122,89,0.12);
+    padding: 7px 18px; border-radius: 20px;
+    margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    font-size: 52px; font-weight: 700; line-height: 1.2;
+    letter-spacing: -1px; margin-bottom: 22px;
+    color: #fff;
+  }
+  .hero-lead {
+    font-size: 17px; line-height: 1.8;
+    color: rgba(255,255,255,0.7);
+    max-width: 640px; margin: 0 auto;
+  }
+  .hero-stats {
+    display: flex; gap: 44px; justify-content: center;
+    margin-top: 40px; flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, #ff7a59, #ffb38a);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-stat-label {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    letter-spacing: 2px; margin-top: 4px;
+  }
+
+  /* ===== MASONRY GALLERY ===== */
+  .gallery {
+    max-width: 1400px; margin: 0 auto;
+    padding: 40px 16px 100px;
+    column-count: 3;
+    column-gap: 12px;
+  }
+  @media (max-width: 1100px) { .gallery { column-count: 2; } }
+  @media (max-width: 640px)  { .gallery { column-count: 1; } }
+
+  .m-item {
+    break-inside: avoid;
+    margin: 0 0 12px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #1a1a1a;
+    cursor: zoom-in;
+    transition: transform 0.25s ease;
+  }
+  .m-item img {
+    display: block; width: 100%; height: auto;
+    transition: transform 0.5s ease, opacity 0.3s ease;
+  }
+  .m-item:hover { transform: translateY(-2px); }
+  .m-item:hover img { transform: scale(1.02); opacity: 0.92; }
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.94);
+    display: none; align-items: center; justify-content: center;
+    padding: 40px;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; animation: lbFade 0.25s ease; }
+  @keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox img {
+    max-width: 100%; max-height: 100%;
+    display: block;
+    border-radius: 6px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+  .lightbox-close {
+    position: absolute; top: 22px; right: 28px;
+    color: rgba(255,255,255,0.7);
+    font-size: 28px; cursor: pointer;
+    user-select: none;
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.08);
+    transition: background 0.2s;
+  }
+  .lightbox-close:hover { background: rgba(255,255,255,0.18); color: #fff; }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; user-select: none;
+    font-size: 24px; font-weight: 300;
+    transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.2); color: #fff; }
+  .lightbox-prev { left: 24px; }
+  .lightbox-next { right: 24px; }
+  .lightbox-counter {
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    letter-spacing: 2px;
+    font-family: 'Inter', sans-serif;
+  }
+  @media (max-width: 640px) {
+    .lightbox { padding: 16px; }
+    .lightbox-nav { width: 42px; height: 42px; font-size: 20px; }
+    .lightbox-prev { left: 8px; }
+    .lightbox-next { right: 8px; }
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    padding: 50px 24px;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-back {
+    display: inline-block; margin-bottom: 16px;
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    padding: 8px 20px; border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    transition: background 0.2s;
+  }
+  .footer-back:hover { background: rgba(255,255,255,0.12); }
+  .footer-meta { font-size: 12px; line-height: 1.8; letter-spacing: 0.5px; }
+  .footer-meta a { color: rgba(255,255,255,0.6); text-decoration: none; }
+
+  @media (max-width: 720px) {
+    .hero { padding: 100px 20px 40px; }
+    .hero h1 { font-size: 36px; }
+    .hero-lead { font-size: 15px; }
+    .hero-stat-num { font-size: 28px; }
+    .nav-links { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-eyebrow">AI 工作坊 · 学员专享</div>
+  <h2>一号位 AI 俱乐部</h2>
+  <p>请输入访问口令</p>
+  <div class="gate-input-wrap">
+    <input type="text" class="gate-input" id="gateName" placeholder="你的姓名" autofocus>
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令">
+    <button class="gate-btn" id="gateBtn">进入</button>
+  </div>
+  <div class="gate-error" id="gateError">口令不对，再试一下</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span>一号位 AI 工作坊</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">工作坊总览</a></li>
+      <li><a href="../day1-morning.html">D1 上午</a></li>
+      <li><a href="../day2-afternoon.html">D2 下午</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-eyebrow">📸 MOMENTS · 两天的切片</div>
+  <h1>那两天，我们在一起的样子。</h1>
+  <p class="hero-lead">
+    镜头里没有金句、没有反转——只有 18 个人围坐在一起，被同一件事照亮的瞬间。<br>
+    这些照片不会写进 PPT，但它们是这次工作坊真正发生过的证据。
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">18</div>
+      <div class="hero-stat-label">AI 经营家启程者</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2</div>
+      <div class="hero-stat-label">天 · 一夜</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">35</div>
+      <div class="hero-stat-label">现场切片</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== GALLERY ===== -->
+<section class="gallery" id="gallery">
+    <figure class="m-item"><img src="photos/photo-01.jpg" alt="工作坊现场 01" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-02.jpg" alt="工作坊现场 02" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-03.jpg" alt="工作坊现场 03" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-04.jpg" alt="工作坊现场 04" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-05.jpg" alt="工作坊现场 05" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-06.jpg" alt="工作坊现场 06" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-07.jpg" alt="工作坊现场 07" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-08.jpg" alt="工作坊现场 08" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-09.jpg" alt="工作坊现场 09" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-10.jpg" alt="工作坊现场 10" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-11.jpg" alt="工作坊现场 11" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-12.jpg" alt="工作坊现场 12" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-13.jpg" alt="工作坊现场 13" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-14.jpg" alt="工作坊现场 14" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-15.jpg" alt="工作坊现场 15" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-16.jpg" alt="工作坊现场 16" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-17.jpg" alt="工作坊现场 17" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-18.jpg" alt="工作坊现场 18" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-19.jpg" alt="工作坊现场 19" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-20.jpg" alt="工作坊现场 20" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-21.jpg" alt="工作坊现场 21" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-22.jpg" alt="工作坊现场 22" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-23.jpg" alt="工作坊现场 23" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-24.jpg" alt="工作坊现场 24" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-25.jpg" alt="工作坊现场 25" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-26.jpg" alt="工作坊现场 26" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-27.jpg" alt="工作坊现场 27" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-28.jpg" alt="工作坊现场 28" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-29.jpg" alt="工作坊现场 29" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-30.jpg" alt="工作坊现场 30" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-31.jpg" alt="工作坊现场 31" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-32.jpg" alt="工作坊现场 32" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-33.jpg" alt="工作坊现场 33" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-34.jpg" alt="工作坊现场 34" loading="lazy"></figure>
+    <figure class="m-item"><img src="photos/photo-35.jpg" alt="工作坊现场 35" loading="lazy"></figure>
+</section>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lbClose">✕</div>
+  <div class="lightbox-nav lightbox-prev" id="lbPrev">‹</div>
+  <img id="lbImg" src="" alt="">
+  <div class="lightbox-nav lightbox-next" id="lbNext">›</div>
+  <div class="lightbox-counter" id="lbCounter"></div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <a href="../" class="footer-back">← 返回工作坊总览</a>
+  <div class="footer-meta">
+    一号位 AI 工作坊 · 2026.04.18-19<br>
+    主办：<a href="https://vivianai.cn/">Vivian 的 AI 进化论</a> × 一号位 AI 俱乐部<br>
+    <span style="color: rgba(255,255,255,0.3); letter-spacing: 0.5px;">学员专享 · 请勿外传</span>
+  </div>
+</footer>
+
+<script src="../welcome.js"></script>
+<script>
+  // Password gate (shared across all workshop pages via sessionStorage)
+  const PASS = 'Vivian0418';
+  const gate = document.getElementById('gate');
+  const nameInput = document.getElementById('gateName');
+  const input = document.getElementById('gateInput');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateError');
+
+  function applyWatermark(name) {
+    if (document.getElementById('wm-layer')) return;
+    const now = new Date();
+    const date = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
+    const raw = name + ' · 专属访问 · 请勿外传 · ' + date;
+    const escaped = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="460" height="240" viewBox="0 0 460 240"><text x="20" y="130" transform="rotate(-28 230 120)" font-family="-apple-system, Noto Sans SC, sans-serif" font-size="13" font-weight="600" fill="rgba(255,255,255,0.08)">' + escaped + '</text></svg>';
+    const wm = document.createElement('div');
+    wm.id = 'wm-layer';
+    wm.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:50;background-image:url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '");background-repeat:repeat;user-select:none;';
+    document.body.appendChild(wm);
+  }
+
+  const savedName = sessionStorage.getItem('workshop0418UserName');
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1' && savedName) {
+    gate.classList.add('hidden');
+    applyWatermark(savedName);
+  }
+
+  function tryUnlock() {
+    const name = nameInput.value.trim();
+    const val = input.value.trim();
+    if (!name) {
+      err.textContent = '请先填写你的姓名';
+      err.style.display = 'block';
+      nameInput.focus();
+      return;
+    }
+    if (val === PASS) {
+      sessionStorage.setItem('workshop0418Unlocked', '1');
+      sessionStorage.setItem('workshop0418UserName', name);
+      gate.classList.add('hidden');
+      applyWatermark(name);
+      if (window.showWelcome) showWelcome(name);
+    } else {
+      err.textContent = '口令不对，再试一下';
+      err.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', tryUnlock);
+  nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') input.focus(); });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryUnlock(); });
+
+  // ===== Lightbox =====
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  const lbCounter = document.getElementById('lbCounter');
+  const items = Array.from(document.querySelectorAll('.m-item img'));
+  let cur = 0;
+
+  function open(i) {
+    cur = (i + items.length) % items.length;
+    lbImg.src = items[cur].src;
+    lbImg.alt = items[cur].alt;
+    lbCounter.textContent = (cur+1) + ' / ' + items.length;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  items.forEach((img, i) => img.parentElement.addEventListener('click', () => open(i)));
+  lbClose.addEventListener('click', (e) => { e.stopPropagation(); close(); });
+  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); open(cur - 1); });
+  lbNext.addEventListener('click', (e) => { e.stopPropagation(); open(cur + 1); });
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft')  open(cur - 1);
+    else if (e.key === 'ArrowRight') open(cur + 1);
+  });
+</script>
+
+</body>
+</html>
