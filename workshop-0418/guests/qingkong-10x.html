@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AI 驱动的跨量级增长 · 晴空分享 — 一号位 AI 工作坊</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --cream: #fafaf9;
+    --blue-deep: #0050a8;
+    --blue: #0071e3;
+    --blue-soft: #bfdbfe;
+    --blue-bg: #eff6ff;
+    --white: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--cream);
+  }
+
+  /* ===== PASSWORD GATE ===== */
+  .gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #eff6ff 0%, #fafaf9 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .gate.hidden { display: none; }
+  .gate-eyebrow {
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase;
+  }
+  .gate h2 {
+    font-size: 32px; font-weight: 800; margin-bottom: 10px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0050a8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .gate p { font-size: 15px; color: var(--gray-3); margin-bottom: 36px; text-align: center; }
+  .gate-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .gate-input {
+    width: 240px; padding: 13px 18px; border-radius: 12px;
+    border: 1px solid var(--gray-4); font-size: 15px;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit; background: #fff;
+  }
+  .gate-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,113,227,0.14); }
+  .gate-btn {
+    padding: 13px 28px; border-radius: 12px; border: none;
+    background: var(--blue); color: #fff; font-size: 15px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gate-error { color: #ef4444; font-size: 13px; margin-top: 14px; display: none; text-align: center; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 1040px; margin: 0 auto; padding: 0 24px;
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: var(--black);
+    letter-spacing: 0.3px; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--gray-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blue-deep); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 140px 24px 80px;
+    max-width: 760px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    background: rgba(0,113,227,0.08);
+    padding: 7px 18px; border-radius: 20px;
+    margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-size: 56px; font-weight: 900; line-height: 1.12;
+    letter-spacing: -2px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #1d1d1f 40%, #0071e3 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 19px; color: var(--gray-2); line-height: 1.6;
+    max-width: 580px; margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; gap: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 13px; color: var(--gray-3);
+    flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ===== BIG QUOTE BANNER ===== */
+  .banner-quote {
+    max-width: 900px; margin: 0 auto;
+    padding: 80px 24px 40px;
+  }
+  .banner-quote-inner {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 24px;
+    padding: 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner-quote-mark {
+    position: absolute; top: 24px; left: 40px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 96px; color: rgba(0,80,168,0.15);
+    line-height: 1; font-weight: 700;
+  }
+  .banner-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px; font-weight: 600;
+    line-height: 1.55; color: var(--black);
+    position: relative; z-index: 1;
+  }
+  .banner-quote-attr {
+    margin-top: 28px; font-size: 14px; color: var(--gray-2);
+    font-weight: 500; letter-spacing: 0.5px;
+  }
+
+  /* ===== INTRO / SETUP ===== */
+  .setup {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 20px;
+  }
+  .setup h2 {
+    font-size: 14px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .setup p {
+    font-size: 18px; line-height: 1.8; color: var(--gray-1);
+    margin-bottom: 20px;
+  }
+  .setup p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== SECTION ===== */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .section-index {
+    display: inline-block;
+    font-size: 13px; font-weight: 700;
+    color: var(--blue); letter-spacing: 2px;
+    background: rgba(0,113,227,0.08);
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .section-h {
+    font-size: 36px; font-weight: 800;
+    line-height: 1.25; letter-spacing: -0.8px;
+    margin-bottom: 16px; color: var(--black);
+  }
+  .section-lead {
+    font-size: 17px; color: var(--gray-2);
+    line-height: 1.7; margin-bottom: 32px;
+    font-style: italic;
+  }
+  .section h3 {
+    font-size: 22px; font-weight: 700;
+    margin: 40px 0 16px; color: var(--black);
+    letter-spacing: -0.3px;
+  }
+  .section h4 {
+    font-size: 17px; font-weight: 700;
+    margin: 28px 0 12px; color: var(--gray-1);
+  }
+  .section p {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 18px;
+  }
+  .section p strong { color: var(--black); font-weight: 600; }
+  .section ul, .section ol {
+    margin: 12px 0 24px 0; padding-left: 22px;
+  }
+  .section li {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 10px;
+  }
+  .section li strong { color: var(--black); font-weight: 600; }
+
+  /* ===== PULL QUOTE ===== */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 28px 24px 32px;
+    background: var(--blue-bg);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 12px 12px 0;
+  }
+  .pull-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 19px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin: 0;
+  }
+  .pull-quote.big p { font-size: 22px; font-weight: 600; }
+
+  /* ===== SUB-POINT CARDS ===== */
+  .layers {
+    display: grid; gap: 14px;
+    margin: 24px 0 32px;
+  }
+  .layer {
+    background: #fff; border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px; padding: 20px 24px;
+    position: relative; padding-left: 72px;
+  }
+  .layer-num {
+    position: absolute; left: 20px; top: 20px;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue-soft), var(--blue));
+    color: #fff; font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer-label {
+    font-size: 12px; color: var(--blue-deep); font-weight: 700;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .layer-body {
+    font-size: 15px; color: var(--gray-1); line-height: 1.7;
+  }
+
+  /* ===== TABLE ===== */
+  .section table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0 28px; font-size: 15px;
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .section th {
+    text-align: left; padding: 12px 18px;
+    background: var(--blue-bg); font-weight: 700;
+    color: var(--black); border-bottom: 1px solid rgba(0,80,168,0.15);
+  }
+  .section td {
+    padding: 12px 18px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--gray-1); line-height: 1.6;
+  }
+  .section tr:last-child td { border-bottom: none; }
+
+  /* ===== SCENE BOX ===== */
+  .scene {
+    margin: 32px 0;
+    padding: 28px 32px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .scene-label {
+    font-size: 12px; font-weight: 700;
+    color: var(--blue); letter-spacing: 2px;
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+  .scene p { font-size: 16px; line-height: 1.75; color: var(--gray-1); margin-bottom: 12px; }
+  .scene p:last-child { margin-bottom: 0; }
+
+  /* ===== CALLOUT (dark, for method formulas) ===== */
+  .callout-dark {
+    margin: 28px 0;
+    background: linear-gradient(135deg, #1d1d1f, #2a2a2f);
+    color: #fff; border-radius: 16px;
+    padding: 32px 36px;
+  }
+  .callout-dark-label {
+    font-size: 12px; font-weight: 700;
+    color: var(--blue-soft); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .callout-dark p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px; line-height: 1.65;
+    color: #fff; font-weight: 500;
+  }
+  .callout-dark code {
+    font-family: 'Inter', monospace;
+    font-size: 15px; color: var(--blue-soft);
+    background: rgba(255,255,255,0.08);
+    padding: 2px 8px; border-radius: 4px;
+  }
+
+  /* ===== QUOTE WALL ===== */
+  .quote-wall {
+    max-width: 1040px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .quote-wall-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .quote-wall-eyebrow {
+    font-size: 13px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 14px;
+  }
+  .quote-wall-title {
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -0.8px; color: var(--black);
+  }
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .quote-card {
+    background: #fff; border-radius: 16px;
+    padding: 28px; border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -8px; right: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 100px; color: rgba(0,113,227,0.08);
+    line-height: 1; font-weight: 700;
+  }
+  .quote-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,80,168,0.10);
+  }
+  .quote-card-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .quote-card-attr {
+    font-size: 12px; color: var(--blue-deep);
+    font-weight: 700; letter-spacing: 1px;
+  }
+
+  /* ===== TAKEAWAYS ===== */
+  .takeaways {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .takeaway-item {
+    background: #fff; border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 16px;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex; gap: 22px;
+  }
+  .takeaway-num {
+    flex-shrink: 0;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-soft) 0%, var(--blue) 100%);
+    color: #fff; font-weight: 800; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .takeaway-body h4 {
+    font-size: 18px; font-weight: 700;
+    color: var(--black); margin-bottom: 8px;
+  }
+  .takeaway-body p {
+    font-size: 15px; line-height: 1.7;
+    color: var(--gray-1); margin: 0;
+  }
+  .takeaway-body p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== DISCLAIMER ===== */
+  .disclaimer {
+    max-width: 760px; margin: 40px auto 0;
+    padding: 24px 28px;
+    background: #fff8f0;
+    border: 1px solid #fde6c7;
+    border-radius: 14px;
+  }
+  .disclaimer-title {
+    font-size: 13px; font-weight: 700;
+    color: #b45309; letter-spacing: 1px;
+    margin-bottom: 8px; text-transform: uppercase;
+  }
+  .disclaimer p {
+    font-size: 14px; line-height: 1.7;
+    color: #78350f; margin: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    max-width: 1040px; margin: 40px auto 0;
+    padding: 48px 24px 60px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .footer-back {
+    display: inline-block; margin-bottom: 24px;
+    font-size: 14px; color: var(--blue-deep);
+    text-decoration: none; font-weight: 600;
+    padding: 10px 22px; border-radius: 20px;
+    background: rgba(0,113,227,0.08);
+    transition: background 0.2s;
+  }
+  .footer-back:hover { background: rgba(0,113,227,0.15); }
+  .footer-meta {
+    font-size: 13px; color: var(--gray-3);
+    line-height: 1.7;
+  }
+  .footer-meta a { color: var(--blue-deep); text-decoration: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .hero { padding: 110px 20px 50px; }
+    .hero h1 { font-size: 38px; letter-spacing: -1.2px; }
+    .hero-sub { font-size: 17px; }
+    .banner-quote { padding: 40px 16px 20px; }
+    .banner-quote-inner { padding: 40px 28px; }
+    .banner-quote-mark { font-size: 64px; top: 16px; left: 20px; }
+    .banner-quote p { font-size: 20px; }
+    .section { padding: 40px 20px; }
+    .section-h { font-size: 26px; letter-spacing: -0.5px; }
+    .section p, .section li { font-size: 16px; }
+    .pull-quote p { font-size: 17px; }
+    .pull-quote.big p { font-size: 18px; }
+    .layer { padding: 18px 20px 18px 66px; }
+    .scene { padding: 22px 22px; }
+    .callout-dark { padding: 24px 22px; }
+    .callout-dark p { font-size: 17px; }
+    .quote-wall { padding: 50px 20px; }
+    .quote-wall-title { font-size: 26px; }
+    .takeaway-item { padding: 22px 22px; flex-direction: column; gap: 12px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-eyebrow">AI 工作坊 · 学员专享</div>
+  <h2>一号位 AI 俱乐部</h2>
+  <p>请输入访问口令</p>
+  <div class="gate-input-wrap">
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令" autofocus>
+    <button class="gate-btn" id="gateBtn">进入</button>
+  </div>
+  <div class="gate-error" id="gateError">口令不对，再试一下</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span>一号位 AI 工作坊</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">工作坊总览</a></li>
+      <li><a href="#quotes">金句收藏</a></li>
+      <li><a href="#takeaways">带回去的动作</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <span class="hero-eyebrow">嘉宾分享 · 理性篇</span>
+  <h1>AI 是杠杆<br>不是大脑</h1>
+  <p class="hero-sub">
+    00 后创始人晴空，半年时间把一个品类做到了头部体量。<br>
+    这场分享把他的打法抽骨——战略 × 组织 × AI × 战术 × 底层认知。
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026.04.19 · 下午</span>
+    <span>🎙️ 晴空 · B站电商创始人</span>
+    <span>🏠 V 聚场</span>
+    <span>⏱️ 2 小时+</span>
+  </div>
+</header>
+
+<!-- ===== BIG QUOTE BANNER ===== -->
+<section class="banner-quote">
+  <div class="banner-quote-inner">
+    <div class="banner-quote-mark">"</div>
+    <p>
+      AI 的本质不是大脑，是杠杆。杠杆的作用是放大——给它可验证的高胜率策略，它能把产品放大一千倍；输入混乱的指令，AI 会把混乱放大，让问题更糟。
+    </p>
+    <div class="banner-quote-attr">— 晴空 · 这场分享的主线一句话</div>
+  </div>
+</section>
+
+<!-- ===== SETUP ===== -->
+<section class="setup">
+  <h2>这一场在讲什么</h2>
+  <p>Day 2 下午晴空把自己这半年的增长打法完整拆给在座。<strong>他是 00 后，没带过大公司，没背过完整商业学科</strong>——但他一边做一边把每一件事变成了可复用的方法论。</p>
+  <p>关键是：<strong>他讲的不是「怎么用 AI 写文案」，而是「怎么把 AI 嵌进公司每一个环节，同时创始人自己不下场就做不出来」</strong>。</p>
+  <p>这一场是工作坊 D2 最硬核的嘉宾切片——<strong>AI × 增长 × 组织的完整闭环</strong>。下面按战略 / 组织 / AI / 战术 / 认知五层重组。</p>
+</section>
+
+<!-- ===== SECTION 1 ===== -->
+<article class="section" id="belief">
+  <span class="section-index">01 核心信念</span>
+  <h2 class="section-h">AI 是杠杆，不是大脑</h2>
+  <p class="section-lead">整场分享的底层公设。所有具体打法都是这个信念的推论。</p>
+
+  <div class="pull-quote big">
+    <p>"AI 放大一切，包括垃圾。好的指令被放大，差的指令也被放大。"</p>
+  </div>
+
+  <p>由这个公设直接推出三个关键推论，奠定了整场分享的基调：</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">推论一</div>
+      <div class="layer-body">AI 放大一切——<strong>好指令被放大，垃圾指令也被放大</strong>。你给 AI 喂什么，AI 就把什么写进你的公司</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">推论二</div>
+      <div class="layer-body">打磨 AI 必须用<strong>顶级员工</strong>——审美、逻辑、业务理解都要够，一般员工上场会产生大量内耗</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">推论三</div>
+      <div class="layer-body">创始人必须<strong>亲自下场</strong>调关键智能体——画面稿、文案、策略这些「高杠杆点」要两脚踩泥、仰望星空，否则调不出好东西</div>
+    </div>
+  </div>
+
+  <p>这三条串起来就是晴空区别于同行的最底层差异——<strong>他把 AI 当成「公司的放大镜」，而不是「省人的机器」</strong>。</p>
+</article>
+
+<!-- ===== SECTION 2 ===== -->
+<article class="section" id="strategy">
+  <span class="section-index">02 战略层</span>
+  <h2 class="section-h">砍掉，是最快的增长杠杆</h2>
+  <p class="section-lead">他这半年做对的第一件事不是"加什么"，是"砍什么"。</p>
+
+  <h3>2.1 产品的 SABC 分级</h3>
+
+  <p>晴空把所有产品按<strong>利润贡献度</strong>（当下利润 or 未来利润）分成四级，判断维度只用这一个，不看花哨指标：</p>
+
+  <table>
+    <thead>
+      <tr><th>分级</th><th>占比</th><th>贡献 / 处理方式</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>S 级</strong></td><td>占比极小</td><td>贡献公司绝大部分利润 · 全部资源重点投</td></tr>
+      <tr><td>A 级</td><td>中等</td><td>稳定补位 · 正常投入</td></tr>
+      <tr><td>B / C 级</td><td>最多</td><td><strong>拖累资源 · 果断砍掉</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.2 阿里反例 vs 晴空正例</h3>
+
+  <p>晴空引了一组对比，把战略取舍讲得很透：</p>
+
+  <div class="scene">
+    <div class="scene-label">CASE</div>
+    <p><strong>阿里张勇时期</strong>：资源分散到多个 B 级业务，削弱了 S 级（淘宝）——后来被新玩家打得很惨。</p>
+    <p><strong>拼多多 / 抖音</strong>：不做分散，主业吃到底——爆发式利润。</p>
+    <p><strong>晴空自己</strong>：砍掉所有旁支品类，All in 一个核心品类——半年从小体量跑到品类头部。</p>
+  </div>
+
+  <p>结论很简单：<strong>你不砍，AI 就会把你的"分散"放大成"全线稀薄"</strong>。</p>
+
+  <h3>2.3 SG 产品逻辑（Super Good）</h3>
+
+  <p>"SG 产品"是晴空自己发明的词——<strong>当你已经有超级渠道（流量）时，要找超级产品来放大</strong>。</p>
+
+  <p>他的做法非常反常识：</p>
+
+  <ul>
+    <li>砸真金白银去<strong>报专业产品课</strong>（几万块学费不眨眼）</li>
+    <li>"i 人"出身，硬是在课上主动加所有认识的供应链人</li>
+    <li>最终锁定一家优质工厂深度合作</li>
+    <li>合作后同一品类<strong>销量出现数量级跃升</strong></li>
+  </ul>
+
+  <div class="pull-quote big">
+    <p>"当你内心极度渴望这件事，方向明确，能为此豁出去时——上帝就听到你敲门了。"</p>
+  </div>
+
+  <p>这个信念后面会不断呼应——<strong>创始人必须真的想要，不能装着想要</strong>。</p>
+</article>
+
+<!-- ===== SECTION 3 ===== -->
+<article class="section" id="org">
+  <span class="section-index">03 组织层</span>
+  <h2 class="section-h">1A + 多C 架构 · 单点极端指标 · 淘汰逼出剩下的人</h2>
+  <p class="section-lead">晴空讲组织的部分最扎心——"你奖再多钱推不动人，罚一点点钱就有用"。</p>
+
+  <h3>3.1 人才架构</h3>
+
+  <div class="callout-dark">
+    <div class="callout-dark-label">ORG STRUCTURE</div>
+    <p>创始人（策略脑）<br>&nbsp;&nbsp;&nbsp;&nbsp;↓<br>A 级人才（传达指令 · 调度）<br>&nbsp;&nbsp;&nbsp;&nbsp;↓<br>多名 C 级执行（负责细节落地）</p>
+  </div>
+
+  <p>几个关键判断：</p>
+
+  <ul>
+    <li><strong>A 级人才靠培养，不靠招</strong>——招来的大概率不是 A 级，要从 C 级里拎出"有天赋 + 能拿结果"的人往上提</li>
+    <li>强的人<strong>薪资必须越给越高</strong>，把天花板打开</li>
+    <li>执行层的价值<strong>体现在细节上</strong>，别期待他出策略</li>
+  </ul>
+
+  <h3>3.2 SOP 极简招聘：两天筛人法</h3>
+
+  <p>他有一套反行业常识的筛人法——<strong>不给三个月试用期，只给两天</strong>。</p>
+
+  <div class="scene">
+    <div class="scene-label">FLOW</div>
+    <p><strong>第一天</strong>：新人拿到一份 20 多页的 SOP（包含操作步骤 + 检查清单 + 标准公式 + 证据留痕的模板），只做一件事——看 SOP、做笔记。</p>
+    <p><strong>第二天</strong>：拿参考文件，上手工作。</p>
+    <p>两天看完，不合适直接 pass——"给他省时间，双方都好"。过去他培养一个文案要 1–2 个月，现在两天判断。</p>
+  </div>
+
+  <p>关键设计：SOP 要求<strong>每半小时打勾、写留痕</strong>，贴在工位上。<strong>没有摸鱼空间</strong>。</p>
+
+  <h3>3.3 SOP 迭代机制</h3>
+
+  <ul>
+    <li>创始人出初版（必须自己懂业务）</li>
+    <li>外聘兼职 HR 跟进迭代——"他本身像 AI，考过多个学位，善处理业务和家事"</li>
+    <li>每日收集新人反馈 → 持续迭代</li>
+    <li><strong>SOP = 公司封装的顶级员工智慧</strong>——不是 word 文档，是让 AI 也能读的标准化协议</li>
+  </ul>
+
+  <h3>3.4 单点极端指标（反 KPI 权重制）</h3>
+
+  <p>他对传统 KPI 权重制的批判非常直接：</p>
+
+  <div class="pull-quote">
+    <p>"KPI 权重制的员工会选性价比最高的点做，做到 60–70 分就停。难的事情基本不感兴趣，奖金再拉也很难推动。"</p>
+  </div>
+
+  <p>他的做法：<strong>每月只抓一个核心指标，全公司火力集中打这一个点</strong>。</p>
+
+  <ul>
+    <li>这个月打"<strong>准时发布</strong>"——打透之后变成标准，下月不再单列考核</li>
+    <li>下个月打"<strong>评论区维护</strong>"——同样打透、沉淀成标准</li>
+    <li>十二个月能把 12 个关键环节全部打成<strong>默认行为</strong></li>
+  </ul>
+
+  <h3>3.5 罚钱比奖钱有效</h3>
+
+  <p>这段很多人听完在笑，但晴空是认真的：</p>
+
+  <div class="pull-quote big">
+    <p>"过去治不了迟到——奖钱没用，讲几百块也没用。改成罚几十块，第一天就全勤。触发的是损失厌恶，不是激励。"</p>
+  </div>
+
+  <h3>3.6 淘汰一个，逼出剩下的几个</h3>
+
+  <p>他有一个"反直觉"的观察——<strong>淘汰的效果不在被淘汰的那个人身上，在排第二的那个人身上</strong>。</p>
+
+  <div class="scene">
+    <div class="scene-label">OBSERVATION</div>
+    <p>他年底淘汰了一位垫底员工（还是朋友关系，淘汰得很艰难）。开年以后<strong>效果不体现在这位被淘汰的同事身上</strong>——体现在原先排倒数第二的那个人身上。</p>
+    <p>他感到了真实的压力，薪资明显提升，给公司创造的价值是原先的几倍。<strong>淘汰一个人的价值，是点燃了剩下的人</strong>。</p>
+  </div>
+
+  <p>底层逻辑：<strong>高速增长的公司必须配"重点班"氛围——优秀的人在一起</strong>，能量场本身就是生产力。</p>
+
+  <h3>3.7 管理飞轮</h3>
+
+  <div class="callout-dark">
+    <div class="callout-dark-label">MANAGEMENT FLYWHEEL</div>
+    <p>SOP 降低管理难度<br>&nbsp;&nbsp;↓<br>创始人时间释放，全部花在指数级增长决策上<br>&nbsp;&nbsp;↓<br>公司高速增长<br>&nbsp;&nbsp;↓<br>增长期间没有管理难度（大家一个劲往前冲）<br>&nbsp;&nbsp;↓<br><strong>进攻是最好的防御</strong></p>
+  </div>
+</article>
+
+<!-- ===== SECTION 4 ===== -->
+<article class="section" id="ai">
+  <span class="section-index">04 AI 实战层</span>
+  <h2 class="section-h">把 AI 嵌进每一个业务环节</h2>
+  <p class="section-lead">这一层是工作坊学员最惊讶的部分——他把 AI 用在了没人会想到的地方。</p>
+
+  <h3>4.1 AI 文案流水线（核心引擎）</h3>
+
+  <p>他把视频文案拆成几个模块，每个模块用不同的 AI 手法：</p>
+
+  <table>
+    <thead>
+      <tr><th>模块</th><th>AI 用法</th><th>关键技巧</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>开局</strong></td><td>利用 AI 发散性，一次生成 5–10 个版本</td><td>不给太多规范，防止千篇一律</td></tr>
+      <tr><td><strong>成绩板块</strong></td><td>做科普、建用户心智</td><td>稳定性为主</td></tr>
+      <tr><td><strong>产品测评</strong>（主体）</td><td>喂 AI 两类"高手饮料"：头部 KOL 观点 + 产品策略</td><td>产品策略由 AI 文案负责人输出</td></tr>
+      <tr><td><strong>对比</strong></td><td>跟竞品 / 同价位对标</td><td>顺应人性底层，转化极好</td></tr>
+      <tr><td><strong>伪承诺</strong></td><td>"在我实测下来……在我的清单里面……"</td><td>看似客观实则感性，感性才激发下单</td></tr>
+      <tr><td><strong>主观强度</strong></td><td>像"渣男式语言"——想抓把柄又不能坐实</td><td>这是内容魅力的核心</td></tr>
+    </tbody>
+  </table>
+
+  <h4>"高手饮料"机制</h4>
+
+  <p>SOP 里硬性要求文案员去找市面上高播放、高转化的 KOL 内容 → 结构化地喂给 AI → <strong>借别人的势能输出自己的观点</strong>。</p>
+
+  <p>这个机制的核心是：<strong>AI 不能凭空出内容，但它能把你提供的内容 × N 倍地重组</strong>。</p>
+
+  <h3>4.2 AI 配音（低投入高回报的隐藏王牌）</h3>
+
+  <ul>
+    <li>声音对用户感知极其重要，但实现难度不大</li>
+    <li>性价比 >> 画面、文案优化</li>
+    <li><strong>不能直接抄别人的声音</strong>（侵权），但可以调成接近某种风格的自信感</li>
+    <li>自信的声音 = 高转化</li>
+  </ul>
+
+  <h3>4.3 画面稿智能体（创始人亲自调 2 天）</h3>
+
+  <p>传统做法：画面稿太抽象，谁也讲不清楚标准，新来的剪辑师永远对不上调子。</p>
+
+  <p>晴空的做法：</p>
+
+  <ol>
+    <li>把自家所有视频<strong>逐帧下载</strong></li>
+    <li>用多模态大模型做画面拆解</li>
+    <li>拆完后喂给 Claude 做结构化输出</li>
+    <li>画面分类打标签：过渡性、重点性、环点性……</li>
+    <li><strong>把可量化数据变成标签</strong>——AI 就能输出</li>
+  </ol>
+
+  <p>效果：</p>
+
+  <ul>
+    <li>AI 输出的画面稿和人工稿<strong>基本重合</strong>（多期对照验证过）</li>
+    <li>剪辑师用这套画面稿剪片，<strong>一小时出活</strong></li>
+    <li><strong>关键是创始人自己调——只有创始人对业务颗粒度最细</strong></li>
+  </ul>
+
+  <h3>4.4 AI 同行监控（一个"不懂代码的小白"做出来的系统）</h3>
+
+  <div class="scene">
+    <div class="scene-label">CASE</div>
+    <p><strong>需求</strong>：实时监控同行排名，高频刷新。</p>
+    <p><strong>实现者</strong>：不是程序员，是公司里的一名运营——完全用 AI 编程完成。</p>
+    <p><strong>流程</strong>：① 先让 Claude 对齐产品需求 → ② 去 GitHub 找类似开源方案（不重复造轮子） → ③ 源码交给 AI 做适配和执行。</p>
+    <p><strong>用途</strong>：发现同行冒头立刻加速砸曝光、抢心智。</p>
+  </div>
+
+  <p>这个案例最重要的结论是：<strong>"能用 AI"的人不等于"会写代码"的人。只要他懂业务、敢上手，AI 就是他的脚手架</strong>。</p>
+
+  <h3>4.5 评论区矩阵</h3>
+
+  <ul>
+    <li>公司维护着一组多账号矩阵，专门做评论区氛围</li>
+    <li>热评前几条大部分是自营——<strong>第一条必须是自己的</strong>（高引导话术，例如"代工厂下场做这品类"这种勾子）</li>
+    <li><strong>品牌方账号绝对不能在最上面</strong>——会被用户一眼识破</li>
+    <li>考核周期：每月抓一次评论区指标，打透后变成标准（呼应前面的"单点极端指标"）</li>
+  </ul>
+
+  <h3>4.6 智能体开发的底层方法（亚楠也补充过）</h3>
+
+  <div class="callout-dark">
+    <div class="callout-dark-label">CORE PRINCIPLE</div>
+    <p>以<strong>结果</strong>为标准，<strong>测试先行</strong>（TDD）</p>
+  </div>
+
+  <ul>
+    <li>模型是黑盒，没人知道为什么 AI 有智能（"涌现"）</li>
+    <li><strong>不用纠结提示词写得多好</strong>——"总结"两个字可能比 2000 字 prompt 更好</li>
+    <li>关键是<strong>定义清楚结果标准</strong></li>
+  </ul>
+
+  <p>亚楠补充的"答疑智能体"案例就是标准实践：</p>
+
+  <ol>
+    <li>过去多年的问答语料按场景分类打标</li>
+    <li>留出一部分作为<strong>测试集</strong>（不给 AI 学习）</li>
+    <li>让 AI 生成答案，和真实回答对比</li>
+    <li>AI 自动迭代直到输出风格一致</li>
+    <li><strong>最终提示词作者根本没读过</strong>——只要结果达标就 OK</li>
+  </ol>
+
+  <p>这是一个"<strong>TDD 用在 AI 上</strong>"的范式——你不在乎 AI 怎么想，你只在乎输出是否达标。</p>
+</article>
+
+<!-- ===== SECTION 5 ===== -->
+<article class="section" id="tactics">
+  <span class="section-index">05 战术层</span>
+  <h2 class="section-h">平台阳谋打法</h2>
+  <p class="section-lead">晴空讲完"阳谋"后，在场好几位做内容电商的同学都在记笔记。</p>
+
+  <h3>5.1 平台底层逻辑</h3>
+
+  <div class="pull-quote big">
+    <p>"成交付费，曝光免费送——很多商家只会保 ROI，我不保。"</p>
+  </div>
+
+  <p>这个底层逻辑一旦想通，打法就跟同行完全不一样——<strong>同行在「防守 ROI」，你在「把曝光当现金收」</strong>。</p>
+
+  <h3>5.2 三层阳谋具体战法</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">第一层 · 多品多账号拉认知</div>
+      <div class="layer-body">有的产品负责<strong>拉认知</strong>，有的产品负责<strong>卖</strong>，视频多划链——把单次曝光的价值拆成多个</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">第二层 · 把 GMV 的一部分循环回投站内</div>
+      <div class="layer-body">A 品<strong>可以不赚钱</strong>，专门砸曝光；用户第 2、3、4 次刷到才会形成心智。平台的长尾回搜权重极高，后续转化非常好</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">第三层 · 高毛利产品收割</div>
+      <div class="layer-body">用高毛利 SG 产品承接曝光带来的长尾流量——<strong>看毛利不看 GMV</strong>（十万 GMV 的品类可能只有两万毛利）</div>
+    </div>
+  </div>
+
+  <h3>5.3 投放节奏</h3>
+
+  <ul>
+    <li>每天<strong>都投</strong>（微投但都投）——不让模型失忆</li>
+    <li>战略付费视频<strong>持续重押</strong></li>
+    <li>追求的是"A 品不赚钱，但把<strong>曝光赚到</strong>"</li>
+  </ul>
+
+  <h3>5.4 为什么同行追不上？</h3>
+
+  <p>这段晴空讲得很克制，但在场都听懂了：</p>
+
+  <div class="pull-quote">
+    <p>"同行还停留在上一阶段——保 ROI、堆数量。我这边是超级产品 + 阳谋曝光 + 强内容模型 + 评论区矩阵 + 同行监控五层叠加，<strong>他们模型不齐，就很难复制</strong>。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 6 ===== -->
+<article class="section" id="pricing">
+  <span class="section-index">06 定价与渠道</span>
+  <h2 class="section-h">定价倒推品质，高低位打配合</h2>
+
+  <h3>6.1 定价分渠道不同</h3>
+
+  <ul>
+    <li><strong>内容渠道定价必须留利润空间</strong>——没有利润，品牌方没钱继续做内容，货也卖不出去</li>
+    <li><strong>必须给平台交足够的钱</strong>——这是底层逻辑，对抗它就是对抗系统</li>
+    <li><strong>调价倒推品质</strong>——让供应链加价，倒推供应链把品质做好</li>
+  </ul>
+
+  <h3>6.2 高低位打法</h3>
+
+  <ul>
+    <li>用<strong>高维度的爆款风标</strong>占领当前品类</li>
+    <li>封面 = 找对标 + 让 AI 改成自己的</li>
+    <li><strong>跨赛道借势</strong>——从卷的赛道迁到不卷的数码赛道的爱好者圈</li>
+  </ul>
+
+  <h3>6.3 选赛道的思路</h3>
+
+  <ul>
+    <li>B 站数码用户对内容<strong>很挑剔</strong>——原住民虽不卷，但内容门槛高</li>
+    <li>相邻赛道互相认识，<strong>知道数码有利润会跑过来卷</strong>——所以要快速吃掉品类氛围</li>
+    <li>男 16–30 岁是主力——<strong>吃掉品类大部分氛围</strong>比抢全量市场更重要（即使品类总搜索量不大，也能养出一家公司）</li>
+  </ul>
+</article>
+
+<!-- ===== SECTION 7 ===== -->
+<article class="section" id="negotiation">
+  <span class="section-index">07 谈判心法</span>
+  <h2 class="section-h">优先报价，占主动权</h2>
+  <p class="section-lead">晴空讲谈判的方式有一种"00 后的直接"——不绕弯。</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">商单谈判</div>
+      <div class="layer-body"><strong>先报价占主动权</strong>——"我直接报个数，主动权就在你这边了"</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">供应链谈判</div>
+      <div class="layer-body"><strong>直接开条件</strong>——"你拿 X 分成，拿不拿？"行业里工厂能拿到比例越高，越说明你在给他让利</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">员工薪资</div>
+      <div class="layer-body"><strong>直接聊"你想拿多少"</strong>——合适就给，离谱就不合作。省掉所有"博弈时间"</div>
+    </div>
+  </div>
+
+  <div class="pull-quote big">
+    <p>"很多事，其实可以用很直接的方式去推进。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 8 ===== -->
+<article class="section" id="founder">
+  <span class="section-index">08 创始人亲身下场</span>
+  <h2 class="section-h">两脚踩泥 × 仰望星空</h2>
+
+  <p>晴空讲到最后，主线回到了创始人本身：</p>
+
+  <div class="pull-quote big">
+    <p>"一个创始人必须同时具备两个特质——两脚踩泥 + 仰望星空。少一个都不行。"</p>
+  </div>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">A</div>
+      <div class="layer-label">两脚踩泥</div>
+      <div class="layer-body">对业务<strong>细节颗粒度</strong>要够细——每句话有什么作用、每个画面为什么这么切，心里要有数</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">B</div>
+      <div class="layer-label">仰望星空</div>
+      <div class="layer-body">找到能让公司<strong>数量级跃升</strong>的点——不在细节里淹死，要能抬头看战略</div>
+    </div>
+  </div>
+
+  <h3>AI 和业务环环相扣的飞轮</h3>
+
+  <div class="callout-dark">
+    <div class="callout-dark-label">THE AI FLYWHEEL</div>
+    <p>内容反哺投放<br>&nbsp;&nbsp;↓<br>投放数据反哺选品<br>&nbsp;&nbsp;↓<br>选品结果反哺下一个内容<br>&nbsp;&nbsp;↓<br>降低管理难度<br>&nbsp;&nbsp;↓<br><strong>创始人时间进一步释放</strong></p>
+  </div>
+
+  <h3>创始人自己怎么用 AI</h3>
+
+  <ul>
+    <li>这次来工作坊的 PPT，他<strong>昨晚用 Opus 4.7 + Sonnet 并跑，两小时写出</strong>——金句到位</li>
+    <li>方法：<strong>自己搭知识框架 → 让 AI 持续追问 → 根据语料输出</strong></li>
+    <li>灵感随时用录音笔记录，后期加工</li>
+    <li>核心：<strong>框架是你的，AI 只是放大</strong></li>
+  </ul>
+</article>
+
+<!-- ===== SECTION 9 ===== -->
+<article class="section" id="vivian">
+  <span class="section-index">09 Vivian 的点评与升华</span>
+  <h2 class="section-h">晴空示范了一个"AI 型创始人"长什么样</h2>
+
+  <h3>晴空做对的 5 件事（Vivian 总结）</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">AI 型创始人</div>
+      <div class="layer-body">把时间花在创始人该花的地方——<strong>在自己最专长的领域下场调智能体</strong></div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">不重复造轮子</div>
+      <div class="layer-body">先去 GitHub 找开源方案，再改成自己的——<strong>AI 时代的底层礼仪</strong></div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">SOP = 顶级员工的智慧封装</div>
+      <div class="layer-body">AI 读不了散落的文件，<strong>必须有结构化的标准 SOP</strong>。这呼应了白天讲的"把员工复制成 skill"</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">4</div>
+      <div class="layer-label">最优员工要被封装</div>
+      <div class="layer-body">每个岗位的顶级表现都要变成可复用的智能体——<strong>找到那个最紧急的策略，其他都是执行</strong></div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">5</div>
+      <div class="layer-label">A 级脑 + 执行层架构</div>
+      <div class="layer-body">人少速度快，<strong>杠杆高</strong>——这就是 AI 时代的新组织形态</div>
+    </div>
+  </div>
+
+  <h3>Vivian 的金句升级版</h3>
+
+  <div class="pull-quote">
+    <p>"行业经验我们先上讲——给到 AI 的是垃圾，输出就是垃圾。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"所有经验都会在 AI 上被放大。好东西放大，垃圾也放大。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"我用 AI、其他人用 AI、我的员工用 AI——一定会有差别。"</p>
+  </div>
+
+  <h3>新时代人才标准（Vivian 补充）</h3>
+
+  <p>晴空这套打法暗藏了<strong>三种新岗位</strong>：</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">α</div>
+      <div class="layer-label">AI 编排师</div>
+      <div class="layer-body">设计 agent 协作图、定标准（晴空公司的"AI 技术负责人"就是这个角色——不懂代码，但懂业务）</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">β</div>
+      <div class="layer-label">混合管理者</div>
+      <div class="layer-body"><strong>既管人又管 agent</strong>——分工的边界从此不在人与人之间</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">γ</div>
+      <div class="layer-label">球员兼教练</div>
+      <div class="layer-body">自己在跑流程，<strong>同时设计让别人跑</strong>——这是最稀缺的那个角色</div>
+    </div>
+  </div>
+
+  <h3>管理公式升级</h3>
+
+  <div class="callout-dark">
+    <div class="callout-dark-label">MANAGEMENT FORMULA · UPGRADED</div>
+    <p>传统：<code>选 · 育 · 用 · 留</code><br>新增：<strong>Harness 环境</strong>——如果环境不搭，前四条全被稀释</p>
+  </div>
+
+  <p>这是晴空这场分享最终落到"一号位能带走什么"的地方——<strong>你不仅要管人，还要给 AI 搭舞台</strong>。</p>
+</article>
+
+<!-- ===== QUOTE WALL ===== -->
+<section class="quote-wall" id="quotes">
+  <div class="quote-wall-header">
+    <div class="quote-wall-eyebrow">✦ 金句收藏</div>
+    <h2 class="quote-wall-title">这场分享的十二个刀</h2>
+  </div>
+
+  <div class="quote-grid">
+    <div class="quote-card">
+      <p class="quote-card-text">AI 不是大脑，是杠杆。杠杆的作用是放大。</p>
+      <div class="quote-card-attr">— 主线公设</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">AI 放大一切，包括垃圾。好指令被放大，差指令也被放大。</p>
+      <div class="quote-card-attr">— 核心推论</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">当你内心极度渴望这件事，方向明确，能为此豁出去时——上帝就听到你敲门了。</p>
+      <div class="quote-card-attr">— SG 产品心法</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">KPI 权重制的员工做到 60–70 分就停。奖金再拉也推不动。</p>
+      <div class="quote-card-attr">— 组织层</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">奖钱没用，罚一点就行——触发的是损失厌恶。</p>
+      <div class="quote-card-attr">— 管理反常识</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">淘汰的效果不体现在被淘汰的人身上，体现在排第二的那个人身上。</p>
+      <div class="quote-card-attr">— 淘汰机制</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">SOP 就是公司封装的顶级员工智慧。</p>
+      <div class="quote-card-attr">— SOP 本质</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">成交付费，曝光免费送——很多商家只会保 ROI，我不保。</p>
+      <div class="quote-card-attr">— 平台阳谋</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">一个创始人必须同时具备两个特质——两脚踩泥 + 仰望星空。</p>
+      <div class="quote-card-attr">— 创始人心法</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">很多事，其实可以用很直接的方式去推进。</p>
+      <div class="quote-card-attr">— 谈判心法</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">我用 AI、其他人用 AI、我的员工用 AI——一定会有差别。</p>
+      <div class="quote-card-attr">— Vivian 升华</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">框架是你的，AI 只是放大。</p>
+      <div class="quote-card-attr">— 创始人 AI 使用心法</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAKEAWAYS ===== -->
+<section class="takeaways" id="takeaways">
+  <div style="max-width: 760px; margin: 0 auto 40px; padding: 0 24px;">
+    <div style="font-size: 13px; font-weight: 700; color: var(--blue-deep); letter-spacing: 3px; margin-bottom: 14px; text-align: center;">✦ 带回去的动作</div>
+    <h2 style="font-size: 36px; font-weight: 800; letter-spacing: -0.8px; text-align: center; color: var(--black);">七件今晚就能开始做的事</h2>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">1</div>
+    <div class="takeaway-body">
+      <h4>盘点公司的 SABC，只看利润</h4>
+      <p>把所有产品/业务按"当下利润 or 未来利润"硬排序。<strong>砍掉 B/C 级，集中火力 All in 一个 SG 品类</strong>——不砍就是在养脂肪。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">2</div>
+    <div class="takeaway-body">
+      <h4>写一份 20 页 SOP，本月就写</h4>
+      <p>必须包含：操作步骤 + 检查清单 + 标准公式 + 证据留痕模板。<strong>创始人出初版——别外包，你不懂业务 AI 也不会懂</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">3</div>
+    <div class="takeaway-body">
+      <h4>本月只抓一个核心指标</h4>
+      <p>全公司火力集中打这一个点，打透变成标准再换下一个。<strong>一年打 12 个关键环节，就是护城河</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">4</div>
+    <div class="takeaway-body">
+      <h4>创始人亲自调一个核心智能体</h4>
+      <p>选一个<strong>业务最核心的高杠杆点</strong>（画面稿、文案、客服、定价……），自己两天不干别的，把这个 agent 调到和自己一致。这件事不能外包。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">5</div>
+    <div class="takeaway-body">
+      <h4>把业务知识打成标签，不要扔散文件给 AI</h4>
+      <p>AI 读不了散文件。<strong>可量化的数据要变成标签，不可量化的经验要变成 SOP</strong>——AI 才能放大你的经验。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">6</div>
+    <div class="takeaway-body">
+      <h4>定义清楚 AI 产出的测试标准（TDD）</h4>
+      <p>别再纠结提示词写得多好。<strong>先定结果标准（测试集），让 AI 自己迭代到达标</strong>——最终提示词长什么样无所谓。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">7</div>
+    <div class="takeaway-body">
+      <h4>先找开源方案，不重复造轮子</h4>
+      <p>AI 编程的顺序：<strong>① Claude 对齐需求 → ② GitHub 找类似源码 → ③ AI 做适配</strong>。这是 AI 时代的基础礼仪，也是效率的三倍杠杆。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DISCLAIMER ===== -->
+<div class="disclaimer">
+  <div class="disclaimer-title">⚠️ 口径说明</div>
+  <p>本页为工作坊学员的方法论笔记，已对涉及晴空公司的<strong>具体数据、账号数量、投放比例、供应链比例、薪资/罚款细节</strong>等做脱敏处理。如需引用具体数据做对外传播，请直接与晴空同步口径。</p>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <a href="../" class="footer-back">← 返回工作坊总览</a>
+  <div class="footer-meta">
+    一号位 AI 工作坊 · 2026.04.18-19 · V 聚场<br>
+    主办：<a href="https://vivianai.cn/">Vivian 的 AI 进化论</a> × 一号位 AI 俱乐部<br>
+    <span style="font-size: 12px; color: var(--gray-4); letter-spacing: 0.5px;">学员专享 · 请勿外传</span>
+  </div>
+</footer>
+
+<script>
+  const PASS = 'Vivian0418';
+  const gate = document.getElementById('gate');
+  const input = document.getElementById('gateInput');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateError');
+
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1') {
+    gate.classList.add('hidden');
+  }
+
+  function tryUnlock() {
+    const val = input.value.trim();
+    if (val === PASS) {
+      sessionStorage.setItem('workshop0418Unlocked', '1');
+      gate.classList.add('hidden');
+    } else {
+      err.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+</script>
+
+</body>
+</html>
