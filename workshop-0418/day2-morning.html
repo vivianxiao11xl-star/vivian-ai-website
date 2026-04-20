@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AI 如何真正进入损益表 · Day2 上午 — 一号位 AI 工作坊</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --cream: #fafaf9;
+    --blue-deep: #0050a8;       /* deep blue */
+    --blue: #0071e3;            /* brand blue */
+    --blue-soft: #bfdbfe;       /* soft light blue */
+    --blue-bg: #eff6ff;
+    --white: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--cream);
+  }
+
+  /* ===== PASSWORD GATE ===== */
+  .gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #eff6ff 0%, #fafaf9 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .gate.hidden { display: none; }
+  .gate-eyebrow {
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase;
+  }
+  .gate h2 {
+    font-size: 32px; font-weight: 800; margin-bottom: 10px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0050a8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .gate p { font-size: 15px; color: var(--gray-3); margin-bottom: 36px; text-align: center; }
+  .gate-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .gate-input {
+    width: 240px; padding: 13px 18px; border-radius: 12px;
+    border: 1px solid var(--gray-4); font-size: 15px;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit; background: #fff;
+  }
+  .gate-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .gate-btn {
+    padding: 13px 28px; border-radius: 12px; border: none;
+    background: var(--blue); color: #fff; font-size: 15px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gate-error { color: #ef4444; font-size: 13px; margin-top: 14px; display: none; text-align: center; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 1040px; margin: 0 auto; padding: 0 24px;
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: var(--black);
+    letter-spacing: 0.3px; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--gray-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blue-deep); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 140px 24px 80px;
+    max-width: 760px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    background: rgba(0,80,168,0.08);
+    padding: 7px 18px; border-radius: 20px;
+    margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-size: 56px; font-weight: 900; line-height: 1.12;
+    letter-spacing: -2px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #1d1d1f 40%, #0050a8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 19px; color: var(--gray-2); line-height: 1.6;
+    max-width: 580px; margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; gap: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 13px; color: var(--gray-3);
+    flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ===== BIG QUOTE BANNER ===== */
+  .banner-quote {
+    max-width: 900px; margin: 0 auto;
+    padding: 80px 24px 40px;
+  }
+  .banner-quote-inner {
+    background: linear-gradient(135deg, #0050a8 0%, #0071e3 100%);
+    border-radius: 24px;
+    padding: 64px 56px;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+  }
+  .banner-quote-mark {
+    position: absolute; top: 24px; left: 40px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 96px; color: rgba(255,255,255,0.18);
+    line-height: 1; font-weight: 700;
+  }
+  .banner-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px; font-weight: 600;
+    line-height: 1.55; color: #fff;
+    position: relative; z-index: 1;
+  }
+  .banner-quote-attr {
+    margin-top: 28px; font-size: 14px; color: rgba(255,255,255,0.75);
+    font-weight: 500; letter-spacing: 0.5px;
+  }
+
+  /* ===== INTRO / SETUP ===== */
+  .setup {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 20px;
+  }
+  .setup h2 {
+    font-size: 14px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .setup p {
+    font-size: 18px; line-height: 1.8; color: var(--gray-1);
+    margin-bottom: 20px;
+  }
+  .setup p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== SECTION ===== */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .section-index {
+    display: inline-block;
+    font-size: 13px; font-weight: 700;
+    color: var(--blue); letter-spacing: 2px;
+    background: rgba(0,113,227,0.08);
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .section-h {
+    font-size: 36px; font-weight: 800;
+    line-height: 1.25; letter-spacing: -0.8px;
+    margin-bottom: 16px; color: var(--black);
+  }
+  .section-lead {
+    font-size: 17px; color: var(--gray-2);
+    line-height: 1.7; margin-bottom: 32px;
+    font-style: italic;
+  }
+  .section h3 {
+    font-size: 22px; font-weight: 700;
+    margin: 40px 0 16px; color: var(--black);
+    letter-spacing: -0.3px;
+  }
+  .section h4 {
+    font-size: 17px; font-weight: 700;
+    margin: 28px 0 12px; color: var(--gray-1);
+  }
+  .section p {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 18px;
+  }
+  .section p strong { color: var(--black); font-weight: 600; }
+  .section ul, .section ol {
+    margin: 12px 0 24px 0; padding-left: 22px;
+  }
+  .section li {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 10px;
+  }
+  .section li strong { color: var(--black); font-weight: 600; }
+
+  /* ===== PULL QUOTE (inline highlight) ===== */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 28px 24px 32px;
+    background: var(--blue-bg);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 12px 12px 0;
+  }
+  .pull-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 19px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin: 0;
+  }
+  .pull-quote.big p { font-size: 22px; font-weight: 600; }
+
+  /* ===== SUB-POINT CARDS ===== */
+  .layers {
+    display: grid; gap: 14px;
+    margin: 24px 0 32px;
+  }
+  .layer {
+    background: #fff; border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px; padding: 20px 24px;
+    position: relative; padding-left: 72px;
+  }
+  .layer-num {
+    position: absolute; left: 20px; top: 20px;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue-soft), var(--blue));
+    color: #fff; font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer-label {
+    font-size: 12px; color: var(--blue-deep); font-weight: 700;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .layer-body {
+    font-size: 15px; color: var(--gray-1); line-height: 1.7;
+  }
+
+  /* ===== TABLE ===== */
+  .section table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0 28px; font-size: 15px;
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .section th {
+    text-align: left; padding: 12px 18px;
+    background: var(--blue-bg); font-weight: 700;
+    color: var(--black); border-bottom: 1px solid rgba(0,80,168,0.18);
+  }
+  .section td {
+    padding: 12px 18px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--gray-1); line-height: 1.6;
+    vertical-align: top;
+  }
+  .section tr:last-child td { border-bottom: none; }
+
+  /* ===== SCENE BOX (narrative moment) ===== */
+  .scene {
+    margin: 32px 0;
+    padding: 28px 32px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .scene-label {
+    font-size: 12px; font-weight: 700;
+    color: var(--blue); letter-spacing: 2px;
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+  .scene p { font-size: 16px; line-height: 1.75; color: var(--gray-1); margin-bottom: 12px; }
+  .scene p:last-child { margin-bottom: 0; }
+
+  /* ===== QUOTE WALL ===== */
+  .quote-wall {
+    max-width: 1040px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .quote-wall-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .quote-wall-eyebrow {
+    font-size: 13px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 14px;
+  }
+  .quote-wall-title {
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -0.8px; color: var(--black);
+  }
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .quote-card {
+    background: #fff; border-radius: 16px;
+    padding: 28px; border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -8px; right: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 100px; color: rgba(0,113,227,0.09);
+    line-height: 1; font-weight: 700;
+  }
+  .quote-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,80,168,0.10);
+  }
+  .quote-card-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .quote-card-attr {
+    font-size: 12px; color: var(--blue-deep);
+    font-weight: 700; letter-spacing: 1px;
+  }
+
+  /* ===== TAKEAWAYS ===== */
+  .takeaways {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .takeaway-item {
+    background: #fff; border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 16px;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex; gap: 22px;
+  }
+  .takeaway-num {
+    flex-shrink: 0;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-soft) 0%, var(--blue) 100%);
+    color: #fff; font-weight: 800; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .takeaway-body h4 {
+    font-size: 18px; font-weight: 700;
+    color: var(--black); margin-bottom: 8px;
+  }
+  .takeaway-body p {
+    font-size: 15px; line-height: 1.7;
+    color: var(--gray-1); margin: 0;
+  }
+  .takeaway-body p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    max-width: 1040px; margin: 40px auto 0;
+    padding: 48px 24px 60px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .footer-back {
+    display: inline-block; margin-bottom: 24px;
+    font-size: 14px; color: var(--blue-deep);
+    text-decoration: none; font-weight: 600;
+    padding: 10px 22px; border-radius: 20px;
+    background: rgba(0,113,227,0.08);
+    transition: background 0.2s;
+  }
+  .footer-back:hover { background: rgba(0,113,227,0.15); }
+  .footer-meta {
+    font-size: 13px; color: var(--gray-3);
+    line-height: 1.7;
+  }
+  .footer-meta a { color: var(--blue-deep); text-decoration: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .hero { padding: 110px 20px 50px; }
+    .hero h1 { font-size: 38px; letter-spacing: -1.2px; }
+    .hero-sub { font-size: 17px; }
+    .banner-quote { padding: 40px 16px 20px; }
+    .banner-quote-inner { padding: 40px 28px; }
+    .banner-quote-mark { font-size: 64px; top: 16px; left: 20px; }
+    .banner-quote p { font-size: 20px; }
+    .section { padding: 40px 20px; }
+    .section-h { font-size: 26px; letter-spacing: -0.5px; }
+    .section p, .section li { font-size: 16px; }
+    .pull-quote p { font-size: 17px; }
+    .pull-quote.big p { font-size: 18px; }
+    .layer { padding: 18px 20px 18px 66px; }
+    .scene { padding: 22px 22px; }
+    .quote-wall { padding: 50px 20px; }
+    .quote-wall-title { font-size: 26px; }
+    .takeaway-item { padding: 22px 22px; flex-direction: column; gap: 12px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-eyebrow">AI 工作坊 · 学员专享</div>
+  <h2>一号位 AI 俱乐部</h2>
+  <p>请输入访问口令</p>
+  <div class="gate-input-wrap">
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令" autofocus>
+    <button class="gate-btn" id="gateBtn">进入</button>
+  </div>
+  <div class="gate-error" id="gateError">口令不对，再试一下</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span>一号位 AI 工作坊</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">工作坊总览</a></li>
+      <li><a href="#quotes">金句收藏</a></li>
+      <li><a href="#takeaways">带回去的动作</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <span class="hero-eyebrow">Day 02 · 上午</span>
+  <h1>AI 如何真正进入损益表</h1>
+  <p class="hero-sub">
+    从个人武装到组织重构——一号位必须亲自下场。
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026.04.19 · 上午</span>
+    <span>🎙️ Vivian</span>
+    <span>🏠 V 聚场</span>
+    <span>⏱️ 约 2.5 小时</span>
+  </div>
+</header>
+
+<!-- ===== BIG QUOTE BANNER ===== -->
+<section class="banner-quote">
+  <div class="banner-quote-inner">
+    <div class="banner-quote-mark">"</div>
+    <p>
+      你一个人用 AI 用得再猛，只要没落进损益表，这件事就不算做完。
+    </p>
+    <div class="banner-quote-attr">— 这个上午的主线一句话</div>
+  </div>
+</section>
+
+<!-- ===== SETUP ===== -->
+<section class="setup">
+  <h2>这个上午在讲什么</h2>
+  <p>Day1 讲完之后大家回去基本都在折腾自己的 skill——有人开了六个窗口搞到凌晨两点，有人买了语雀超级会员 200 块才能把三年的资料导出来。</p>
+  <p>Day2 上午 Vivian 把视角从"个人武装"直接拽到"组织改造"：<strong>真正的 AI 化不是招聘一个 AI 负责人、挂在 IT 部门——是一号位亲自下场，把数据、知识、智能体、harness 一整套系统搭起来，让 AI 接管中层的信息路由。</strong></p>
+  <p>主线三件事：<strong>① 认知对焦</strong>——麦肯锡 78% 公司都在用 AI，但 80% 进不了损益表；<strong>② 四步转化图</strong>——数据 → 知识库 → 智能体 → Harness；<strong>③ 三个全球样本</strong>——Block（成功样板）、施乐（30 年前的 AI 原型）、Klarna（翻车警示）。</p>
+  <div class="pull-quote">
+    <p>"一号位如果不亲自下场，这件事情推进速度和效果都不会好。因为 ERP 这么多年了，老板关注在哪里，事情就推进在哪里。"<br><span style="font-size: 13px; color: var(--gray-3); font-weight: 400;">— 曹赟</span></p>
+  </div>
+</section>
+
+<!-- ===== SECTION 1 ===== -->
+<article class="section">
+  <span class="section-index">01 开场</span>
+  <h2 class="section-h">文杰的两个好问题</h2>
+  <p class="section-lead">胡民杰昨天回去搞到一两点，一次开了 6 个窗口，问了两个非常实在的问题。</p>
+
+  <h3>问题一：AI 交互的颗粒度到底要细到什么程度？</h3>
+
+  <div class="pull-quote">
+    <p>"我每一个都要看，还是挺花时间的。精确度高了，但不相信他的原则让我很多都要去看一下。"</p>
+  </div>
+
+  <p>Vivian 的回应是一个定位问题——<strong>一号位的时间不应该放在调每一个 skill 和每一个智能体</strong>：</p>
+
+  <div class="pull-quote big">
+    <p>"我们创始人要花在哪个地方，不是去调制每一个智能体、每一个 skill。做过球员才知道怎么监控别的球员，但不是每一个智能体都要自己来调。我们要做的是<strong>设计好环境</strong>、设置好模型以外的东西——就是 harness。"</p>
+  </div>
+
+  <p>具体做法：<strong>主动控制窗口数</strong>。Vivian 自己昨晚只开了三五个窗口——"同时运行确实是考脑力的事情"。</p>
+
+  <h3>问题二：Claude 的 hand off（显式交接）什么时候用？</h3>
+
+  <p>这是 harness 五原则里的第二条。很多人觉得"电脑都不关，第二天打开还是这样"，为什么还要手动交接？Vivian 给了两个具体场景：</p>
+
+  <ol>
+    <li><strong>上下文被压缩了</strong>：对话太长时系统会自动压缩，有些重要信息可能丢。对于值得持续讨论的话题，写个交接文档是保险。</li>
+    <li><strong>同一主题跨次使用</strong>：比如 Vivian 自己会开第一次、第二次、第三次工作坊——不是每次都从零开始，<strong>给一号位工作坊写一个 hand off，下次就沿着上次的沉淀继续</strong>。</li>
+  </ol>
+
+  <div class="pull-quote">
+    <p>"你可以告诉他是要 hand off 所有窗口的内容，还是某一个窗口的内容。Claude 现在是会跨窗口去看我们对话的。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 2 ===== -->
+<article class="section">
+  <span class="section-index">02 复习</span>
+  <h2 class="section-h">Harness 五原则</h2>
+  <p class="section-lead">AI 驾驭公式：效能 = 模型 × Harness × 判断力。模型选最强（Claude、Codex 两家），Harness 是今天的重点，判断力是一号位的核心。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">原则</th>
+        <th>要干什么</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>① 增量推进</strong></td>
+        <td>一次做一件事</td>
+      </tr>
+      <tr>
+        <td><strong>② 显式交接</strong></td>
+        <td>防止上下文丢失 + 沉淀知识</td>
+      </tr>
+      <tr>
+        <td><strong>③ 质检闭环</strong></td>
+        <td>自检 + 外部把关</td>
+      </tr>
+      <tr>
+        <td><strong>④ 版本管理 & 可追溯</strong></td>
+        <td>Vivian 特别强调——公司级雷区</td>
+      </tr>
+      <tr>
+        <td><strong>⑤ 可观测</strong></td>
+        <td>有命名、有版本、有使用次数</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>⚠️ 版本管理是公司级雷区</h3>
+
+  <p>张冬慧昨天提了一个很重要的问题：如果把语雀上三四年的历史资料都传给 AI，版本会怎么处理？Vivian 的警告很直接：</p>
+
+  <div class="pull-quote">
+    <p>"同一个话题你有 V1、V2、V3、V4，如果没有版本命名，AI 会读取你所有文档。你的 V1 和 V3 可能是矛盾的——AI 到底要相信哪个？"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"比如改 PPT，他没有从最新版本开始改，从 V1 开始改——这种错出了会非常头疼。"</p>
+  </div>
+
+  <p>所以<strong>版本归档意识必须写进 CLAUDE.md</strong>——什么时候覆盖、什么时候更新，要讲清楚。</p>
+
+  <h3>Harness 是什么——马 vs 马的护具</h3>
+
+  <ul>
+    <li>马 = 大模型</li>
+    <li>马鞍、马的护具 = Harness</li>
+    <li>发动机 = Claude Code（半成品 harness）</li>
+    <li>引擎之外的四件东西（知识库、skill、CLAUDE.md、流程质控）= <strong>谁都抄不走的护城河</strong></li>
+  </ul>
+
+  <div class="pull-quote big">
+    <p>"发动机谁都能买，但引擎之外这四件东西是谁都抄不走的，这个才是我们这个时代真正的护城河。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 3 ===== -->
+<article class="section">
+  <span class="section-index">03 WHY NOW</span>
+  <h2 class="section-h">78% 在用 AI，80% 进不了损益表</h2>
+  <p class="section-lead">Vivian 拿出麦肯锡的数据——AI 无处不在，但损益表里没有他。</p>
+
+  <p><strong>78–80% 的公司已经有业务在用 AI</strong>（豆包、DeepSeek、通义千问都算），<strong>但 80% 的公司损益表里看不到 AI 带来的结果</strong>。</p>
+
+  <p>为什么？</p>
+
+  <div class="pull-quote">
+    <p>"我们买了模型，做了一些 demo，这只是起步，也是一个很常见的误判。大家把它当成一次软件采购，生成的答案就觉得可以被主食吸收。"</p>
+  </div>
+
+  <div class="pull-quote big">
+    <p>"但它缺的是一套 harness 系统——不会在内部团队里自动显现，也不会自动生成。需要我们一号位去搭建这样一套系统。"</p>
+  </div>
+
+  <p>这一整个上午后面讲的就是——<strong>一号位怎么搭这一套，让 AI 从"有用了"变成"有结果"</strong>。</p>
+</article>
+
+<!-- ===== SECTION 4 ===== -->
+<article class="section">
+  <span class="section-index">04 核心图</span>
+  <h2 class="section-h">四步转化：数据如何变成经营结果</h2>
+  <p class="section-lead">Vivian 把"数据如何变成经营结果"拆成了四步 + 经营结果——这是进损益表的唯一路径。</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">STEP 1</div>
+      <div class="layer-body"><strong>数据盘点</strong>——资产到底在哪？散落在飞书、钉钉、企业微信、CRM、ERP、自研系统、语雀、本地电脑……<strong>第一步不是技术，是盘点</strong>。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">STEP 2</div>
+      <div class="layer-body"><strong>知识库</strong>——知识外化是一个工程项目。不是一本大而全的说明书，要给他一张地图（索引）。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">STEP 3</div>
+      <div class="layer-body"><strong>智能体</strong>——不要把所有知识塞给它。"<strong>上下文是稀缺资源</strong>，智能体不需要一天就知道公司的一切，但他知道在哪里找答案就好了。"</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">4</div>
+      <div class="layer-label">STEP 4</div>
+      <div class="layer-body"><strong>Harness 系统</strong>——一组分工的智能体，有 SOP、有职责说明、有调用关系。一号位做的是<strong>环境设计者</strong>。</div>
+    </div>
+    <div class="layer" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);">
+      <div class="layer-num" style="background: linear-gradient(135deg, var(--blue), var(--blue-deep));">✓</div>
+      <div class="layer-label">结果</div>
+      <div class="layer-body"><strong>经营结果</strong>——真正进入损益表的 AI，不是挂在 IT 部门的摆设。</div>
+    </div>
+  </div>
+
+  <h3>STEP 1：数据盘点的现场问答</h3>
+
+  <p>Vivian 现场一个一个问，答案惊人地雷同——</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>同学</th>
+        <th>数据散落在哪</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>张冬慧（Lipro，100 人）</strong></td>
+        <td>飞书（大部分）、CRM、财务系统、人力系统——"虽然我们是小公司，也非常多。"</td>
+      </tr>
+      <tr>
+        <td><strong>黄青松（科圣达）</strong></td>
+        <td>钉钉、微信、公司的 U8 系统、各个电脑里面的资料——昨天刚刚打通微信聊天接口</td>
+      </tr>
+      <tr>
+        <td><strong>晴空（回声科技）</strong></td>
+        <td>自研系统、钉钉转企业微信、市场团队用飞书、校区用企业微信——<strong>三套系统并行</strong>。昨天为导出三四年语雀资料，买了 200 多超级会员</td>
+      </tr>
+      <tr>
+        <td><strong>曹赟（雪狼户外）</strong></td>
+        <td>"飞书、企业微信、钉钉都在用，但都用得不深。数字资产我要去捋一下。"</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pull-quote">
+    <p>"接下来飞书、钉钉一定会做一个非常强大的知识库给公司，这是他们必争之地。但现在他们的知识库还不够——东西还是散落在其他地方，肯定是会想办法弄一个中心化的。"</p>
+  </div>
+
+  <div class="pull-quote big">
+    <p>"这一步至关重要。现在数字资产散落在各地，要不要归拢一下？怎么把文件里躺着的素材变成 AI 能够读得懂的文件？"</p>
+  </div>
+
+  <h3>STEP 2：知识外化是一个工程项目</h3>
+
+  <div class="pull-quote">
+    <p>"知识外化其实现在是一个工程项目——涉及到很多信息的盘点、结构化。它不能是一本大而全的说明书，要给他一张地图。"</p>
+  </div>
+
+  <p>核电（行业内一位同学）做过这个：<strong>几万份、几年的资料文档，把它变成一个索引</strong>——等于给 AI 一个图书馆目录。</p>
+
+  <h3>STEP 3：智能体不要什么都知道</h3>
+
+  <div class="pull-quote">
+    <p>"一定要像优秀员工一样，要知道他去哪里找答案，并且能够逐渐深入。如果把所有东西都给他，相当于没有给他。<strong>上下文是稀缺资源</strong>——智能体不需要一天就知道公司的一切，但他知道在哪里找答案就好了。"</p>
+  </div>
+
+  <div class="scene">
+    <div class="scene-label">现场案例 · 亚楠答疑智能体</div>
+    <p>Vivian 正在帮亚楠做：</p>
+    <p>① 扒知识星球大量数据 + 书籍资料 → 变成可检索的结构化信息</p>
+    <p>② 让智能体判断搜索、判断调用工具的逻辑 → 变成 24 小时答疑智能体</p>
+    <p>③ <strong>亚楠需要持续关注什么时候可以用、什么时候合规、什么时候要调整</strong>——这是一号位的工作</p>
+  </div>
+
+  <h3>STEP 4：一号位是环境设计者</h3>
+
+  <div class="pull-quote">
+    <p>"我们要给 agent 写他的上岗手册、他的 SOP、他的职责说明。要知道他能调什么东西、知道他自己可以做什么、下一步要怎么做。这是一个完整的系统。"</p>
+  </div>
+
+  <div class="pull-quote big">
+    <p>"假设自己公司的人员员工推翻重来，以智能体的形式在一个组织架构里运行，你的智能体会分为哪些部门？"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 5 ===== -->
+<article class="section">
+  <span class="section-index">05 翻车预警</span>
+  <h2 class="section-h">数据分级 × 权限管理</h2>
+  <p class="section-lead">黄青松现场提了一个非常重要的观察。</p>
+
+  <div class="pull-quote">
+    <p>"知识其实还有一个很重要的，就是分级——权限和分级管理。否则你会变成一个人离职，把你公司全部容易拿走。"</p>
+  </div>
+
+  <p>Vivian 顺势把这层扩展成<strong>两类安全管理</strong>：</p>
+
+  <ol>
+    <li><strong>中外模型的安全管理</strong>——要不要用国内模型还是国外模型（很多公司卡在这一层）</li>
+    <li><strong>员工级别权限</strong>——哪些是高管可知，哪些是只有员工可用</li>
+  </ol>
+
+  <p><strong>实操建议</strong>：做一个<strong>内部网站 / 操作系统</strong>，把智能体和知识库都部署上去。员工只能用接口，背后的智能体代码和原始数据他们看不到。</p>
+
+  <div class="pull-quote">
+    <p>"相当于自己内部的操作系统。就像 iPhone 的操作系统是 iOS，我们自己的操作系统也可以是一个网站的形式。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 6 ===== -->
+<article class="section">
+  <span class="section-index">06 一号位五大原则</span>
+  <h2 class="section-h">AI 时代一号位的新角色</h2>
+  <p class="section-lead">从"管理者"变成"环境设计者"——这是 Vivian 这个上午最重的一张 PPT。</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">原则一</div>
+      <div class="layer-body"><strong>文档是基础设施</strong>——不只是文字，视频、音频、各种模态的记录都算。"员工不仅要工作，还要记录工作。所有员工的东西都要去留痕。如果他不记录——非常重要的员工——甚至还派一个人去把他的东西记录下来。"</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">原则二</div>
+      <div class="layer-body"><strong>品味被编码</strong>——质量标准、合格要求、管控边界全部写下来。你最好的产品经理的审美、最好的销售话术、最好的服务标准，全部要被写出来才能被 AI 复制。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">原则三</div>
+      <div class="layer-body"><strong>快速失败</strong>——"出错的早，沉淀改得也快，沉淀也会更早一些、更深一些。"对应显式交接 + 质检闭环。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">4</div>
+      <div class="layer-label">原则四</div>
+      <div class="layer-body"><strong>行业经验是支点，AI 是杠杆</strong>——"AI 不是我们用上它，大家都会用上它。但我们的行业经验、我们本身作为这家公司过程中是什么——这些东西是我们的支点。AI 是把它撬动起来。"</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">5</div>
+      <div class="layer-label">原则五</div>
+      <div class="layer-body"><strong>模型不是护城河，环境设计才是</strong>——"转型主线不是在换一个模型上面，我们管理者的新角色是<strong>设计环境</strong>。"</div>
+    </div>
+  </div>
+</article>
+
+<!-- ===== SECTION 7 ===== -->
+<article class="section">
+  <span class="section-index">07 现场讨论</span>
+  <h2 class="section-h">AI 挂在哪个部门？谁会反对？</h2>
+  <p class="section-lead">Vivian 给出两个问题分组讨论——这一段是最扎心的一段。</p>
+
+  <h3>胡民杰（野迹鸣）：反对的是"信息路由"中层</h3>
+
+  <div class="pull-quote big">
+    <p>"年前我就觉得得自己干。一线同事反而更接纳；<strong>中层因为做的是协调类、传达类的工作——就是信息路由的工作——他们会更抵触</strong>。因为 AI 要做的恰恰是信息路由。"</p>
+  </div>
+
+  <p>这一段超级扎心——<strong>中层为什么反对？因为 AI 要替代的就是他们现在在做的事</strong>。</p>
+
+  <h3>核电一位同学：催 IT 部门没用</h3>
+
+  <div class="pull-quote">
+    <p>"之前我一直催着 IT 部门，但是他们思路在传统的 IT 思维里面，不理解业务，看不到全貌。反而是市场团队自己弄，我跟着跑，跑得挺快。最终出路肯定就是<strong>我们自己要相信</strong>。"</p>
+  </div>
+
+  <p>她还讲了一个很狠的动作——<strong>Q1 季度会上直接说"给大家六个月时间，不会 AI 的赶紧就走"</strong>（朋友跟她说六个月太长，两个月已经够了）。</p>
+
+  <h3>曹赟（雪狼户外）：ERP 的规律适用于 AI</h3>
+
+  <div class="pull-quote">
+    <p>"一号位一定要亲自下场。这么多年过来，ERP 也好、任何一个流程的推进——<strong>必须是老板关注在哪里，这个事情就推进在哪里</strong>。"</p>
+  </div>
+
+  <p>他还给了一个非常具体的要求：<strong>公司里每个人每天要和智能体对话 2 小时</strong>。</p>
+
+  <div class="scene">
+    <div class="scene-label">曹赟的现场观察</div>
+    <p>"美工的详情页出来问我好不好——我说你先扔到豆包里头，让他看看。啪出来一大堆这个问题、那个问题。本来我去说他还不认可，但人家就智能提出来，他感觉人家还比较专业。"</p>
+  </div>
+
+  <p><strong>Vivian 的关键点评</strong>（这一段非常值钱）：</p>
+
+  <div class="pull-quote big">
+    <p>"豆包给到一个答案，是<strong>通用模型</strong>的答案。我们要封装智能体——封装了<strong>你的审美、你的判断</strong>，就是你平时跟他们去点评的那些东西。确保你的观念、你的判断是公司最高的审美的标准——把你的经验和审美封装成一个智能体去审核它的东西，会比豆包更准确。"</p>
+  </div>
+
+  <p>这就是<strong>从"用通用 AI" → "做专属智能体"</strong>的分水岭。</p>
+
+  <h3>蔡一鸣（名流）：新人接受、主管抵触</h3>
+
+  <div class="pull-quote">
+    <p>"新加进来的同事会比较接受。你给他看一个很小的案例——文件夹里 100 条视频全是乱码，Claude 五分钟能把它们按你的命名格式全部整理好——他们会觉得很开心。但主管层级的，他觉得<strong>'让下面的人做就好了，我的脑子里的东西为什么要先交给 AI'——觉得是浪费时间</strong>。"</p>
+  </div>
+
+  <h3>黄青松（科圣达）：一号位真的下场 vs 交给软件工程师</h3>
+
+  <div class="scene">
+    <div class="scene-label">现场笑点</div>
+    <p>"我们有一个采购核算成本的软件。我让软件工程师去做，他说大概需要一个多月。我说你拿过来我做——<strong>结果一天我就把它做出来了</strong>。"</p>
+    <p>"还有我们公司设备的智能体健康管理系统，是比较大的一个系统。我从年初就开始布局，招他过来就是为了干这事，做了好几个月结果不太满意。<strong>一个周末我自己用 Claude Code 去写，大概花了 15 个小时</strong>。"</p>
+    <p>"有一段时间我对这个东西特别着迷。以至于很多事儿他们来找我，我说'你去找吴总'，我要跟 AI 里去。老朱说我们公司老板已经不务正业了。"</p>
+  </div>
+
+  <p>Vivian 接了一句——</p>
+
+  <div class="pull-quote">
+    <p>"AI 这个东西值得我们沉迷一段时间。给大家这样一个窗口期。"</p>
+  </div>
+
+  <div class="scene">
+    <div class="scene-label">Vivian 的真实状态</div>
+    <p>"那段时间我非常沉迷，每天跟他聊到我都头疼，第一次知道什么叫头疼。1 点、2 点才睡。昨晚上我要睡觉的时候，把电脑放在我老公的枕头上了。<strong>他说'你跟他结婚去吧，他把他的位置给占了'</strong>。"</p>
+  </div>
+
+  <h3>叶婷（妈咪宝）：劳动密集型的慢</h3>
+
+  <div class="pull-quote">
+    <p>"我们是劳动密集型，技术人才密度低，大家不会反对。但有两种情况比较难——一种是员工满足于现状、对自己的工作方式还挺自信的；另一种是习惯了自己的方式，如果不是<strong>一号位亲自开周会、专项会议来推</strong>，他们不会改。"</p>
+  </div>
+
+  <h3>张冬慧（Lipro）：已经在跑比赛了</h3>
+
+  <p>东辉组已经跑在前面了——<strong>先培训，再开比赛</strong>。每周开放一段时间，有技术智囊团在，员工有任何问题可以来找他们。五月底会开始提交作品、做路演。</p>
+
+  <p><strong>Vivian 自己补的样本</strong>：</p>
+
+  <div class="pull-quote">
+    <p>"我们公司也搞了一些比赛，结果出乎我意料——<strong>会用 Claude Code 做出 skill 给他们运行的，其实都是一些文科生——我们的商务、运营</strong>，一样可以做出来。但前期很多培训、有个技术人员可以指导他们，很重要。他们遇到小小的卡点，比如鼠标怎么点、窗口怎么打开——有人随时能回答，非常重要。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 8 ===== -->
+<article class="section">
+  <span class="section-index">08 全球案例①</span>
+  <h2 class="section-h">Block：AI 把中层接管掉</h2>
+  <p class="section-lead">Twitter 前创始人 Jack Dorsey 创立的支付公司——成功样板。</p>
+
+  <div class="scene">
+    <div class="scene-label">结果先行</div>
+    <p>人员从 <strong>6000 人降到 2000 人</strong>（裁了 4000 人）</p>
+    <p>营收在涨、利润在涨、股价在涨</p>
+  </div>
+
+  <h3>① 100% 员工都有 AI（标配，不是申请制）</h3>
+
+  <div class="pull-quote">
+    <p>"以后这个东西可能是标配。当然产线的员工、一线员工可能除外——对于用电脑的员工，AI 就是标配。"</p>
+  </div>
+
+  <h3>② 裁的不是人，是"层级"</h3>
+
+  <div class="pull-quote big">
+    <p>"层级制度本质上是一种<strong>信息路由、信息协议</strong>。Block 是去把层级给拆了，不是说把员工给拆了——他把本来由中层员工要做上传下达的这些事情，让 AI 来接管了这个职能。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"以前学校也做过非常多的尝试，但就是做不到，因为没有 AI 这样一个媒介去承担这一部分的工作。"</p>
+  </div>
+
+  <h3>③ 三套制度建起来</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">I</div>
+      <div class="layer-label">世界模型</div>
+      <div class="layer-body">公司共享认知（Vivian 的对应就是她的 Obsidian vault）</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">II</div>
+      <div class="layer-label">事件模型</div>
+      <div class="layer-body">公司运行的制度、流程、部门信息</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">III</div>
+      <div class="layer-label">客户信号</div>
+      <div class="layer-body">直接连接客户数据</div>
+    </div>
+  </div>
+
+  <h3>经典案例：Block 的贷款业务（现代版王永庆卖米）</h3>
+
+  <div class="pull-quote">
+    <p>"Block 有一部分业务是做贷款的。他通过线上支付的渠道看到某家客户资金流出了问题——支付交流都在这个平台上面——他预估到这个公司的现金流可能紧张。紧张的时候，他就给它弹出一条消息——你需不需要小额贷款？"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"他不需要人为干预、预估。他就把以前王永庆肉身预估的系统放在了现在 AI 的模型上面。"</p>
+  </div>
+
+  <p>王永庆卖米的类比——王永庆记录每次客人来买米的量，预估 20 号会吃完，19 号就送上门。现在 Block 把这套做在 AI 上面，<strong>不需要请示、规则被写在 Agent 里</strong>。</p>
+
+  <div class="pull-quote big">
+    <p>"管理两千多年来都是一个非常难的题目——管得多看不过来，管得少就要分层级，层级一多信息就失真。<strong>直到 AI 出现，这种成为了一种可能性</strong>。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 9 ===== -->
+<article class="section">
+  <span class="section-index">09 全球案例②</span>
+  <h2 class="section-h">施乐：30 年前的 AI 原型</h2>
+  <p class="section-lead">25000 名一线维修工程师，如何把每个人脑子里的小册子串成公司的共享知识？</p>
+
+  <p>施乐当年有 <strong>25000 名一线维修工程师</strong>。客户打电话说复印机卡纸/冒烟，工程师上门。问题是——<strong>每台机器、每个客户、每种纸张、每种温度都会出现新问题。手册滞后，故障在现场。每个工程师脑子里有一本小册子，但没人能把这些经验串起来</strong>。</p>
+
+  <h3>施乐 CEO 做了三件反常动作</h3>
+
+  <ol>
+    <li><strong>绕过 IT 部门</strong>——没做系统</li>
+    <li><strong>绕过总部专家</strong>——不让专家写 SOP 下发</li>
+    <li><strong>自下而上</strong>：<strong>让一线员工互相写、互相评、互相用</strong></li>
+  </ol>
+
+  <h3>两个关键支柱</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">A</div>
+      <div class="layer-label">支柱一 · 极简写入</div>
+      <div class="layer-body">只写 200 字的 tips；可以用电脑写，也可以语音输入；维修完一个故障，在车里五分钟就写完。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">B</div>
+      <div class="layer-label">支柱二 · 同行评审 + 人工把关</div>
+      <div class="layer-body">专家委员会审核（通过率 50–60%）；不通过的打回去让作者修改或补证据；通过的才采纳到系统。</div>
+    </div>
+  </div>
+
+  <h3>荣誉感机制（Vivian 特别强调的一点）</h3>
+
+  <ul>
+    <li><strong>每个 tips 署作者名字</strong></li>
+    <li><strong>用一次就加一颗星（像 GitHub 的 star）</strong></li>
+    <li><strong>奖励被引用最多的员工</strong></li>
+    <li><strong>全世界同行都能看到是某个人署名的 tips</strong>——这是老工程师的价值被看到</li>
+  </ul>
+
+  <p><strong>结果</strong>：每年省了上亿的维修成本。</p>
+
+  <h3>Vivian 的延伸：这套放到 AI 时代怎么重做？</h3>
+
+  <div class="pull-quote">
+    <p>"30 年前施乐做的这个事情，我们可以用 AI 重新再做一遍。<strong>让这个过程很极简</strong>——就像我们推 AI 这个事情一样，让他可以很丝滑地去跟 AI 谈恋爱。这个环节可以有人工去把关，用我们的判断做好守门人。"</p>
+  </div>
+
+  <p>Vivian 还顺着抛出了一个想法——<strong>招人的标准变了</strong>：</p>
+
+  <div class="pull-quote big">
+    <p>"现在大家很以为招人看 GitHub 上传了多少代码、拿到多少颗星——<strong>这可能是以后我们招人的一个标准</strong>。以前写简历是一个很好的技能，写 PPT 是一个很好的技能——现在这种完全就没有用了。"</p>
+  </div>
+
+  <p>黄青松在旁边接了一句——</p>
+
+  <div class="pull-quote">
+    <p>"相当于一个减分项。因为这说明你没有用 AI。"<br>
+    "他把超级个体的这种能力显性化了。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 10 ===== -->
+<article class="section">
+  <span class="section-index">10 全球案例③</span>
+  <h2 class="section-h">Klarna：尾部指标的翻车</h2>
+  <p class="section-lead">欧洲金融独角兽。CEO 非常激进地拥抱 AI——结果一年后公开认错。</p>
+
+  <div class="scene">
+    <div class="scene-label">时间线</div>
+    <p><strong>2024 年</strong>：砍客服 700 人，省成本 4000 万美元。CEO 站台说"AI 做了三分之二客服工作"，听起来非常性感。</p>
+    <p><strong>2025 年</strong>：CEO <strong>公开承认错了，把这些客服又招回来</strong>。</p>
+  </div>
+
+  <h3>为什么翻车？尾部指标崩了</h3>
+
+  <div class="pull-quote">
+    <p>"大部分 80% 的常规问题 AI 可以解决，平均分其实是上去了的。但是<strong>一些尾部的复杂投诉没有办法解决</strong>——比如用户的投诉、欺诈、需要售后——AI 没有这种弹性，不知道怎么灵活处理。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"这 20% 的异常案例、这些尾部指标，影响了他整个客服的评价和满意度。"</p>
+  </div>
+
+  <h3>Vivian 的警醒（金句）</h3>
+
+  <div class="pull-quote big">
+    <p>"不只看总量，要看<strong>尾部指标、异常指标</strong>。"</p>
+  </div>
+
+  <p><strong>对应到现场每家公司</strong>：</p>
+
+  <ul>
+    <li>亚楠的答疑智能体——正常育儿问题 OK，但医疗问题不能答，应该给专业渠道</li>
+    <li>各位的电商客服——投诉、欺诈、售后这些异常怎么兜底</li>
+  </ul>
+</article>
+
+<!-- ===== SECTION 11 ===== -->
+<article class="section">
+  <span class="section-index">11 延伸话题</span>
+  <h2 class="section-h">AI 时代的教育：知识还是陪伴？</h2>
+  <p class="section-lead">讨论 Klarna 时话题滑到了教育——知识点 AI 能替代，但让孩子愿意坐在这里学，反而是最难的事。</p>
+
+  <div class="pull-quote">
+    <p>"现在我们做英语教研，是用 AI 做教研的，但最后还是要人工审查的。AI 教师、口语陪练看上去能给情绪——但以高标准的产品来看，这个肯定还是不行的。<strong>糊弄家长可能可以</strong>。"<br><span style="font-size: 13px; color: var(--gray-3); font-weight: 400;">— 何健 / 聪聪</span></p>
+  </div>
+
+  <div class="pull-quote big">
+    <p>"现在孩子是'我觉得这个不好玩''我觉得这没意思'——不是因为不会，是因为<strong>他不在学习状态</strong>。<strong>让他愿意进入学习状态，是人的工作</strong>，不是 AI 的。"</p>
+  </div>
+
+  <h3>Vivian：看看可汗学院</h3>
+
+  <p>她推荐了可汗学院创始人的书《教育新语》——OpenAI 刚出来时就做了一个小孩用的教育网站：</p>
+
+  <div class="pull-quote">
+    <p>"小孩子可以答题，他可以设置身份——<strong>不要直接给结果，要给过程</strong>。身份可以选择。"</p>
+  </div>
+
+  <h3>黄青松：让孩子去"撞南墙"</h3>
+
+  <div class="pull-quote">
+    <p>"南墙是试错，给他更多的空白、给他去试错。我把一些智能体放在我的笔记本上面，让 Codex 给我做个 APP——咔嚓咔嚓做了一个。干完这个事情以后我再想——我得让我女儿去看看、去玩玩。有些东西就是必须是人亲历——摔过了才知道这个是痛苦的、要去改变的。"</p>
+  </div>
+
+  <p>全场共识——<strong>"不是花钱买第一份工作，是让孩子从小进入真实的商业场景"</strong>。（黄青松去年英国房车展带两个女儿发传单，老大给人家做成 600 英镑的订单；叶婷平台里孵化的 4 岁孩子每天都在想怎么做品牌；Vivian 计划以后带天天来摆桌子发东西。）</p>
+</article>
+
+<!-- ===== SECTION 12 ===== -->
+<article class="section">
+  <span class="section-index">12 补充</span>
+  <h2 class="section-h">三种 AI 交互模式</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 32%;">模式</th>
+        <th>特征</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>自动化模式</strong></td>
+        <td>单点技能（skill），AI 帮你做一件事</td>
+      </tr>
+      <tr>
+        <td><strong>正常模式</strong></td>
+        <td>人机对话、人主导</td>
+      </tr>
+      <tr>
+        <td><strong>代理模式（最高级）</strong></td>
+        <td>AI 有目标、多步流程、自己完成整个工作流</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pull-quote">
+    <p>"Skill 是单点技能，比如录音 skill、招聘 skill——筛简历的、出面试题的。<strong>Agent 的概念就是有多个 skill、有一个目标、多步流程、自己去完成</strong>。"</p>
+  </div>
+
+  <p>Vivian 自己的公众号 skill 已经到了 agent 层级——<strong>9 个智能体、出一个选题告诉它角度，它就会自动完成</strong>。</p>
+</article>
+
+<!-- ===== SECTION 13 ===== -->
+<article class="section">
+  <span class="section-index">13 灵魂拷问</span>
+  <h2 class="section-h">哪一层交给 AI，哪一层必须你自己沉淀？</h2>
+  <p class="section-lead">Vivian 在临近下课时抛出了她认为这一整个上午最重要的问题。</p>
+
+  <div class="pull-quote big">
+    <p>"老客户为什么续约？新客户为什么流失？这个订单要不要接？价格定高价还是低价？哪些投诉是真问题？产品为什么这样设计？——这些很难说清楚的东西，有没有沉淀到你们的系统里面去？"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"你的公司这些很难理解的东西，每天是否都在加深对哪一层？<strong>哪些东西可以被 AI 接管，哪些必须在你脑子里沉淀下来？</strong>"</p>
+  </div>
+
+  <h3>张冬慧的回答——"用户为什么买我们的产品？"</h3>
+
+  <div class="pull-quote">
+    <p>"我们自己是有假设的——用户关注健康、关注健康照明。但目前一些数据也好、用户反馈也好，<strong>串不起来形成一个结论</strong>。这是我们接下来应该要不断去沉淀的——我们的预期和用户最终的体验、感受是不是一致。"</p>
+  </div>
+
+  <p>Vivian 把这个问题精炼了一下，现场大家都愣了——</p>
+
+  <div class="pull-quote big">
+    <p>"<strong>他们的购买理由和你们想的购买理由是不是一致的？</strong>"</p>
+  </div>
+
+  <p>这个问题每个做产品的人都应该问自己一遍。</p>
+
+  <h3>叶婷的回答：两个切入维度</h3>
+
+  <div class="pull-quote">
+    <p>"一个是从效率最容易发生的地方去切；另一个是那些不需要很高技能的人来工作的作业——AI 直接接管，或者任何人只要有 AI 就很快能接受，让这件事情更简单。<strong>不是替代他，而是提升他的标准、提升他的准确率</strong>，减少一些人为的判断。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 14 ===== -->
+<article class="section">
+  <span class="section-index">14 收束</span>
+  <h2 class="section-h">用 AI 重塑组织，不是为了砍人</h2>
+  <p class="section-lead">上午的收束 + 下午预告。</p>
+
+  <div class="pull-quote big">
+    <p>"Block 那个就是用 AI 去重新设计组织。这是我一直在强调的——<strong>我们用 AI 要去重塑组织，而不是为了砍人去用 AI</strong>。每个人都可以强百倍的时候，你带的团队是一个每个人都乘以 10、能量乘以十的团队。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"我们该怎么去建造我们的组织？可能不是去看营收增长、利润增长——成交表也是很好的事情，但<strong>不要以这个为出发点</strong>，要从组织的角度来想。"</p>
+  </div>
+
+  <h3>下午会讲</h3>
+
+  <ul>
+    <li><strong>选人用人的标准在 AI 时代怎么变</strong></li>
+    <li><strong>哪些岗位、部门可以被 AI 替代</strong></li>
+    <li><strong>晴空分享</strong>：AI 如何融入内容营销，三四个月跑出成绩</li>
+  </ul>
+</article>
+
+<!-- ===== QUOTE WALL ===== -->
+<section class="quote-wall" id="quotes">
+  <div class="quote-wall-header">
+    <div class="quote-wall-eyebrow">💎 金句收藏</div>
+    <h2 class="quote-wall-title">这个上午留下的 10 句话</h2>
+  </div>
+  <div class="quote-grid">
+    <div class="quote-card">
+      <p class="quote-card-text">你一个人用 AI 用得再猛，只要没落进损益表，这件事就不算做完。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">78% 公司在用 AI，80% 的公司进不了损益表——缺的是 harness 系统。</p>
+      <div class="quote-card-attr">— Vivian（引麦肯锡）</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">我们要用 AI 去重塑组织，而不是为了砍人去用 AI。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">层级制度本质上是一种信息路由、信息协议。AI 接管的就是这一层。</p>
+      <div class="quote-card-attr">— Vivian（讲 Block）</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">不只看总量，要看尾部指标、异常指标。</p>
+      <div class="quote-card-attr">— Vivian（讲 Klarna）</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">管理者的新角色是设计环境。模型不是护城河，环境设计才是。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">豆包给的是通用模型的答案。封装你的审美和判断，才是公司的最高标准。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">一号位关注在哪里，事情就推进在哪里——ERP 这么多年的规律。</p>
+      <div class="quote-card-attr">— 曹赟</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">中层为什么反对？因为 AI 要做的恰恰是信息路由——就是他们现在在做的事。</p>
+      <div class="quote-card-attr">— 胡民杰</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">AI 把超级个体的这种能力显性化了。简历、PPT 这些技能现在是减分的。</p>
+      <div class="quote-card-attr">— 黄青松</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAKEAWAYS ===== -->
+<section class="takeaways" id="takeaways">
+  <div class="quote-wall-header" style="margin-bottom: 36px;">
+    <div class="quote-wall-eyebrow">📝 带回去的动作</div>
+    <h2 class="quote-wall-title">8 条 Takeaway</h2>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">1</div>
+    <div class="takeaway-body">
+      <h4>盘点这周做一遍</h4>
+      <p>把公司所有数据载体列出来：飞书、钉钉、企业微信、CRM、ERP、自研系统、语雀、本地文档、员工个人电脑……然后问每一条：<strong>这里的数据能被 AI 读吗？如果不能，下一步怎么办？</strong>（Vivian 说这一步"至关重要"。）</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">2</div>
+    <div class="takeaway-body">
+      <h4>版本管理写进 CLAUDE.md</h4>
+      <p>不要让 AI 读到 V1 / V2 / V3 矛盾的历史版本。<strong>今天就写一条规则</strong>：哪些字段代表"最新版"，AI 只能读这个；历史版本归档到 <code>archive/</code> 下面，默认不读。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">3</div>
+    <div class="takeaway-body">
+      <h4>跑一个"数据→知识→智能体"的最小可行样本</h4>
+      <p>不用所有部门都做。<strong>选一个最痛、最高频、最好测试效果的小场景</strong>——比如招聘筛简历（Vivian 现成有）、客服 FAQ、销售话术——<strong>一周内跑出来第一个可用版本</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">4</div>
+    <div class="takeaway-body">
+      <h4>把"一号位亲自下场"写进这周的日历</h4>
+      <p>每天至少 2 小时和智能体对话。像黄青松那样"老板不务正业"——<strong>这段沉迷期就是你的窗口期，过了这段就长不出来了</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">5</div>
+    <div class="takeaway-body">
+      <h4>中层是反对力最大的地方——做好准备</h4>
+      <p>像 Block 一样把层级拆掉（不是把人拆掉），让 AI 接管上传下达的"信息路由"职能。对中层的共情和转岗设计要提前想。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">6</div>
+    <div class="takeaway-body">
+      <h4>问自己张冬慧那个问题</h4>
+      <p><strong>"用户购买我们产品的理由，和我们以为的理由，是不是一致的？"</strong>这是 AI 接管不了的一层，必须你亲自沉淀。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">7</div>
+    <div class="takeaway-body">
+      <h4>封装自己的审美，不要用通用模型当裁判</h4>
+      <p>豆包给的是通用答案。<strong>你最强的那个维度——设计审美、客户沟通、产品判断——必须被封装成专属智能体</strong>，才能成为公司的最高标准。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">8</div>
+    <div class="takeaway-body">
+      <h4>尾部指标！尾部指标！尾部指标！</h4>
+      <p>Klarna 砍了 700 个客服、省了 4000 万，一年后全部招回。原因就是尾部 20% 异常案例崩了。<strong>用 AI 接管前，先把尾部"AI 绝对不能碰"的清单写出来</strong>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <a href="../" class="footer-back">← 返回工作坊总览</a>
+  <div class="footer-meta">
+    一号位 AI 工作坊 · 2026.04.18-19 · V 聚场<br>
+    主办：<a href="https://vivianai.cn/">Vivian 的 AI 进化论</a> × 一号位 AI 俱乐部<br>
+    <span style="font-size: 12px; color: var(--gray-4); letter-spacing: 0.5px;">学员专享 · 请勿外传</span>
+  </div>
+</footer>
+
+<script>
+  // Password gate
+  const PASS = 'Vivian0418';
+  const gate = document.getElementById('gate');
+  const input = document.getElementById('gateInput');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateError');
+
+  // Check if already unlocked
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1') {
+    gate.classList.add('hidden');
+  }
+
+  function tryUnlock() {
+    const val = input.value.trim();
+    if (val === PASS) {
+      sessionStorage.setItem('workshop0418Unlocked', '1');
+      gate.classList.add('hidden');
+    } else {
+      err.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+</script>
+
+</body>
+</html>

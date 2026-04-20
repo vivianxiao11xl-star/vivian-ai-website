@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>一号位 AI 工作坊 · 2026.04.18-19 · V 聚场</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --off-white: #fafaf9;
+    --blue: #0071e3;
+    --blue-deep: #0050a8;
+    --warm-1: #c2410c;
+    --warm-2: #ea580c;
+    --warm-bg: #fef6ee;
+    --white: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--off-white);
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ===== PASSWORD GATE ===== */
+  .gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #fafaf9 0%, #f5f5f7 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .gate.hidden { display: none; }
+  .gate-eyebrow {
+    font-size: 12px; font-weight: 700; color: var(--blue);
+    letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase;
+  }
+  .gate h2 {
+    font-size: 32px; font-weight: 800; margin-bottom: 10px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0071e3 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .gate p { font-size: 15px; color: var(--gray-3); margin-bottom: 36px; text-align: center; }
+  .gate-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .gate-input {
+    width: 240px; padding: 13px 18px; border-radius: 12px;
+    border: 1px solid var(--gray-4); font-size: 15px;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit; background: #fff;
+  }
+  .gate-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,113,227,0.12); }
+  .gate-btn {
+    padding: 13px 28px; border-radius: 12px; border: none;
+    background: var(--blue); color: #fff; font-size: 15px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gate-error { color: #ef4444; font-size: 13px; margin-top: 14px; display: none; text-align: center; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 24px;
+    height: 54px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: var(--black);
+    letter-spacing: 0.3px; display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--warm-2));
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--gray-2); font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--black); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 140px 24px 60px;
+    max-width: 880px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: var(--blue);
+    background: rgba(0,113,227,0.08);
+    padding: 7px 18px; border-radius: 20px;
+    margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-size: 64px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -2.5px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0071e3 70%, #c2410c 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 20px; color: var(--gray-2); line-height: 1.6;
+    max-width: 620px; margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; gap: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num {
+    font-size: 32px; font-weight: 800; color: var(--black);
+    letter-spacing: -0.5px;
+  }
+  .hero-stat-label { font-size: 12px; color: var(--gray-3); margin-top: 4px; letter-spacing: 0.5px; }
+
+  /* ===== MANIFESTO ===== */
+  .manifesto {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 24px 40px;
+  }
+  .manifesto-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700;
+    color: var(--blue); letter-spacing: 3px;
+    margin-bottom: 14px; text-transform: uppercase;
+  }
+  .section-title {
+    font-size: 40px; font-weight: 800;
+    letter-spacing: -1px; line-height: 1.2;
+    color: var(--black);
+  }
+  .section-lead {
+    font-size: 18px; color: var(--gray-2);
+    max-width: 640px; margin: 14px auto 0;
+    line-height: 1.6;
+  }
+  .manifesto-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 40px;
+  }
+  .manifesto-card {
+    background: #fff; border-radius: 20px;
+    padding: 36px 32px; border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .manifesto-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+  }
+  .manifesto-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 20px; font-weight: 800;
+    color: #fff;
+  }
+  .manifesto-icon.blue { background: linear-gradient(135deg, #0071e3, #0050a8); }
+  .manifesto-icon.warm { background: linear-gradient(135deg, #ea580c, #c2410c); }
+  .manifesto-icon.dark { background: linear-gradient(135deg, #374151, #1f2937); }
+  .manifesto-card h3 {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.3px; margin-bottom: 12px;
+  }
+  .manifesto-card p {
+    font-size: 15px; line-height: 1.7;
+    color: var(--gray-1);
+  }
+
+  /* ===== BIG PULL QUOTE ===== */
+  .banner {
+    max-width: 1000px; margin: 60px auto;
+    padding: 0 24px;
+  }
+  .banner-inner {
+    background: linear-gradient(135deg, #1d1d1f 0%, #2a2a2e 100%);
+    color: #fff; border-radius: 28px;
+    padding: 72px 64px; position: relative; overflow: hidden;
+  }
+  .banner-mark {
+    position: absolute; top: 24px; left: 44px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 120px; color: rgba(255,255,255,0.06);
+    line-height: 1; font-weight: 700;
+  }
+  .banner-inner p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 30px; font-weight: 600;
+    line-height: 1.55; position: relative; z-index: 1;
+  }
+  .banner-inner p strong {
+    background: linear-gradient(135deg, #60a5fa 0%, #fbbf24 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .banner-attr {
+    margin-top: 28px; font-size: 13px;
+    color: rgba(255,255,255,0.5); letter-spacing: 1px;
+  }
+
+  /* ===== REVERSALS ===== */
+  .reversals {
+    max-width: 1100px; margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .reversals-header { text-align: center; margin-bottom: 48px; }
+  .reversal-list {
+    display: grid; gap: 20px;
+    max-width: 860px; margin: 0 auto;
+  }
+  .reversal {
+    background: #fff; border-radius: 18px;
+    padding: 32px 40px; display: flex; gap: 28px;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .reversal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+  }
+  .reversal-num {
+    flex-shrink: 0; width: 56px; height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
+    color: #fff; font-weight: 900; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reversal.warm .reversal-num {
+    background: linear-gradient(135deg, var(--warm-2) 0%, var(--warm-1) 100%);
+  }
+  .reversal-body h4 {
+    font-size: 20px; font-weight: 800;
+    letter-spacing: -0.2px; margin-bottom: 10px;
+  }
+  .reversal-body p {
+    font-size: 15px; line-height: 1.75;
+    color: var(--gray-1);
+  }
+  .reversal-body p strong { color: var(--black); font-weight: 600; }
+  .reversal-body .origin {
+    display: inline-block; margin-top: 12px;
+    font-size: 12px; color: var(--blue);
+    background: rgba(0,113,227,0.08);
+    padding: 4px 12px; border-radius: 20px; font-weight: 600;
+  }
+  .reversal.warm .reversal-body .origin {
+    color: var(--warm-1);
+    background: rgba(234,88,12,0.08);
+  }
+
+  /* ===== DAYS ===== */
+  .days {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 24px 40px;
+  }
+  .day-block { margin-bottom: 60px; }
+  .day-header {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .day-label {
+    font-size: 14px; font-weight: 700; color: var(--blue);
+    letter-spacing: 2px;
+  }
+  .day-title {
+    font-size: 28px; font-weight: 800;
+    letter-spacing: -0.5px; color: var(--black);
+  }
+  .day-meta { margin-left: auto; font-size: 13px; color: var(--gray-3); }
+
+  .session-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .session {
+    background: #fff; border-radius: 18px;
+    padding: 32px; border: 1px solid rgba(0,0,0,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; display: block;
+  }
+  .session:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+  }
+  .session-time {
+    font-size: 12px; font-weight: 700; color: var(--gray-3);
+    letter-spacing: 1.5px; margin-bottom: 10px;
+  }
+  .session-title {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.3px; margin-bottom: 14px;
+    color: var(--black);
+  }
+  .session-quote {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px; line-height: 1.7;
+    color: var(--gray-1); margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .session-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 16px;
+  }
+  .session-tag {
+    font-size: 11px; font-weight: 600;
+    background: var(--gray-bg); color: var(--gray-2);
+    padding: 4px 10px; border-radius: 6px;
+  }
+  .session-link {
+    font-size: 13px; font-weight: 600; color: var(--blue);
+    display: flex; align-items: center; gap: 4px;
+    transition: gap 0.2s;
+  }
+  .session:hover .session-link { gap: 8px; }
+  .session.coming {
+    border-style: dashed; background: transparent;
+    opacity: 0.7;
+  }
+  .session.coming .session-link { color: var(--gray-3); }
+
+  /* ===== GUEST STARS (嘉宾双子星) ===== */
+  .guests {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .guests-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .guests-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .guest-card {
+    border-radius: 24px; padding: 48px 40px;
+    color: #fff; position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: block; min-height: 340px;
+    display: flex; flex-direction: column;
+  }
+  .guest-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  .guest-card.warm {
+    background: linear-gradient(135deg, #fb923c 0%, #c2410c 60%, #7c2d12 100%);
+  }
+  .guest-card.cool {
+    background: linear-gradient(135deg, #60a5fa 0%, #0050a8 60%, #1e3a5f 100%);
+  }
+  .guest-card::before {
+    content: ''; position: absolute;
+    top: -100px; right: -100px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .guest-eyebrow {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; opacity: 0.9;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .guest-title {
+    font-size: 32px; font-weight: 900;
+    letter-spacing: -0.8px; line-height: 1.2;
+    margin-bottom: 12px; position: relative; z-index: 1;
+  }
+  .guest-speaker {
+    font-size: 14px; opacity: 0.85; margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .guest-quote {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px; line-height: 1.7;
+    font-weight: 500; margin-bottom: 28px;
+    position: relative; z-index: 1;
+    flex: 1;
+  }
+  .guest-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 700;
+    padding: 12px 22px; border-radius: 24px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    transition: background 0.2s, gap 0.2s;
+    width: fit-content;
+  }
+  .guest-card:hover .guest-cta { background: rgba(255,255,255,0.3); gap: 10px; }
+
+  /* ===== QUOTE WALL ===== */
+  .quote-wall {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .quote-wall-header { text-align: center; margin-bottom: 48px; }
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .quote-card {
+    background: #fff; border-radius: 16px;
+    padding: 28px 30px; border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -10px; right: 20px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 90px; color: rgba(0,0,0,0.04);
+    line-height: 1; font-weight: 700;
+  }
+  .quote-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  }
+  .quote-card-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .quote-card-attr {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  }
+  .quote-card.blue .quote-card-attr { color: var(--blue); }
+  .quote-card.warm .quote-card-attr { color: var(--warm-1); }
+  .quote-card.dark .quote-card-attr { color: var(--gray-1); }
+
+  /* ===== TAKEAWAYS ===== */
+  .takeaways {
+    max-width: 860px; margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+  .takeaways-header { text-align: center; margin-bottom: 40px; }
+  .takeaway {
+    background: #fff; border-radius: 16px;
+    padding: 26px 32px; margin-bottom: 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex; gap: 22px;
+  }
+  .takeaway-check {
+    flex-shrink: 0;
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid var(--gray-4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--gray-3);
+  }
+  .takeaway-body h4 {
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 6px; color: var(--black);
+  }
+  .takeaway-body p {
+    font-size: 14px; line-height: 1.7;
+    color: var(--gray-1);
+  }
+  .takeaway-body p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    max-width: 1100px; margin: 60px auto 0;
+    padding: 48px 24px 60px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .footer-brand {
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .footer-meta {
+    font-size: 13px; color: var(--gray-3);
+    line-height: 1.8;
+  }
+  .footer-meta a { color: var(--blue); }
+  .footer-note {
+    margin-top: 16px;
+    font-size: 11px; color: var(--gray-4);
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .hero { padding: 110px 20px 40px; }
+    .hero h1 { font-size: 42px; letter-spacing: -1.5px; }
+    .hero-sub { font-size: 17px; }
+    .hero-meta { gap: 28px; }
+    .hero-stat-num { font-size: 26px; }
+    .manifesto, .reversals, .days, .guests, .quote-wall, .takeaways { padding: 50px 20px; }
+    .section-title { font-size: 28px; }
+    .manifesto-grid { grid-template-columns: 1fr; }
+    .banner { padding: 0 16px; }
+    .banner-inner { padding: 48px 32px; border-radius: 20px; }
+    .banner-mark { font-size: 80px; left: 24px; }
+    .banner-inner p { font-size: 22px; }
+    .reversal { padding: 24px; flex-direction: column; gap: 16px; }
+    .day-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .day-meta { margin-left: 0; }
+    .guests-grid { grid-template-columns: 1fr; }
+    .guest-title { font-size: 26px; }
+    .takeaway { flex-direction: column; gap: 10px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-eyebrow">AI 工作坊 · 学员专享</div>
+  <h2>一号位 AI 俱乐部</h2>
+  <p>请输入访问口令</p>
+  <div class="gate-input-wrap">
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令" autofocus>
+    <button class="gate-btn" id="gateBtn">进入</button>
+  </div>
+  <div class="gate-error" id="gateError">口令不对，再试一下</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span>一号位 AI 工作坊</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#manifesto">主张</a></li>
+      <li><a href="#reversals">认知反转</a></li>
+      <li><a href="#days">两天课程</a></li>
+      <li><a href="#guests">嘉宾圆桌</a></li>
+      <li><a href="#quotes">金句</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <span class="hero-eyebrow">2026.04.18 – 04.19 · V 聚场</span>
+  <h1>一号位 × AI 的两天</h1>
+  <p class="hero-sub">
+    第一天讲"把事情做大"——认知反转 × 动手做 skill；<br>
+    第二天讲"真正 AI 化"——组织重构 × 进损益表；<br>
+    晚上讲"你把事情做大了之后，你和你的孩子怎么办"。
+  </p>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <div class="hero-stat-num">2</div>
+      <div class="hero-stat-label">天</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">场</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">~18h</div>
+      <div class="hero-stat-label">沉浸</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">40+</div>
+      <div class="hero-stat-label">一号位</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MANIFESTO ===== -->
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-header">
+    <div class="section-eyebrow">主张</div>
+    <h2 class="section-title">这两天，我们在讲同一件事</h2>
+    <p class="section-lead">
+      AI 不是"更快一点的 Excel"。它是 300 年来第一次，让创始人可以不经过一大群人的翻译，直接把想法变成产品、变成公司、变成自己的人生。但前提是——你愿意亲自下场，而且愿意改自己的底层代码。
+    </p>
+  </div>
+
+  <div class="manifesto-grid">
+    <div class="manifesto-card">
+      <div class="manifesto-icon blue">①</div>
+      <h3>白天讲组织</h3>
+      <p>一号位的认知必须先反转：<strong>执行型知识工作者贬值，"想法"升值；管理幅度 ×10，公司层级将坍塌；创始人必须自己下场</strong>。真正的 AI 化不是招个 AI 负责人，是你自己把数据、知识、智能体、harness 搭起来。</p>
+    </div>
+    <div class="manifesto-card">
+      <div class="manifesto-icon warm">②</div>
+      <h3>晚上讲家庭</h3>
+      <p>你在公司里的那一套，不要带回家。<strong>AI 前时代让你成功的那套代码（恐惧、匮乏、控制），恰恰是 AI 后时代教育孩子的最大障碍。</strong>孩子最大的危机不是被 AI 淘汰，是虚无。解法是给他留白。</p>
+    </div>
+    <div class="manifesto-card">
+      <div class="manifesto-icon dark">③</div>
+      <h3>底层讲代码</h3>
+      <p>公司和家庭表面上是两件事，底层是同一件事——<strong>你神经系统里的底层代码</strong>。公司里这套代码让你赢，家里这套代码让你输。先改自己的代码，再谈外面的世界。这就是为什么一号位的功课永远在自己身上。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BIG BANNER ===== -->
+<section class="banner">
+  <div class="banner-inner">
+    <div class="banner-mark">"</div>
+    <p>
+      效能 = <strong>模型 × Harness × 判断力</strong>。<br>
+      模型谁都能买，Harness 和判断力只有一号位能搭。
+    </p>
+    <div class="banner-attr">— Vivian 的 AI 驾驭公式</div>
+  </div>
+</section>
+
+<!-- ===== REVERSALS ===== -->
+<section class="reversals" id="reversals">
+  <div class="reversals-header">
+    <div class="section-eyebrow">🔥 最硬的 5 个认知反转</div>
+    <h2 class="section-title">两天里最值钱的 5 刀</h2>
+    <p class="section-lead">每一条都是反直觉的，但每一条都被工作坊现场的真实案例验证过。</p>
+  </div>
+
+  <div class="reversal-list">
+    <div class="reversal">
+      <div class="reversal-num">1</div>
+      <div class="reversal-body">
+        <h4>知识工作者贬值，"想法"升值</h4>
+        <p>张冬慧 5 年没碰代码，用 Claude <strong>2 小时</strong>跑完了公司舆情监控系统的前端、后端、数据库、部署——过去是开发团队搞了很久没搞定的项目。创始人的想法第一次可以不经过一大群人的翻译，直接变成产品。<strong>但反面警告：如果你自己也没有真正的想法、只会提问题催进度，下一个被 AI 替代的就是你</strong>。</p>
+        <span class="origin">D1 上午 · Vivian</span>
+      </div>
+    </div>
+
+    <div class="reversal">
+      <div class="reversal-num">2</div>
+      <div class="reversal-body">
+        <h4>管理幅度 × 10，公司层级将坍塌</h4>
+        <p>Block 从 <strong>6000 人裁到 2000 人，业绩持续增长</strong>。公司层级其实是一个"信息路由协议"——创始人 80% 的时间花在这套协议上，而这 80% 的时间并没有在创造价值。AI 是第一个真正能替代这套协议的机制。一个人 + 一套 AI 系统，可以承接过去 10 倍规模团队的产量。</p>
+        <span class="origin">D1 上午 · Vivian</span>
+      </div>
+    </div>
+
+    <div class="reversal">
+      <div class="reversal-num">3</div>
+      <div class="reversal-body">
+        <h4>需要做第二次的事情，都值得做成 skill</h4>
+        <p>Skill 不是工具，是岗位 SOP。<strong>高频发生、流程清晰、结果可验、风险可控</strong>——四条满足程度越高，越值得沉淀。这一下午整个房间在做同一件事：把自己的某个真实业务场景现场跑成一个 skill。这是从"用 AI"到"AI 进入我的系统"的分界线。</p>
+        <span class="origin">D1 下午 · Vivian</span>
+      </div>
+    </div>
+
+    <div class="reversal">
+      <div class="reversal-num">4</div>
+      <div class="reversal-body">
+        <h4>78% 公司用 AI，80% 进不了损益表</h4>
+        <p>麦肯锡数据：全球 78% 的公司都在用 AI，但 <strong>80% 进不了损益表</strong>。差在哪？差在 Harness——也就是一整套"数据 → 知识库 → 智能体 → 系统"的转化路径。<strong>一号位如果不亲自下场，这件事推进速度和效果都不会好</strong>——因为 ERP 这么多年了，老板关注在哪里，事情就推进在哪里（曹赟）。</p>
+        <span class="origin">D2 上午 · Vivian</span>
+      </div>
+    </div>
+
+    <div class="reversal warm">
+      <div class="reversal-num">5</div>
+      <div class="reversal-body">
+        <h4>孩子最大的危机不是被淘汰，是虚无</h4>
+        <p>我们这代人靠恐惧匮乏驱动，所以成功；孩子没有这套代码，所以会遁入虚无。<strong>解法不是让他学更多、学更快，而是给他留白，让他找到热爱</strong>。热爱是一个人和一件事的共振——不可解释、不可预测、不可设计。<strong>真正强大的人才能把过去全放下、重新开始、拜孩子为师</strong>。</p>
+        <span class="origin">D1 晚上 · 亚楠</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DAYS ===== -->
+<section class="days" id="days">
+  <div class="guests-header" style="margin-bottom: 36px;">
+    <div class="section-eyebrow">📅 两天课程</div>
+    <h2 class="section-title">完整笔记导航</h2>
+  </div>
+
+  <!-- Day 1 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label">DAY 01</span>
+      <h3 class="day-title">从认知反转到动手做 skill</h3>
+      <span class="day-meta">04.18 · V 聚场</span>
+    </div>
+    <div class="session-grid">
+      <a href="day1-morning.html" class="session">
+        <div class="session-time">09:30 – 12:00 · 上午</div>
+        <div class="session-title">认知反转：一号位必须先改自己</div>
+        <p class="session-quote">"AI 时代最大的认知反转：以前能帮老板把想法做出来的人，可能没那么值钱了。"</p>
+        <div class="session-tags">
+          <span class="session-tag">可复利的实习生</span>
+          <span class="session-tag">3 个反转</span>
+          <span class="session-tag">人在边缘</span>
+        </div>
+        <span class="session-link">阅读完整笔记 →</span>
+      </a>
+      <a href="day1-afternoon.html" class="session">
+        <div class="session-time">14:00 – 18:00 · 下午</div>
+        <div class="session-title">动手做 skill：从认知到手上</div>
+        <p class="session-quote">"需要做第二次的事情，都值得做成 skill；需要用电脑完成的事，都可以做成 skill。"</p>
+        <div class="session-tags">
+          <span class="session-tag">四件套</span>
+          <span class="session-tag">第二次法则</span>
+          <span class="session-tag">现场 demo</span>
+        </div>
+        <span class="session-link">阅读完整笔记 →</span>
+      </a>
+      <a href="guests/yanan-roundtable.html" class="session">
+        <div class="session-time">18:55 – 20:00 · 晚上</div>
+        <div class="session-title" style="color: var(--warm-1);">亚楠圆桌：AI 时代的家庭教育</div>
+        <p class="session-quote">"孩子最大的危机不是被 AI 淘汰，是虚无。解法不是让他学更多，而是给他留白。"</p>
+        <div class="session-tags">
+          <span class="session-tag">感性篇</span>
+          <span class="session-tag">留白</span>
+          <span class="session-tag">拜孩子为师</span>
+        </div>
+        <span class="session-link" style="color: var(--warm-1);">阅读完整笔记 →</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label">DAY 02</span>
+      <h3 class="day-title">从个人武装到组织重构</h3>
+      <span class="day-meta">04.19 · V 聚场</span>
+    </div>
+    <div class="session-grid">
+      <a href="day2-morning.html" class="session">
+        <div class="session-time">09:37 – 12:00 · 上午</div>
+        <div class="session-title">AI 如何真正进入损益表</div>
+        <p class="session-quote">"你一个人用 AI 用得再猛，只要没落进损益表，这件事就不算做完。"</p>
+        <div class="session-tags">
+          <span class="session-tag">四步转化图</span>
+          <span class="session-tag">Block 样本</span>
+          <span class="session-tag">Klarna 翻车</span>
+        </div>
+        <span class="session-link">阅读完整笔记 →</span>
+      </a>
+      <div class="session coming">
+        <div class="session-time">14:00 – 17:00 · 下午</div>
+        <div class="session-title">D2 下午（整理中）</div>
+        <p class="session-quote" style="color: var(--gray-3);">笔记正在整理，导完即上线。</p>
+        <div class="session-tags">
+          <span class="session-tag">整理中</span>
+        </div>
+        <span class="session-link">即将上线</span>
+      </div>
+      <div class="session coming">
+        <div class="session-time">嘉宾分享 · 理性篇</div>
+        <div class="session-title" style="color: var(--blue);">晴空：AI × 10倍增长</div>
+        <p class="session-quote" style="color: var(--gray-3);">嘉宾分享笔记整理中，导完即上线。</p>
+        <div class="session-tags">
+          <span class="session-tag">理性篇</span>
+          <span class="session-tag">整理中</span>
+        </div>
+        <span class="session-link" style="color: var(--blue);">即将上线</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GUEST STARS ===== -->
+<section class="guests" id="guests">
+  <div class="guests-header">
+    <div class="section-eyebrow">⭐ 嘉宾圆桌双子星</div>
+    <h2 class="section-title">理性 × 感性，两面一体</h2>
+    <p class="section-lead">
+      晴空把 AI 的十倍增长讲到骨头里；亚楠把 AI 时代的家庭教育讲到灵魂里。<br>
+      一个是方法论，一个是返本归源——都是这次工作坊最难复制的部分。
+    </p>
+  </div>
+
+  <div class="guests-grid">
+    <div class="guest-card cool" style="opacity: 0.78; cursor: default;">
+      <div class="guest-eyebrow">理性篇 · D2</div>
+      <h3 class="guest-title">AI × 10 倍增长</h3>
+      <div class="guest-speaker">晴空 · AI 商业增长专家</div>
+      <p class="guest-quote">
+        把 AI 当一个"可复利的团队"——不是替代某个岗位，是把整个增长链路重组成一套可自我迭代的系统。
+      </p>
+      <span class="guest-cta">笔记整理中 · 即将上线</span>
+    </div>
+
+    <a href="guests/yanan-roundtable.html" class="guest-card warm">
+      <div class="guest-eyebrow">感性篇 · D1 晚上</div>
+      <h3 class="guest-title">AI 时代的家庭教育</h3>
+      <div class="guest-speaker">尹亚楠 · 蒙台梭利教育专家</div>
+      <p class="guest-quote">
+        AI 前时代让你成功的那套代码，恰恰是 AI 后时代教育孩子的最大障碍。孩子最大的危机不是被淘汰，是虚无。
+      </p>
+      <span class="guest-cta">阅读完整分享 →</span>
+    </a>
+  </div>
+</section>
+
+<!-- ===== QUOTE WALL ===== -->
+<section class="quote-wall" id="quotes">
+  <div class="quote-wall-header">
+    <div class="section-eyebrow">💎 金句墙</div>
+    <h2 class="section-title">两天里最有力的 12 句</h2>
+    <p class="section-lead">从 ~18 小时内容里，精选出最值得截屏、最值得反复想、最值得发给下属发给孩子的 12 句。</p>
+  </div>
+  <div class="quote-grid">
+    <div class="quote-card blue">
+      <p class="quote-card-text">效能 = 模型 × Harness × 判断力。模型谁都能买，Harness 和判断力只有一号位能搭。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card blue">
+      <p class="quote-card-text">AI 就是一个你一旦教会了就不会忘记的员工，他的输入输出确定性比人高一个数量级。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card blue">
+      <p class="quote-card-text">AI 时代最大的认知反转：以前能帮老板把想法做出来的人，可能没那么值钱了。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card blue">
+      <p class="quote-card-text">公司层级本质是一个信息路由协议。AI 第一次真正替代了这套协议。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card blue">
+      <p class="quote-card-text">需要做第二次的事情，都值得做成 skill；需要用电脑完成的事，都可以做成 skill。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card blue">
+      <p class="quote-card-text">用上 Claude 一个周五，我觉得我自己强的可怕。</p>
+      <div class="quote-card-attr">— 王明军 · Lipro 研发总监</div>
+    </div>
+    <div class="quote-card dark">
+      <p class="quote-card-text">一号位如果不亲自下场，这件事情推进速度和效果都不会好。因为 ERP 这么多年了，老板关注在哪里，事情就推进在哪里。</p>
+      <div class="quote-card-attr">— 曹赟</div>
+    </div>
+    <div class="quote-card warm">
+      <p class="quote-card-text">我们 AI 前时代靠恐惧匮乏驱动的成功代码，恰恰是 AI 后时代教育孩子的最大障碍。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card warm">
+      <p class="quote-card-text">AI 时代孩子最大的危机不是被淘汰，是虚无。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card warm">
+      <p class="quote-card-text">热爱是一个人和一件事的共振，它不可解释、不可预测、不可设计。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card warm">
+      <p class="quote-card-text">真正强大的人才能把过去全放下、重新开始、拜孩子为师。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card dark">
+      <p class="quote-card-text">健康最重要，AI 让我们多活几年，给我们 50 年——活到 150 岁。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAKEAWAYS ===== -->
+<section class="takeaways">
+  <div class="takeaways-header">
+    <div class="section-eyebrow">📝 带回去的动作</div>
+    <h2 class="section-title">这周就能做的 7 件事</h2>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>① 把"第二次法则"贴在办公桌上</h4>
+      <p><strong>这周只要有事情做第二次，就停下来想一想：这个能不能做成 skill？</strong>先从 1 个开始，跑通一个再做下一个。</p>
+    </div>
+  </div>
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>② 装好四件套 + 跑通一个真实业务场景</h4>
+      <p>Claude Code + Obsidian + Claudian + 闪电说——Vivian 在工作坊上现场带大家装好了。这周挑一个你最烦的重复工作，把它变成第一个 skill。</p>
+    </div>
+  </div>
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>③ 每周给自己留半天"不 AI、不网络"</h4>
+      <p><strong>如果连你自己都停不下来，凭什么要求孩子停下来？</strong>这是亚楠给所有一号位的功课。</p>
+    </div>
+  </div>
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>④ 周末不给孩子报班</h4>
+      <p>他的"磨粉笔时间"可能才是他最宝贵的创造力土壤。</p>
+    </div>
+  </div>
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>⑤ 6-12 岁孩子，用"战略/战术复盘"的方式聊考试</h4>
+      <p>哪科考好、为什么；哪科没考好、是战略问题还是战术问题。<strong>一号位最擅长的动作，偏偏最不会用在自己孩子身上</strong>。</p>
+    </div>
+  </div>
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>⑥ 想清楚你的"垂类智能体"</h4>
+      <p>你的公司里有没有一套对用户画像的独特刻画？有没有可能把它变成一个智能体，一边收 C 端订阅、一边收 B 端上架费？</p>
+    </div>
+  </div>
+  <div class="takeaway">
+    <div class="takeaway-check">☐</div>
+    <div class="takeaway-body">
+      <h4>⑦ 健康最重要</h4>
+      <p>AI 给你活到 150 岁的机会，别让 AI 焦虑把你的寿命先压缩掉。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-brand">一号位 AI 工作坊 · 2026.04.18-19</div>
+  <div class="footer-meta">
+    V 聚场（杨浦区优质创作者集聚地）<br>
+    主办：<a href="https://vivianai.cn/">Vivian 的 AI 进化论</a> × 一号位 AI 俱乐部
+  </div>
+  <div class="footer-note">学员专享 · 请勿外传</div>
+</footer>
+
+<script>
+  // Password gate (shared across all workshop pages via sessionStorage)
+  const PASS = 'Vivian0418';
+  const gate = document.getElementById('gate');
+  const input = document.getElementById('gateInput');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateError');
+
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1') {
+    gate.classList.add('hidden');
+  }
+
+  function tryUnlock() {
+    const val = input.value.trim();
+    if (val === PASS) {
+      sessionStorage.setItem('workshop0418Unlocked', '1');
+      gate.classList.add('hidden');
+    } else {
+      err.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+</script>
+
+</body>
+</html>

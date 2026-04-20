@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AI 时代的家庭教育 · 亚楠圆桌 — 一号位 AI 工作坊</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --cream: #fdfbf7;
+    --warm-1: #c2410c;       /* terracotta */
+    --warm-2: #ea580c;       /* deep amber */
+    --warm-3: #fed7aa;       /* soft peach */
+    --warm-bg: #fef6ee;
+    --blue: #0071e3;
+    --white: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--cream);
+  }
+
+  /* ===== PASSWORD GATE ===== */
+  .gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #fef6ee 0%, #fdfbf7 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .gate.hidden { display: none; }
+  .gate-eyebrow {
+    font-size: 12px; font-weight: 700; color: var(--warm-1);
+    letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase;
+  }
+  .gate h2 {
+    font-size: 32px; font-weight: 800; margin-bottom: 10px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #c2410c 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .gate p { font-size: 15px; color: var(--gray-3); margin-bottom: 36px; text-align: center; }
+  .gate-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .gate-input {
+    width: 240px; padding: 13px 18px; border-radius: 12px;
+    border: 1px solid var(--gray-4); font-size: 15px;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit; background: #fff;
+  }
+  .gate-input:focus { border-color: var(--warm-2); box-shadow: 0 0 0 3px rgba(234,88,12,0.12); }
+  .gate-btn {
+    padding: 13px 28px; border-radius: 12px; border: none;
+    background: var(--warm-2); color: #fff; font-size: 15px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gate-error { color: #ef4444; font-size: 13px; margin-top: 14px; display: none; text-align: center; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(253,251,247,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 1040px; margin: 0 auto; padding: 0 24px;
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: var(--black);
+    letter-spacing: 0.3px; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--warm-2), var(--warm-1));
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--gray-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--warm-1); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 140px 24px 80px;
+    max-width: 760px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: var(--warm-1);
+    background: rgba(234,88,12,0.08);
+    padding: 7px 18px; border-radius: 20px;
+    margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-size: 56px; font-weight: 900; line-height: 1.12;
+    letter-spacing: -2px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #1d1d1f 40%, #c2410c 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 19px; color: var(--gray-2); line-height: 1.6;
+    max-width: 580px; margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; gap: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 13px; color: var(--gray-3);
+    flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ===== BIG QUOTE BANNER ===== */
+  .banner-quote {
+    max-width: 900px; margin: 0 auto;
+    padding: 80px 24px 40px;
+  }
+  .banner-quote-inner {
+    background: linear-gradient(135deg, #fef6ee 0%, #fef0e4 100%);
+    border-radius: 24px;
+    padding: 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner-quote-mark {
+    position: absolute; top: 24px; left: 40px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 96px; color: rgba(194,65,12,0.15);
+    line-height: 1; font-weight: 700;
+  }
+  .banner-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px; font-weight: 600;
+    line-height: 1.55; color: var(--black);
+    position: relative; z-index: 1;
+  }
+  .banner-quote-attr {
+    margin-top: 28px; font-size: 14px; color: var(--gray-2);
+    font-weight: 500; letter-spacing: 0.5px;
+  }
+
+  /* ===== INTRO / SETUP ===== */
+  .setup {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 20px;
+  }
+  .setup h2 {
+    font-size: 14px; font-weight: 700; color: var(--warm-1);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .setup p {
+    font-size: 18px; line-height: 1.8; color: var(--gray-1);
+    margin-bottom: 20px;
+  }
+  .setup p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== SECTION ===== */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .section-index {
+    display: inline-block;
+    font-size: 13px; font-weight: 700;
+    color: var(--warm-2); letter-spacing: 2px;
+    background: rgba(234,88,12,0.08);
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .section-h {
+    font-size: 36px; font-weight: 800;
+    line-height: 1.25; letter-spacing: -0.8px;
+    margin-bottom: 16px; color: var(--black);
+  }
+  .section-lead {
+    font-size: 17px; color: var(--gray-2);
+    line-height: 1.7; margin-bottom: 32px;
+    font-style: italic;
+  }
+  .section h3 {
+    font-size: 22px; font-weight: 700;
+    margin: 40px 0 16px; color: var(--black);
+    letter-spacing: -0.3px;
+  }
+  .section h4 {
+    font-size: 17px; font-weight: 700;
+    margin: 28px 0 12px; color: var(--gray-1);
+  }
+  .section p {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 18px;
+  }
+  .section p strong { color: var(--black); font-weight: 600; }
+  .section ul, .section ol {
+    margin: 12px 0 24px 0; padding-left: 22px;
+  }
+  .section li {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 10px;
+  }
+  .section li strong { color: var(--black); font-weight: 600; }
+
+  /* ===== PULL QUOTE (inline highlight) ===== */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 28px 24px 32px;
+    background: var(--warm-bg);
+    border-left: 3px solid var(--warm-2);
+    border-radius: 0 12px 12px 0;
+  }
+  .pull-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 19px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin: 0;
+  }
+  .pull-quote.big p { font-size: 22px; font-weight: 600; }
+
+  /* ===== SUB-POINT CARDS ===== */
+  .layers {
+    display: grid; gap: 14px;
+    margin: 24px 0 32px;
+  }
+  .layer {
+    background: #fff; border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px; padding: 20px 24px;
+    position: relative; padding-left: 72px;
+  }
+  .layer-num {
+    position: absolute; left: 20px; top: 20px;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--warm-3), var(--warm-2));
+    color: #fff; font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer-label {
+    font-size: 12px; color: var(--warm-1); font-weight: 700;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .layer-body {
+    font-size: 15px; color: var(--gray-1); line-height: 1.7;
+  }
+
+  /* ===== TABLE ===== */
+  .section table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0 28px; font-size: 15px;
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .section th {
+    text-align: left; padding: 12px 18px;
+    background: var(--warm-bg); font-weight: 700;
+    color: var(--black); border-bottom: 1px solid rgba(194,65,12,0.15);
+  }
+  .section td {
+    padding: 12px 18px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--gray-1); line-height: 1.6;
+  }
+  .section tr:last-child td { border-bottom: none; }
+
+  /* ===== SCENE BOX (narrative moment) ===== */
+  .scene {
+    margin: 32px 0;
+    padding: 28px 32px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .scene-label {
+    font-size: 12px; font-weight: 700;
+    color: var(--warm-2); letter-spacing: 2px;
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+  .scene p { font-size: 16px; line-height: 1.75; color: var(--gray-1); margin-bottom: 12px; }
+  .scene p:last-child { margin-bottom: 0; }
+
+  /* ===== QUOTE WALL ===== */
+  .quote-wall {
+    max-width: 1040px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .quote-wall-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .quote-wall-eyebrow {
+    font-size: 13px; font-weight: 700; color: var(--warm-1);
+    letter-spacing: 3px; margin-bottom: 14px;
+  }
+  .quote-wall-title {
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -0.8px; color: var(--black);
+  }
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .quote-card {
+    background: #fff; border-radius: 16px;
+    padding: 28px; border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -8px; right: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 100px; color: rgba(234,88,12,0.08);
+    line-height: 1; font-weight: 700;
+  }
+  .quote-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(194,65,12,0.08);
+  }
+  .quote-card-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .quote-card-attr {
+    font-size: 12px; color: var(--warm-1);
+    font-weight: 700; letter-spacing: 1px;
+  }
+
+  /* ===== TAKEAWAYS ===== */
+  .takeaways {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .takeaway-item {
+    background: #fff; border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 16px;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex; gap: 22px;
+  }
+  .takeaway-num {
+    flex-shrink: 0;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--warm-3) 0%, var(--warm-2) 100%);
+    color: #fff; font-weight: 800; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .takeaway-body h4 {
+    font-size: 18px; font-weight: 700;
+    color: var(--black); margin-bottom: 8px;
+  }
+  .takeaway-body p {
+    font-size: 15px; line-height: 1.7;
+    color: var(--gray-1); margin: 0;
+  }
+  .takeaway-body p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    max-width: 1040px; margin: 40px auto 0;
+    padding: 48px 24px 60px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .footer-back {
+    display: inline-block; margin-bottom: 24px;
+    font-size: 14px; color: var(--warm-1);
+    text-decoration: none; font-weight: 600;
+    padding: 10px 22px; border-radius: 20px;
+    background: rgba(234,88,12,0.08);
+    transition: background 0.2s;
+  }
+  .footer-back:hover { background: rgba(234,88,12,0.15); }
+  .footer-meta {
+    font-size: 13px; color: var(--gray-3);
+    line-height: 1.7;
+  }
+  .footer-meta a { color: var(--warm-1); text-decoration: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .hero { padding: 110px 20px 50px; }
+    .hero h1 { font-size: 38px; letter-spacing: -1.2px; }
+    .hero-sub { font-size: 17px; }
+    .banner-quote { padding: 40px 16px 20px; }
+    .banner-quote-inner { padding: 40px 28px; }
+    .banner-quote-mark { font-size: 64px; top: 16px; left: 20px; }
+    .banner-quote p { font-size: 20px; }
+    .section { padding: 40px 20px; }
+    .section-h { font-size: 26px; letter-spacing: -0.5px; }
+    .section p, .section li { font-size: 16px; }
+    .pull-quote p { font-size: 17px; }
+    .pull-quote.big p { font-size: 18px; }
+    .layer { padding: 18px 20px 18px 66px; }
+    .scene { padding: 22px 22px; }
+    .quote-wall { padding: 50px 20px; }
+    .quote-wall-title { font-size: 26px; }
+    .takeaway-item { padding: 22px 22px; flex-direction: column; gap: 12px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-eyebrow">AI 工作坊 · 学员专享</div>
+  <h2>一号位 AI 俱乐部</h2>
+  <p>请输入访问口令</p>
+  <div class="gate-input-wrap">
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令" autofocus>
+    <button class="gate-btn" id="gateBtn">进入</button>
+  </div>
+  <div class="gate-error" id="gateError">口令不对，再试一下</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span>一号位 AI 工作坊</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">工作坊总览</a></li>
+      <li><a href="#quotes">金句收藏</a></li>
+      <li><a href="#takeaways">带回去的动作</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <span class="hero-eyebrow">嘉宾圆桌 · 感性篇</span>
+  <h1>AI 时代的家庭教育</h1>
+  <p class="hero-sub">
+    白天讲"把事情做大"；晚上亚楠把话题拽回家里——<br>
+    你在公司里的那一套，不要带回家。
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026.04.18 · 晚上</span>
+    <span>🎙️ 尹亚楠 · 蒙台梭利教育专家</span>
+    <span>🏠 V 聚场</span>
+    <span>⏱️ 1 小时 08 分钟</span>
+  </div>
+</header>
+
+<!-- ===== BIG QUOTE BANNER ===== -->
+<section class="banner-quote">
+  <div class="banner-quote-inner">
+    <div class="banner-quote-mark">"</div>
+    <p>
+      AI 前时代让你成功的那套代码（恐惧、匮乏、控制），恰恰是 AI 后时代教育孩子的最大障碍。
+      孩子最大的危机不是被 AI 淘汰，是虚无。
+      解法不是让他学更多、学更快，而是给他留白，让他找到热爱。
+    </p>
+    <div class="banner-quote-attr">— 这一场的主线一句话</div>
+  </div>
+</section>
+
+<!-- ===== SETUP ===== -->
+<section class="setup">
+  <h2>这一场在讲什么</h2>
+  <p>白天讲的是"一号位怎么用 AI 做公司"——讲 skill、讲 harness、讲招聘流水线、讲员工复制。</p>
+  <p>晚上亚楠把话题拽回家里：<strong>你在公司里的那一套，不要带回家。</strong></p>
+  <p>这场圆桌是工作坊第一天的情绪暗线——<strong>白天讲"怎么把事情做大"，晚上讲"你把事情做大了之后，你和你的孩子怎么办"</strong>。很多同学听完陷入沉默，因为被戳中了。</p>
+</section>
+
+<!-- ===== SECTION 1 ===== -->
+<article class="section">
+  <span class="section-index">01 主线推演</span>
+  <h2 class="section-h">白天 → 晚上的认知衔接</h2>
+  <p class="section-lead">亚楠开场第一个问题就让全场愣住。</p>
+
+  <p>白天 Vivian 讲的反转 A/B/C（技能→战略 / 管理幅度 ×10 / 创始人必须自己下场）全部是<strong>组织维度</strong>的论述——AI 让你一个人能管一个公司、能跑一个事业部。</p>
+
+  <p>亚楠把话题接到了<strong>家庭维度</strong>。她的第一个问题就让全场愣住：</p>
+
+  <div class="pull-quote big">
+    <p>"大家觉得在 AI 前时代获得成功的人，在家庭教育上最大的障碍是什么？"</p>
+  </div>
+
+  <p>这个问题本身就是反转——你以为她会讲"怎么让孩子适应 AI 时代、怎么给孩子装 skill"，但她讲的是<strong>反面</strong>：你在 AI 前时代靠控制、靠逻辑、靠厮杀拼出来的那套能力，带回家就是灾难。</p>
+
+  <p>她对这个判断有一套非常扎实的底层逻辑，分三层展开：</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">表象</div>
+      <div class="layer-body">成功者没时间陪孩子</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">本质</div>
+      <div class="layer-body">成功者把"管理企业的模式"带回了家</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">最底层</div>
+      <div class="layer-body">你管企业靠的是恐惧、匮乏、控制——<strong>这些代码已经写进了你的神经系统，你回家根本关不掉</strong></div>
+    </div>
+  </div>
+
+  <p>她说得很直接：</p>
+
+  <div class="pull-quote">
+    <p>"成功人士的 ego 很大，他觉得自己的经验肯定有用。但在 AI 时代，尽可能会成为爸爸。反而弱势的家长培养出来的孩子更成功，因为他的 ego 没那么大。"</p>
+  </div>
+
+  <p>这一刀切得很深——整个圆桌气氛从热闹切换成了专注。</p>
+</article>
+
+<!-- ===== SECTION 2 ===== -->
+<article class="section">
+  <span class="section-index">02 核心洞察一</span>
+  <h2 class="section-h">AI 时代孩子最大的危机是"虚无"</h2>
+  <p class="section-lead">这是亚楠整场最核心的一个观点，也是全场最多人重听的一段。</p>
+
+  <h3>为什么是虚无？</h3>
+
+  <p><strong>我们这代人的底层驱动是恐惧匮乏</strong>——对物质匮乏的恐惧、对贫穷的恐惧、对被淘汰的恐惧、对不被认可的恐惧。亚楠说："这是长达 20 年的传统教育在我们神经系统里写下的代码。"</p>
+
+  <p>而这个代码恰恰是我们成功的原料——"我们这一代的成功，不是靠热爱，不是靠梦想，是靠底层这种恐惧匮乏驱动。这个驱动进入到极强的行动力，帮你在竞争中胜出。"</p>
+
+  <p>但孩子<strong>没有这个代码</strong>。</p>
+
+  <ul>
+    <li>物质没有匮乏过（各位大佬的孩子十几岁就走完全世界了）</li>
+    <li>未来 AI 把工作都替代了，他可能要"<strong>购买</strong>一份工作"（Vivian 之前分享的文章说，"第一份工作要买，因为没人要实习生了"）</li>
+    <li>马斯克说的未来图景：7×24 机器人工作，产品极度富裕，没有贫穷</li>
+  </ul>
+
+  <p><strong>但没有贫穷就是好事吗？</strong></p>
+
+  <div class="pull-quote big">
+    <p>"大家会遁入虚无。"</p>
+  </div>
+
+  <h3>为什么这个问题在我们身上不明显？</h3>
+
+  <p>因为我们这代人的恐惧代码停不下来——<strong>即便财富自由了，恐惧还在</strong>。</p>
+
+  <p>她举了两个现场同学都认识的例子：</p>
+
+  <ul>
+    <li><strong>段永平</strong> vs <strong>王石</strong>：段永平迭代了、告别了，去打高尔夫很松弛。<strong>王石那个匮乏的底子还在</strong>。</li>
+    <li><strong>张雪峰老师</strong>：AI 前时代的胜出者，一直停不下来，直到去世。</li>
+  </ul>
+
+  <div class="pull-quote">
+    <p>"我们那个时代培养出来的人就是这样，即便财富自由了还是很焦虑。"</p>
+  </div>
+
+  <h3>为什么这会传给孩子？</h3>
+
+  <p>亚楠提了一个她先生（神经科学研究者）的专业领域——<strong>表观遗传学</strong>：</p>
+
+  <div class="pull-quote">
+    <p>"我们这代人童年、青少年时期承受的压力，会写进我们的基因。基因在后天环境会改变，而这个改变是可遗传的，会传给下一代。"</p>
+  </div>
+
+  <p>这是代际传承中最隐蔽的部分——<strong>你以为传承给孩子的是财富，其实最重要的是你的神经系统、你的基因</strong>。</p>
+
+  <p>所以她给在场一号位的建议是硬核的——<strong>先跟你自己和解</strong>：</p>
+
+  <div class="pull-quote">
+    <p>"跟过去和解、疗愈自己，跟恐惧告别，跟匮乏告别。要适度放松。虽然这套系统让你成功，但你成功了以后，要学会停下来、松弛下来。"</p>
+  </div>
+
+  <h3>为什么她敏锐地看到了这件事？</h3>
+
+  <p>她给了一个非常精彩的类比——</p>
+
+  <div class="pull-quote">
+    <p>"我给女儿买了很多人工智能的书，她不感兴趣，我自己帮她看。我看其他 AI 书看不懂，但一看'深度学习'我一秒就懂——因为婴幼儿的学习模式就是深度学习。"</p>
+  </div>
+
+  <p>这是她作为 20 年蒙氏教育者的底层视角——<strong>人也是一串代码，而 AI 的学习速度是指数级的</strong>。婴幼儿要花漫长时间学走路、学单词；AI 是瞬间学习。</p>
+
+  <p>所以推论就是：<strong>我们要先改代码</strong>，不能把"恐惧匮乏"这个老旧代码传给下一代。</p>
+</article>
+
+<!-- ===== SECTION 3 ===== -->
+<article class="section">
+  <span class="section-index">03 核心洞察二</span>
+  <h2 class="section-h">虚无的解药是"热爱"</h2>
+  <p class="section-lead">什么真正能帮助孩子解决未来意义的问题？</p>
+
+  <h3>体验 vs 热爱：这俩不是一回事</h3>
+
+  <p>现场有同学先给出"<strong>体验</strong>"——"人的内心就是需要抓住东西，没有东西要抓住，虚无就会出现。去体验当下的生命。"</p>
+
+  <p>亚楠承接了这个答案，但引到了更深一层。</p>
+
+  <h3>为什么最终答案是"热爱"？</h3>
+
+  <p>她接着把曹赟（曹总）拉出来作为现场样本。</p>
+
+  <p>曹总做户外产品 25 年。他在工作坊上讲自己的路径时，亚楠一直在观察："<strong>他的眼睛在放光</strong>。"</p>
+
+  <p>曹总自己的原话是——</p>
+
+  <div class="pull-quote big">
+    <p>"我这一辈子过得挺幸福的。我创业做了 25 年的事情，是我热爱的、喜欢的——我喜欢户外，喜欢研究产品，做出的产品就是给我做的，不是为了挣钱。做出来以后卖给同样有爱好的消费者，他们享受、解决他的痛点，这是很爽、很有成就感的事情。"</p>
+  </div>
+
+  <p>他 40 岁那年在中石化，同学都在聊"什么时候退休、挣多少钱退休"。他想了想——"退休了我干嘛？天天旅行变流浪？天天打鱼？想来想去，持续能干的还是自己现在干的事情。"</p>
+
+  <p>于是他用了一个词——<strong>自洽</strong>。把上市、挣更多钱、互相攀比销量这些去掉，做自己喜欢的事，<strong>可以一直干下去</strong>。</p>
+
+  <p>这段话里藏的真正的教育观是：</p>
+
+  <div class="pull-quote">
+    <p>"教育观前置的问题是你的幸福观和成功观。如果要教育好孩子，我自己的反省就是如何做好我自己——把这一辈子做好了，就是给孩子的榜样。"</p>
+  </div>
+
+  <h3>亚楠对热爱的定义</h3>
+
+  <p>亚楠接上曹总的话之后，给了热爱一个她自己的定义：</p>
+
+  <div class="pull-quote big">
+    <p>"热爱是一个人和一件事的共振，它不可解释、不可预测、不可设计。它不是理性的。"</p>
+  </div>
+
+  <p>她用了 AI 金字塔做类比——</p>
+
+  <div class="pull-quote">
+    <p>现在 AI 最底层是计算能力，往上是感知、逻辑推理、决策力，再往上是<strong>动物性</strong>——这是人类特有的、AI 很难达到的<strong>灵感和顿悟</strong>。<strong>共振就在这一层</strong>。</p>
+  </div>
+
+  <p>她自己讲了一个亲身经历的"共振时刻"——<strong>她 20 岁之前自认是"养鸡场流水线上的鸡"</strong>，痛恨传统教育到每次考完试就把书卖给破烂王。</p>
+
+  <p>但有一次她去厦门一个条件很差的幼儿园帮同学——"就在那个瞬间，我说这辈子我要做儿童教育。"回来的路上她在公交车上一路疯魔般地向身边的老师输出："儿童教育、人应该怎么活着、儿童应该怎么成长？"</p>
+
+  <div class="pull-quote">
+    <p>"自此我就走上了幸福之路。我知道我来到这个世界上要干什么。"</p>
+  </div>
+
+  <p><strong>这就是她定义的"共振"</strong>——不是理性选择，不是数据对比，是那个瞬间"我就知道这是我的"。</p>
+
+  <p>她也承认这套体验很抽象：<strong>"没体验过的人很难理解。就像一见钟情，没经历过听起来都蛮抽象的。"</strong></p>
+
+  <h3>找到热爱的人怎么衡量幸福？</h3>
+
+  <p>亚楠的回答戳到了当晚最关键的一个认知反转：</p>
+
+  <div class="pull-quote big">
+    <p>"找到热爱的人，不是靠结果来判断幸福和成功，找到的那一刻就很幸福。"</p>
+  </div>
+
+  <p>这就解释了为什么张雪峰对摩托车的描述能让她感同身受——"他说别人都说他成功了，但从当小伙子的时候，他的每一天都觉得很开心，人生很值。"</p>
+</article>
+
+<!-- ===== SECTION 4 ===== -->
+<article class="section">
+  <span class="section-index">04 核心洞察三</span>
+  <h2 class="section-h">热爱不是培养出来的，是"留白"留出来的</h2>
+  <p class="section-lead">这是亚楠全场最反直觉的论述，也是最打动现场的一段。</p>
+
+  <h3>悖论：不是"做什么"，而是"不要做什么"</h3>
+
+  <div class="pull-quote big">
+    <p>"共振怎么产生的呢？悖论——不是培养出来的，反而是让你不要做什么。你要放下你的控制。"</p>
+  </div>
+
+  <p>她直接点名了现场在做的事情：</p>
+
+  <ul>
+    <li>现在 AI 来了，家长把孩子所有时间更要填满——补习班、学校、课外班</li>
+    <li>然后现在 OK，再让他学 AI、培养他搞人工智能</li>
+    <li><strong>"这全是我们原来的思路，其实是反直觉的"</strong></li>
+    <li><strong>"现在越是 AI 时代，越要给他留白。"</strong></li>
+  </ul>
+
+  <p>她引了日本美学的"<strong>间</strong>"——<strong>真正有价值的东西是在空白当中</strong>。</p>
+
+  <p>她进一步把这个道理推到在场每个人自己身上：</p>
+
+  <div class="pull-quote">
+    <p>"等我们玩 AI 玩上瘾了，一定要每天给自己留白——不要有 AI、不要有网络。要不然就是像一个小仓鼠，天天在笼子里停不下来。换了另外一套衣服，还是你的焦虑在驱动，代码没变，你还是个穷人、精神上的穷人。"</p>
+  </div>
+
+  <h3>真实场景：四年级女儿在磨粉笔</h3>
+
+  <div class="scene">
+    <div class="scene-label">现场故事</div>
+    <p>她女儿四年级，开始关门自己待在房间。有一天她送水果进去——</p>
+    <p><strong>"她一晚上拿粉笔在那儿磨、一直磨，把粉笔磨成粉，磨了一大碗。你可以代入一下——她的同学都在学英语、做作业，而她在磨粉笔。"</strong></p>
+    <p>她的第一反应当然是想说点什么。但她压制住自己，转身出去，开始用自己作为教育者的专业解读方式重新看这件事：</p>
+    <p><strong>"他看起来毫无意义，但你想他有这么极强的耐心和沉浸式的专注做这件事，重要不重要？尤其在互联网时代、AI 时代，能这样就跟冥想一样。他在做大部分人做不到的事情。他是在创造力的土壤里——这真正是和 AI 不一样的东西，就是在空白中产生出来。"</strong></p>
+    <p>然后她跟自己和解了，关上门继续让他搞他的事情。</p>
+  </div>
+
+  <p>但她紧接着讲了一句更真实的话：</p>
+
+  <div class="pull-quote">
+    <p>"真的是你懂理念没用，要把它落地到每个日常中，真的要跟自己那个功利主义的、焦虑的、恐惧的自己去斗争，太不容易了。"</p>
+  </div>
+
+  <h3>妈妈怎么拔出来：让她有事业</h3>
+
+  <p>现场一位爸爸问：爸爸相对能做到不控制，妈妈怎么办？亚楠给了一个非常接地气的答案：</p>
+
+  <ul>
+    <li><strong>生二胎</strong>（让注意力分散）</li>
+    <li><strong>生三胎</strong>（彻底分散）</li>
+    <li><strong>让她搞自己的事业，成就自己</strong></li>
+  </ul>
+
+  <div class="pull-quote">
+    <p>"自我成长，把自己成长好，其实就是给孩子最好的榜样。你把自己成长好了，就给孩子留白了。"</p>
+  </div>
+
+  <h3>她给自己女儿"成绩保持中位就好"</h3>
+
+  <div class="pull-quote big">
+    <p>"我跟孩子说：你成绩保持个中位就好。为什么中位？在传统学校，太高的成绩老师会拿你做 KPI，天天给你压力。中间那一块儿，学校也会给你留白——不给你压力，也不给你过多期待，这就是空白。"</p>
+  </div>
+
+  <p>这句话有多反直觉，在场的家长都懂——<strong>你是教育专家，居然让自己女儿考中位</strong>。但她背后的逻辑链条是完整的：<strong>留白 → 让热爱长出来 → 孩子成为他自己</strong>。</p>
+
+  <h3>最难的一句话</h3>
+
+  <div class="pull-quote big">
+    <p>"让孩子成为他自己——但太难了。我们就没有成为自己，怎么能让孩子成为他自己呢？"</p>
+  </div>
+
+  <p>整个圆桌最让人沉默的一句。</p>
+</article>
+
+<!-- ===== SECTION 5 ===== -->
+<article class="section">
+  <span class="section-index">05 核心洞察四</span>
+  <h2 class="section-h">孩子是 AI 原住民，我们要拜孩子为师</h2>
+  <p class="section-lead">这是亚楠全场最"刺"的一段，她自己说："今天可能会冒犯到各位"。</p>
+
+  <h3>我们是移民，他们是原住民</h3>
+
+  <div class="pull-quote big">
+    <p>"我们是 AI 时代的移民，坐在这里这么费劲地学习，就像学一门新的语言。但孩子是原住民。"</p>
+  </div>
+
+  <p>现场 Vivian 的儿子两岁半（天天），已经会说"用豆包给我讲个故事""用即梦给我做首歌""机器人泡奶"。</p>
+
+  <div class="pull-quote">
+    <p>"2 岁半的小孩说出来的话，就已经跟我们当时完全不一样了。"</p>
+  </div>
+
+  <h3>蒙台梭利 100 年前就说过："儿童是成人之父"</h3>
+
+  <div class="pull-quote">
+    <p>"以前就说儿童是我们的老师，因为他们的想象力、直觉都远远胜于我们——我们都丢失了。但现在在 AI 时代，儿童更是我们的老师——不是说谦虚，是你真的该这么想。"</p>
+  </div>
+
+  <p>亚楠直接把这句话的难度点破：</p>
+
+  <div class="pull-quote">
+    <p>"这对在座的各位比较挑战。你们都是指点江山、指挥的人、引导别人、教育别人的人，现在反过来要你真的去看到孩子、承认他是你的老师，这一点挺挑战的。"</p>
+  </div>
+
+  <p>她还补了一个词的变化很能说明问题——</p>
+
+  <div class="pull-quote">
+    <p>"以前我们都叫行业'老炮'，现在流行的词叫'老登'——从词汇的变化你就看到了。'我吃过的盐比你吃过的米多'，经验都不值钱了。"</p>
+  </div>
+
+  <h3>但有一些东西是可以穿越时代的</h3>
+
+  <p>她没有把这段讲成"全否定长辈经验"，最后收得很漂亮——</p>
+
+  <div class="pull-quote big">
+    <p>"品格、教养、边界，还有对做事的专注和热爱——这些是可以穿越时代的。其他的都要放下——所谓的经验、做事的逻辑体系、对世界的认知，全部放下，然后虚心地向孩子学习。"</p>
+  </div>
+
+  <p>最后落在一句话：</p>
+
+  <div class="pull-quote big">
+    <p>"真正强大的人才能把过去全放下、重新开始、拜孩子为师。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 6 ===== -->
+<article class="section">
+  <span class="section-index">06 曹总的补充</span>
+  <h2 class="section-h">接受孩子可能不如我们</h2>
+  <p class="section-lead">亚楠讲完后，曹总主动承接了一段很坦诚的反思。</p>
+
+  <p>他有两个女儿，老大高一。他自己坦白：</p>
+
+  <div class="pull-quote">
+    <p>"我习惯用家里就是公司一个管理员工的方式去跟孩子交流。小孩非常不好的抵触。小时候还好，越来越大就开始反叛，到差点就要动手的这种节奏了。"</p>
+  </div>
+
+  <p>这正好就是亚楠开场讲的"<strong>管理企业的模式带回了家</strong>"的真实案例。</p>
+
+  <p>他的反思落在一个创始人最难的 acceptance 上——</p>
+
+  <div class="pull-quote big">
+    <p>"第一我得要接受——万一他比我差呢？我得接受他可能未来是一个普通人。可能是我运气好、我有一些天赋，今天在座的各位一定是有自己天赋的。但我的孩子未必有天赋。接受他的平庸、接受他可能不如我们，我们就可以更好地融合在一起。"</p>
+  </div>
+
+  <p>亚楠紧接着补了一句非常重要的平衡：</p>
+
+  <div class="pull-quote">
+    <p>"他们未来好的标准是和我们不一样的。我们生活在一个集体主义之中，大家的判断标准是统一的。但在法国、欧洲，你会发现很多人非常多元——他们不会说你考上什么学校就怎么样。从孩子呈现出来的状态就是：你做一个小小的、名不见经传的，也能开心，也能在这个时代获得尊重。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"在我们国家就很难，因为大家都习惯了统一的标准。只要你允许他成为他自己，他躺也能躺得起。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 7 ===== -->
+<article class="section">
+  <span class="section-index">07 叶婷的分享</span>
+  <h2 class="section-h">用 AI 做跨代沟通的翻译</h2>
+  <p class="section-lead">叶婷（妈咪宝执行 CEO）讲了一个场景化的 AI 用法。</p>
+
+  <div class="pull-quote">
+    <p>"AI 在教育上给了我非常大的帮助。因为教育不光是两代人，还有隔代的一些理念差异。上一辈会特别宠，但宠的背后不一定对孩子长久是好的。这件事情我们的经验比他们还少，很难顺应他们，AI 是一个很好的媒介。"</p>
+  </div>
+
+  <p>她讲了两个具体动作：</p>
+
+  <ol>
+    <li><strong>AI 帮她润色跨代沟通的表达</strong>——"我们的表达人家不一定接受，那我们就会想各种方法——我和我老公两个人去弄一套东西，怎么样去做跨代的交流"</li>
+    <li><strong>她自己的热爱来自"利他"</strong>——"我做母婴，至少我每一天一定是从好的出发点，希望我们的品质是对得起用户的。我觉得这件事情有意义、是利他的，我心里至少是安稳的，而且跟家庭教育有关系。"</li>
+  </ol>
+
+  <p>她还提了一段自己父亲的事让在场很多人动容：</p>
+
+  <div class="pull-quote">
+    <p>"长大才发现，原来妈妈并不是喜欢吃鱼尾巴。我某一程度上也很希望我爸放下来多看看风景。他所受过的苦难其实会让我很心疼，所以我不想要某种程度上似乎你在牺牲为他好，又给他负担。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 8 ===== -->
+<article class="section">
+  <span class="section-index">08 亚楠的具体建议</span>
+  <h2 class="section-h">不要夸"你真棒"，要具体</h2>
+  <p class="section-lead">当有人提到"美国幼儿园都教孩子说'我要改变世界'——但我们好像怕鼓励太多，遇到挫折受不了"时。</p>
+
+  <div class="pull-quote big">
+    <p>"要给他真诚的、具体的肯定。不要看见孩子就'你太棒了，跑得最厉害'——这种笼统的表扬反而会让他不敢去突破、不敢去越来越深入。他要保持那个'不能出错'的状态。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"真正创造世界、改变世界的人，经常是要把旧的方法打破的。所以在那种'总是被夸'的孩子当中，反而难产生。肯定要给他勇气，但不要给他人设。我同学就是'好学生人设'的受害者——也不要给孩子'好学生人设'。"</p>
+  </div>
+
+  <h3>6–12 岁是智慧传承的关键窗口</h3>
+
+  <div class="pull-quote big">
+    <p>"你要把你的智慧传承给孩子——你的人生观、教育观、人生经验要细致地多。孩子 12 岁之前尽早传承，因为到青春期他就关上门了。他开始对异性感兴趣，情绪不稳，就没有很多和你交流的意愿。6 岁之前他听不懂，在 <strong>6 到 12 岁</strong> 要花更多时间在一起。"</p>
+  </div>
+
+  <p>具体怎么谈？她给了一个一号位特别能共鸣的方法——<strong>用做商业的方式和孩子复盘</strong>：</p>
+
+  <div class="pull-quote">
+    <p>"讨论一下，就像我们做商业的'怎么样交付这个学校'。我每次考完试都跟他讨论战略战术。哪一科考好、为什么考好？哪一科考不好、是战略还是战术问题？"</p>
+  </div>
+
+  <p>她最后把这个窗口的意义拉到很长远——</p>
+
+  <div class="pull-quote">
+    <p>"你们做事业成功，但做家长往往忘记传承智慧。经常这样跟他们交流，青春期他什么问题都想跟你交心。他跟你有情感、有知性的交流，他将来走进 AI，会愿意跟我们分享、会帮助我们。不然就是培养了白眼狼——送出去，过年时他'没空回来'、'很忙'，就是这样的问题。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 9 ===== -->
+<article class="section">
+  <span class="section-index">09 单身视角</span>
+  <h2 class="section-h">园丁还是木匠？</h2>
+  <p class="section-lead">圆桌中间有一位单身同学提了一个非常精彩的问题。</p>
+
+  <div class="pull-quote">
+    <p>"我们现在说的好多里面都是'我们要什么不要什么'，完全站在家长的角度，还是认为自己要尽到充分的责任以及规划。"</p>
+  </div>
+
+  <p>这其实是在问：<strong>你讲的"留白"，本质上还是家长在规划，只是换了一种规划方式，对吗？</strong></p>
+
+  <p>亚楠给出了一个中庸的答案——</p>
+
+  <div class="pull-quote big">
+    <p>"没有绝对的。我们在实践过程中永远是中庸的，不要是绝对的园丁或者绝对的木匠。我参照的是欧洲的家长——他们已经习惯到本能，做工是做得那么松弛。因为他们是三代以上的贵族，写在基因里。该松的地方松，该紧的地方紧。"</p>
+  </div>
+
+  <p>她顺势给出了教育需要把握的<strong>两对平衡</strong>：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>平衡</th>
+        <th>内涵</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>自由 × 界限</strong></td>
+        <td>让孩子有自由、让他去探索，但还是要有界限</td>
+      </tr>
+      <tr>
+        <td><strong>个性 × 社会性</strong></td>
+        <td>培养孩子的主体性，同时让他能融入社会</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pull-quote">
+    <p>"通过界限、通过早期传承的价值观，在青春期达到一种平衡。青春期这个东西非常危险。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 10 ===== -->
+<article class="section">
+  <span class="section-index">10 00 后视角</span>
+  <h2 class="section-h">热爱怎么界定？</h2>
+  <p class="section-lead">现场一位创业二代的年轻同学也问了一个非常真实的问题。</p>
+
+  <div class="pull-quote">
+    <p>"我感觉大家都有找到自己的热爱，但怎么界定哪一个时间段是你真正热爱这个事情？最近一段时间——我是喜欢某件事情，但真的愿意把休息的时间都用去深挖？好像也没有达到那个程度。热爱是可以培养的吗？"</p>
+  </div>
+
+  <p>亚楠的回答把前面所有的概念收回到一个词——<strong>心流</strong>。</p>
+
+  <p>她先解释了她做的蒙氏教育为什么不一样：</p>
+
+  <div class="pull-quote">
+    <p>"在国外，孩子走进教室有很多选择，不是老师说'这节课学美术、下节课学体育'就牵着你走。他从小就让你选择——选了这个不感兴趣就换，孩子每天都在锻炼'我喜欢不喜欢'。'我现在不行了，这个阶段我的这个学习循环结束了，过段时间我又喜欢别的'——他在不断地拿起来放下。"</p>
+  </div>
+
+  <p><strong>长年练下来，孩子会发展出一个能力——和自己的直觉对话</strong>。这恰恰是传统教育会把它消磨掉的东西。</p>
+
+  <p>然后她给了热爱的可验证特征：</p>
+
+  <div class="pull-quote big">
+    <p>"我觉得是 <strong>心流</strong>——在这当中你不计后果，没有最后的结果奖惩，你只享受中间的过程。"</p>
+  </div>
+
+  <p>Vivian 在这里接住了整场的结尾——</p>
+
+  <div class="pull-quote">
+    <p>"刚刚问大家，找到热爱的举手，其实还是不少的。这个房间里面找到热爱的、眼里有光的还是挺多的。我们没有找到的就在找到的路上，去期待这样的心流和顿悟的时光，希望它早一点到来。"</p>
+  </div>
+
+  <p>她还顺手带了一句白天真铭老师讲过的：</p>
+
+  <div class="pull-quote">
+    <p>"优秀是卓越的敌人。如果我们要小孩子卓越，他就会偏于主线以外的——可能我们定义的那个队列，他就不是队列。所以要允许留白、放手、给他自由。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 11 ===== -->
+<article class="section">
+  <span class="section-index">11 分组讨论</span>
+  <h2 class="section-h">边际成本归零，你的生意会怎么变？</h2>
+  <p class="section-lead">教育话题告一段落后，Vivian 抛出了一个回到业务的思考题。</p>
+
+  <div class="pull-quote">
+    <p>"在你的行业里，如果边际成本真的归零，你会怎么重新定义你自己的生意？"</p>
+  </div>
+
+  <p>三组讨论完之后上台汇报，出现了三种有意思的战略选择：</p>
+
+  <h3>💡 第一组：知识付费 / 教育 / 农产品</h3>
+
+  <p><strong>两种极端路径都有：</strong></p>
+
+  <ul>
+    <li><strong>极端① 变成公益</strong>："所有的知识付费都不收钱了，因为没有成本了，把对方卷死。卷死的目的是让大家都活着。"</li>
+    <li><strong>极端② 走附加值，卖人设本身</strong>：卖鸡蛋的不再卷鸡蛋本身，而是走环保、动物保护；像亚楠这样的教育者——"<strong>问题都能被 AI 解决掉，她走什么？走高大到她自己——她自己就是那个核心、那个灵魂</strong>。做线下活动、让人见到她真人、有陪伴感，通过灵魂人物的品牌打造去赋予附加值。"</li>
+    <li><strong>第三种（反直觉）</strong>：有人坚持<strong>回归产品本身</strong>——"边际成本为零的情况下，更应该把产品打磨好。"宗教式的坚持。</li>
+  </ul>
+
+  <h3>💡 第二组：自动化 / 软件 / 个性化</h3>
+
+  <p>核心洞察：<strong>软件通用产品，用到细分领域上并不一定契合。AI 让每家公司都能做自己的"细分定制软件"</strong>，两个具体方向：</p>
+
+  <ul>
+    <li><strong>远程替代现场工程师</strong>——"原来要现场读数据，现在可以把数据抓回来，问题点立马判断出来。一个人代替几十个工程师。"</li>
+    <li><strong>柔性生产、真正千人千面</strong>——"现在大家还是更批量的推荐，没有真正的千人千面。生产会更柔性。"</li>
+  </ul>
+
+  <h3>💡 第三组：电商 / 产品力回归</h3>
+
+  <p>这一组的洞察非常犀利——<strong>现在电商的真正成本不是产品，是平台税</strong>：</p>
+
+  <div class="pull-quote">
+    <p>"现在很大的一块成本是平台的广告费、佣金。这是渠道通路的成本，让我们用来做真正认真做产品的部分被压缩。"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"如果未来这一部分边际成本都归零了，真正能跑出来的就是——商业还是要'有买有卖、需求和被需求的交易循环'。最终肯定还是要<strong>卷产品</strong>。"</p>
+  </div>
+
+  <p>Vivian 现场接了一句狠的——<strong>"抖音可能要付 30% 的投流费用，用户买到的其实就是广告费——都被平台拿走了。"</strong></p>
+</article>
+
+<!-- ===== SECTION 12 ===== -->
+<article class="section">
+  <span class="section-index">12 Vivian 补充</span>
+  <h2 class="section-h">智能体会成为新的中间商</h2>
+  <p class="section-lead">Vivian 把第三组的讨论往前推了一步——"在 AI 时代，谁替代了平台广告？"</p>
+
+  <p>她的答案是：<strong>懂用户的智能体</strong>。</p>
+
+  <h3>新的商业逻辑</h3>
+
+  <div class="pull-quote">
+    <p>"如果现在有一个智能体，可以帮你去选品，选的是最适合你的、最优的、最懂你的产品。比如洗衣机，这款产品是其中一款——后面待选列表里只有 10 款洗衣机。为什么同样价格会有 10 款？因为<strong>千人千面</strong>——对不同人来说，该选的列表不同。"</p>
+  </div>
+
+  <h3>商品供应商的新生态</h3>
+
+  <div class="pull-quote">
+    <p>"作为洗衣机的提供商，你愿意给这个配置的标准、让你的洗衣机进入他的待选名单。所以新的生意不是'广告、点击率'归零，而是这样越来越懂你的选品和上货架的<strong>双边通知</strong>的商业模式——智能体的时代。"</p>
+  </div>
+
+  <p>她给了一个非常具体的业务建议：</p>
+
+  <div class="pull-quote big">
+    <p>"做你行业里最懂推荐的智能体，这是好生意。"</p>
+  </div>
+
+  <p>她还进一步讲了一个<strong>垂类智能体</strong>的商业模型——</p>
+
+  <div class="pull-quote">
+    <p>"比如你有 1 万个用户，你的智能体跟了用户五年，非常懂用户的这个孩子。你就做这个垂类的智能体——这个智能体不是模型逻辑，是你<strong>独特的提示词、独特的审美、你对用户画像的刻画</strong>。你现在就可以变成这个中间商——一方面收 C 端订阅费，另一方面收 B 端或平台的上架费用。"</p>
+  </div>
+
+  <p>曹总补了一个风险——<strong>"喂毒"</strong>：</p>
+
+  <div class="pull-quote">
+    <p>"就像毒品一样的趣味，各家公司会去喂毒到 AI 数据库里，但也会抵制。如果你像某些医疗平台那样名声坏掉了，就不是公平的。"</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 13 ===== -->
+<article class="section">
+  <span class="section-index">13 悲观 vs 乐观</span>
+  <h2 class="section-h">AI 富裕之后的贫富分化</h2>
+  <p class="section-lead">临近结束时话题转到了 AI 时代的宏观图景。</p>
+
+  <p>现场有同学提出了一个很现实的悲观视角：</p>
+
+  <div class="pull-quote">
+    <p>"我其实是比较悲观的。如果物产真的富裕了，最顶层的人会拿到更多的资源。下面的人其实被淘汰掉了——跟第一次工业革命一模一样，效率变高了不代表下面的人能拿到更多的资源和钱。"</p>
+  </div>
+
+  <p>另一位同学引用了一句非常尖锐的话——</p>
+
+  <div class="pull-quote big">
+    <p>"爱德华·威尔逊说：'人类真正的问题在于——我们拥有<strong>石器时代的情感、中世纪的制度、以及神一般的技术</strong>。'"</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"我们的伦理水平还没有跟上，我们有这么高的技术，可能最后的基尼系数会更大。"</p>
+  </div>
+
+  <p>亚楠的回应非常她——<strong>"所以我们的情绪是原始时代的。还是要解决情绪的问题。"</strong></p>
+
+  <p>这一段把整晚的讨论又收回到她最底层的命题：<strong>技术可以指数级进步，但我们神经系统的底层代码还是石器时代的。解决这个代码——不管是给自己还是给孩子——才是真正的功课</strong>。</p>
+</article>
+
+<!-- ===== SECTION 14 ===== -->
+<article class="section">
+  <span class="section-index">14 收尾</span>
+  <h2 class="section-h">健康最重要，AI 会让我们多活 50 年</h2>
+  <p class="section-lead">Vivian 最后的收尾讲到了她使用 AI 3 年的体感。</p>
+
+  <div class="pull-quote">
+    <p>"我 23 年开始用 AI，当时更新迭代是以年为单位。现在可能以周、以月为单位出热点。年前这个热点是 Deep Research，后来 DeepSeek 出来席卷了整个过年期间，马上小龙虾（Manus）出来、爱马仕出来。以周的速度在更新迭代。"</p>
+  </div>
+
+  <p>然后她给了一个很 Vivian 的收尾——</p>
+
+  <div class="pull-quote big">
+    <p>"所以<strong>健康最重要，AI 让我们多活几年，给我们 50 年——活到 150 岁</strong>。"</p>
+  </div>
+
+  <p>现场回："AI 能治愈所有疾病怎么办？"</p>
+
+  <p>Vivian 笑说："好的，我们好好休息、保持健康。"</p>
+
+  <p>明天的主题在大家的建议下确定为——<strong>AI + 组织</strong>。</p>
+</article>
+
+<!-- ===== QUOTE WALL ===== -->
+<section class="quote-wall" id="quotes">
+  <div class="quote-wall-header">
+    <div class="quote-wall-eyebrow">💎 金句收藏</div>
+    <h2 class="quote-wall-title">这一晚留下的 13 句话</h2>
+  </div>
+  <div class="quote-grid">
+    <div class="quote-card">
+      <p class="quote-card-text">我们 AI 前时代靠恐惧匮乏驱动的成功代码，恰恰是 AI 后时代教育孩子的最大障碍。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">AI 时代孩子最大的危机不是被淘汰，是虚无。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">热爱是一个人和一件事的共振，它不可解释、不可预测、不可设计。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">找到热爱的人，不是靠结果来判断幸福和成功，找到的那一刻就很幸福。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">真正有价值的东西是在空白当中。</p>
+      <div class="quote-card-attr">— 亚楠（引日本美学"间"）</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">让孩子成为他自己——但太难了。我们就没有成为自己，怎么能让孩子成为他自己呢？</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">真正强大的人才能把过去全放下、重新开始、拜孩子为师。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">我要接受——万一他比我差呢？接受他的平庸、接受他可能不如我们。</p>
+      <div class="quote-card-attr">— 曹赟</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">干到 60 岁退休？退休了天天旅行变流浪？想来想去，持续能干的还是自己现在干的事情。</p>
+      <div class="quote-card-attr">— 曹赟</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">教育观前置的问题是你的幸福观和成功观。</p>
+      <div class="quote-card-attr">— 曹赟</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">热爱就是心流——不计后果，没有最后的奖惩，你只享受中间的过程。</p>
+      <div class="quote-card-attr">— 亚楠</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">人类真正的问题在于——我们拥有石器时代的情感、中世纪的制度、以及神一般的技术。</p>
+      <div class="quote-card-attr">— 爱德华·威尔逊</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">健康最重要，AI 让我们多活几年，给我们 50 年——活到 150 岁。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAKEAWAYS ===== -->
+<section class="takeaways" id="takeaways">
+  <div class="quote-wall-header" style="margin-bottom: 36px;">
+    <div class="quote-wall-eyebrow">📝 带回去的动作</div>
+    <h2 class="quote-wall-title">6 条 Takeaway</h2>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">1</div>
+    <div class="takeaway-body">
+      <h4>先改自己的代码，再谈孩子</h4>
+      <p>亚楠最底层的一刀切给所有一号位——<strong>你之所以今天成功，是靠恐惧匮乏驱动的神经系统。这套代码回家就是灾难，而且还会通过表观遗传传给下一代</strong>。所以这周给自己留一次"<strong>不 AI、不网络、纯留白</strong>"的半天，感受一下自己是不是真的停不下来。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">2</div>
+    <div class="takeaway-body">
+      <h4>周末不给孩子报班</h4>
+      <p>亚楠的女儿四年级，周末不报任何班。Vivian 的天天也是被这样对待的。<strong>你如果周末习惯性想给孩子安排学这个学那个，先压制一下——他的"磨粉笔时间"可能才是他最宝贵的创造力土壤</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">3</div>
+    <div class="takeaway-body">
+      <h4>6–12 岁是传承智慧的核心窗口</h4>
+      <p>具体动作：<strong>每次考试后用"战略/战术复盘"的方式和孩子聊</strong>——哪科考好、为什么；哪科没考好、是战略问题还是战术问题。<strong>这个动作一号位最擅长，但偏偏最不会用在自己孩子身上</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">4</div>
+    <div class="takeaway-body">
+      <h4>不要夸"你真棒"，要具体</h4>
+      <p>孩子要"好学生人设"的枷锁一旦形成，他就不敢犯错、不敢突破——恰恰断了"创造世界"的可能性。<strong>肯定给勇气，但不给人设</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">5</div>
+    <div class="takeaway-body">
+      <h4>垂类智能体 = 新的生意模式</h4>
+      <p>Vivian 那段关于"智能体成为新中间商"的论述，是全场唯一一段直接能拿回去做业务的——<strong>你的公司里有没有一套你对用户画像的独特刻画？有没有可能把它变成一个智能体，一边收 C 端订阅、一边收 B 端上架费？</strong></p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">6</div>
+    <div class="takeaway-body">
+      <h4>健康最重要</h4>
+      <p>AI 给你活到 150 岁的机会，<strong>别让 AI 焦虑把你的寿命先压缩掉</strong>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <a href="../" class="footer-back">← 返回工作坊总览</a>
+  <div class="footer-meta">
+    一号位 AI 工作坊 · 2026.04.18-19 · V 聚场<br>
+    主办：<a href="https://vivianai.cn/">Vivian 的 AI 进化论</a> × 一号位 AI 俱乐部<br>
+    <span style="font-size: 12px; color: var(--gray-4); letter-spacing: 0.5px;">学员专享 · 请勿外传</span>
+  </div>
+</footer>
+
+<script>
+  // Password gate
+  const PASS = 'Vivian0418';
+  const gate = document.getElementById('gate');
+  const input = document.getElementById('gateInput');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateError');
+
+  // Check if already unlocked
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1') {
+    gate.classList.add('hidden');
+  }
+
+  function tryUnlock() {
+    const val = input.value.trim();
+    if (val === PASS) {
+      sessionStorage.setItem('workshop0418Unlocked', '1');
+      gate.classList.add('hidden');
+    } else {
+      err.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+</script>
+
+</body>
+</html>

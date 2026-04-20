@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>动手做 skill：从认知到手上 · Day 1 下午 — 一号位 AI 工作坊</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --gray-bg: #f5f5f7;
+    --cream: #fafaf9;
+    --blue-deep: #0050a8;       /* deep brand blue */
+    --blue: #0071e3;            /* apple blue */
+    --blue-soft: #bfdbfe;       /* soft light blue */
+    --blue-bg: #eff6ff;         /* light blue background */
+    --white: #fff;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Noto Sans SC', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--black);
+    background: var(--cream);
+  }
+
+  /* ===== PASSWORD GATE ===== */
+  .gate {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #eff6ff 0%, #fafaf9 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .gate.hidden { display: none; }
+  .gate-eyebrow {
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase;
+  }
+  .gate h2 {
+    font-size: 32px; font-weight: 800; margin-bottom: 10px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0050a8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .gate p { font-size: 15px; color: var(--gray-3); margin-bottom: 36px; text-align: center; }
+  .gate-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .gate-input {
+    width: 240px; padding: 13px 18px; border-radius: 12px;
+    border: 1px solid var(--gray-4); font-size: 15px;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit; background: #fff;
+  }
+  .gate-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .gate-btn {
+    padding: 13px 28px; border-radius: 12px; border: none;
+    background: var(--blue); color: #fff; font-size: 15px;
+    font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gate-error { color: #ef4444; font-size: 13px; margin-top: 14px; display: none; text-align: center; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 1040px; margin: 0 auto; padding: 0 24px;
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: var(--black);
+    letter-spacing: 0.3px; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--gray-2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blue-deep); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 140px 24px 80px;
+    max-width: 760px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: var(--blue-deep);
+    background: rgba(0,80,168,0.08);
+    padding: 7px 18px; border-radius: 20px;
+    margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-size: 56px; font-weight: 900; line-height: 1.12;
+    letter-spacing: -2px; margin-bottom: 20px;
+    background: linear-gradient(135deg, #1d1d1f 40%, #0050a8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 19px; color: var(--gray-2); line-height: 1.6;
+    max-width: 580px; margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; gap: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 13px; color: var(--gray-3);
+    flex-wrap: wrap;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ===== BIG QUOTE BANNER ===== */
+  .banner-quote {
+    max-width: 900px; margin: 0 auto;
+    padding: 80px 24px 40px;
+  }
+  .banner-quote-inner {
+    background: linear-gradient(135deg, #eff6ff 0%, #e0ecff 100%);
+    border-radius: 24px;
+    padding: 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner-quote-mark {
+    position: absolute; top: 24px; left: 40px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 96px; color: rgba(0,80,168,0.15);
+    line-height: 1; font-weight: 700;
+  }
+  .banner-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px; font-weight: 600;
+    line-height: 1.55; color: var(--black);
+    position: relative; z-index: 1;
+  }
+  .banner-quote-attr {
+    margin-top: 28px; font-size: 14px; color: var(--gray-2);
+    font-weight: 500; letter-spacing: 0.5px;
+  }
+
+  /* ===== INTRO / SETUP ===== */
+  .setup {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 20px;
+  }
+  .setup h2 {
+    font-size: 14px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .setup p {
+    font-size: 18px; line-height: 1.8; color: var(--gray-1);
+    margin-bottom: 20px;
+  }
+  .setup p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== SECTION ===== */
+  .section {
+    max-width: 760px; margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .section-index {
+    display: inline-block;
+    font-size: 13px; font-weight: 700;
+    color: var(--blue); letter-spacing: 2px;
+    background: rgba(0,113,227,0.08);
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .section-h {
+    font-size: 36px; font-weight: 800;
+    line-height: 1.25; letter-spacing: -0.8px;
+    margin-bottom: 16px; color: var(--black);
+  }
+  .section-lead {
+    font-size: 17px; color: var(--gray-2);
+    line-height: 1.7; margin-bottom: 32px;
+    font-style: italic;
+  }
+  .section h3 {
+    font-size: 22px; font-weight: 700;
+    margin: 40px 0 16px; color: var(--black);
+    letter-spacing: -0.3px;
+  }
+  .section h4 {
+    font-size: 17px; font-weight: 700;
+    margin: 28px 0 12px; color: var(--gray-1);
+  }
+  .section p {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 18px;
+  }
+  .section p strong { color: var(--black); font-weight: 600; }
+  .section ul, .section ol {
+    margin: 12px 0 24px 0; padding-left: 22px;
+  }
+  .section li {
+    font-size: 17px; line-height: 1.85;
+    color: var(--gray-1); margin-bottom: 10px;
+  }
+  .section li strong { color: var(--black); font-weight: 600; }
+
+  /* ===== PULL QUOTE (inline highlight) ===== */
+  .pull-quote {
+    margin: 32px 0;
+    padding: 24px 28px 24px 32px;
+    background: var(--blue-bg);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 12px 12px 0;
+  }
+  .pull-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 19px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin: 0;
+  }
+  .pull-quote.big p { font-size: 22px; font-weight: 600; }
+
+  /* ===== SUB-POINT CARDS ===== */
+  .layers {
+    display: grid; gap: 14px;
+    margin: 24px 0 32px;
+  }
+  .layer {
+    background: #fff; border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px; padding: 20px 24px;
+    position: relative; padding-left: 72px;
+  }
+  .layer-num {
+    position: absolute; left: 20px; top: 20px;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue-soft), var(--blue));
+    color: #fff; font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer-label {
+    font-size: 12px; color: var(--blue-deep); font-weight: 700;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .layer-body {
+    font-size: 15px; color: var(--gray-1); line-height: 1.7;
+  }
+
+  /* ===== TABLE ===== */
+  .section table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0 28px; font-size: 15px;
+    background: #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .section th {
+    text-align: left; padding: 12px 18px;
+    background: var(--blue-bg); font-weight: 700;
+    color: var(--black); border-bottom: 1px solid rgba(0,80,168,0.15);
+  }
+  .section td {
+    padding: 12px 18px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--gray-1); line-height: 1.6;
+  }
+  .section tr:last-child td { border-bottom: none; }
+
+  /* ===== SCENE BOX (narrative moment) ===== */
+  .scene {
+    margin: 32px 0;
+    padding: 28px 32px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .scene-label {
+    font-size: 12px; font-weight: 700;
+    color: var(--blue); letter-spacing: 2px;
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+  .scene p { font-size: 16px; line-height: 1.75; color: var(--gray-1); margin-bottom: 12px; }
+  .scene p:last-child { margin-bottom: 0; }
+  .scene p strong { color: var(--black); font-weight: 600; }
+
+  /* ===== QUOTE WALL ===== */
+  .quote-wall {
+    max-width: 1040px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .quote-wall-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .quote-wall-eyebrow {
+    font-size: 13px; font-weight: 700; color: var(--blue-deep);
+    letter-spacing: 3px; margin-bottom: 14px;
+  }
+  .quote-wall-title {
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -0.8px; color: var(--black);
+  }
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .quote-card {
+    background: #fff; border-radius: 16px;
+    padding: 28px; border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -8px; right: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 100px; color: rgba(0,113,227,0.08);
+    line-height: 1; font-weight: 700;
+  }
+  .quote-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,80,168,0.08);
+  }
+  .quote-card-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; line-height: 1.7;
+    color: var(--black); font-weight: 500;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .quote-card-attr {
+    font-size: 12px; color: var(--blue-deep);
+    font-weight: 700; letter-spacing: 1px;
+  }
+
+  /* ===== TAKEAWAYS ===== */
+  .takeaways {
+    max-width: 760px; margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .takeaway-item {
+    background: #fff; border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 16px;
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex; gap: 22px;
+  }
+  .takeaway-num {
+    flex-shrink: 0;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-soft) 0%, var(--blue) 100%);
+    color: #fff; font-weight: 800; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .takeaway-body h4 {
+    font-size: 18px; font-weight: 700;
+    color: var(--black); margin-bottom: 8px;
+  }
+  .takeaway-body p {
+    font-size: 15px; line-height: 1.7;
+    color: var(--gray-1); margin: 0;
+  }
+  .takeaway-body p strong { color: var(--black); font-weight: 600; }
+  .takeaway-body p + p { margin-top: 10px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    max-width: 1040px; margin: 40px auto 0;
+    padding: 48px 24px 60px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .footer-back {
+    display: inline-block; margin-bottom: 24px;
+    font-size: 14px; color: var(--blue-deep);
+    text-decoration: none; font-weight: 600;
+    padding: 10px 22px; border-radius: 20px;
+    background: rgba(0,113,227,0.08);
+    transition: background 0.2s;
+  }
+  .footer-back:hover { background: rgba(0,113,227,0.15); }
+  .footer-meta {
+    font-size: 13px; color: var(--gray-3);
+    line-height: 1.7;
+  }
+  .footer-meta a { color: var(--blue-deep); text-decoration: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .hero { padding: 110px 20px 50px; }
+    .hero h1 { font-size: 38px; letter-spacing: -1.2px; }
+    .hero-sub { font-size: 17px; }
+    .banner-quote { padding: 40px 16px 20px; }
+    .banner-quote-inner { padding: 40px 28px; }
+    .banner-quote-mark { font-size: 64px; top: 16px; left: 20px; }
+    .banner-quote p { font-size: 20px; }
+    .section { padding: 40px 20px; }
+    .section-h { font-size: 26px; letter-spacing: -0.5px; }
+    .section p, .section li { font-size: 16px; }
+    .pull-quote p { font-size: 17px; }
+    .pull-quote.big p { font-size: 18px; }
+    .layer { padding: 18px 20px 18px 66px; }
+    .scene { padding: 22px 22px; }
+    .quote-wall { padding: 50px 20px; }
+    .quote-wall-title { font-size: 26px; }
+    .takeaway-item { padding: 22px 22px; flex-direction: column; gap: 12px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-eyebrow">AI 工作坊 · 学员专享</div>
+  <h2>一号位 AI 俱乐部</h2>
+  <p>请输入访问口令</p>
+  <div class="gate-input-wrap">
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令" autofocus>
+    <button class="gate-btn" id="gateBtn">进入</button>
+  </div>
+  <div class="gate-error" id="gateError">口令不对，再试一下</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-brand">
+      <span class="nav-brand-dot"></span>
+      <span>一号位 AI 工作坊</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">工作坊总览</a></li>
+      <li><a href="#quotes">金句收藏</a></li>
+      <li><a href="#takeaways">带回去的动作</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <span class="hero-eyebrow">Day 01 · 下午</span>
+  <h1>动手做 skill：从认知到手上</h1>
+  <p class="hero-sub">
+    上午在脑子里完成认知翻转，下午就是把它拧到手上——<br>
+    需要做第二次的事情，都值得做成 skill。
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026.04.18 · 下午</span>
+    <span>🎙️ Vivian</span>
+    <span>🏠 V 聚场</span>
+    <span>⏱️ 约 4 小时</span>
+  </div>
+</header>
+
+<!-- ===== BIG QUOTE BANNER ===== -->
+<section class="banner-quote">
+  <div class="banner-quote-inner">
+    <div class="banner-quote-mark">"</div>
+    <p>
+      需要做第二次的事情，都值得做成 skill；需要用电脑完成的事，都可以做成 skill。
+    </p>
+    <div class="banner-quote-attr">— 这一下午的主线一句话</div>
+  </div>
+</section>
+
+<!-- ===== SETUP ===== -->
+<section class="setup">
+  <h2>这一下午在讲什么</h2>
+  <p>上午讲的是"<strong>认知反转</strong>"——一号位必须先在脑子里完成翻转。下午一坐下来，Vivian 很明确地切到了下一档：<strong>从认知到手上</strong>。</p>
+  <p>她的逻辑是，认知再清楚，如果手没有练过一遍，所有的话都会停留在感慨层面。所以整个下午几乎都在做一件事——<strong>让每个人现场把至少一个真实业务场景跑通成一个 skill</strong>。</p>
+  <p>午饭前布置的"Apple 风格个人 HTML"作业先验收（大部分人都跑出来了、有人甚至跟 Vivian 生成的是同一个模板），然后四件套再讲一遍，接着就是各种真实场景的现场 demo：<strong>简历筛选、面试录音、4 万字讲稿整理、英文文章深度学习笔记</strong>。</p>
+</section>
+
+<!-- ===== SECTION 1 ===== -->
+<article class="section">
+  <span class="section-index">01 工具再过一遍</span>
+  <h2 class="section-h">四件套：为什么是这四件</h2>
+  <p class="section-lead">午饭前很多人刚装完工具，下午 Vivian 花了一段时间把四件套再过一遍，因为后面所有动作都在这四件套的基础上展开。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>工具</th>
+        <th>角色</th>
+        <th>Vivian 的原话</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Claude Code</strong></td>
+        <td>大脑</td>
+        <td>"这一整套的核心"</td>
+      </tr>
+      <tr>
+        <td><strong>Obsidian</strong></td>
+        <td>文件阅读器 + 世界模型的家</td>
+        <td>"他打开的是我们本地的一个文件夹，你希望他阅读什么，就给他文件夹里放什么东西"</td>
+      </tr>
+      <tr>
+        <td><strong>Claudian</strong>（插件）</td>
+        <td>让 Claude Code 在 Obsidian 里更好看</td>
+        <td>"没有这个插件一样能用，对用惯命令行的人来说没差别"</td>
+      </tr>
+      <tr>
+        <td><strong>闪电说</strong>（语音输入）</td>
+        <td>无延时把想法变文字</td>
+        <td>"因为如果没有输入，对 AI 来说就是什么都没有，一定要留下痕迹"</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pull-quote">
+    <p>语音、文字、图片、文档，任何形式的痕迹都要留下，因为 AI 认识你的全部依据就是你留下的痕迹。</p>
+  </div>
+
+  <h3>模型选择的几个判断</h3>
+
+  <p><strong>Claude Opus 4.6 / 4.7 是目前最强的模型</strong>（Vivian 自己和身边朋友用下来的判断）。Codex（GPT）在写代码上也很强，两者可以互补——但如果 Claude 能用就优先用 Claude。</p>
+
+  <p>关于国内模型和 Claude 的差距，她讲得很直白：</p>
+
+  <div class="pull-quote big">
+    <p>"从豆包到 Claude，Claude 就是变了一个人——把它当成一个拟人化的数字物种的话，它就是变了一个人。"</p>
+  </div>
+
+  <p>她引用了阿里千问负责人自己的说法——差距可能有 1-2 年。所以只要有渠道就用；100 美金不够就上 200 美金。</p>
+
+  <h3>迁移的安全感</h3>
+
+  <p>大家今天装好的这些东西，以后都可以迁移到其他 harness（如爱马仕、小龙虾）——只要对 Claude 说"我要搬到 X 去了，你帮我把这些文件变成 X 能读的格式"，它就会帮你搞定。</p>
+
+  <div class="pull-quote">
+    <p>在一个土壤上养好你所有的东西，不要焦虑。</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 2 ===== -->
+<article class="section">
+  <span class="section-index">02 第四个文件</span>
+  <h2 class="section-h">三剑客之外——SKILL 是什么</h2>
+  <p class="section-lead">上午讲过三剑客（USER / MEMORY / CLAUDE），下午 Vivian 重点展开了第四个文件：SKILL.md。</p>
+
+  <h3>打个比方：skill = 岗位 SOP</h3>
+
+  <p>如果说 USER.md 是身份档案、CLAUDE.md 是入职手册，那 <strong>skill 就是每个岗位的 SOP</strong>。我们公司里每一个岗位都有一堆 SOP——市场部的文案怎么写、HR 怎么面试、财务怎么报销——AI 干活的时候也需要这样一份 SOP，告诉它"<strong>这件事你过去怎么做的、应该按什么流程做</strong>"。</p>
+
+  <h3>Skill 的三个来源</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>来源</th>
+        <th>做法</th>
+        <th>场景</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>直接让 AI 找</strong></td>
+        <td>"帮我找一个做 PPT 的 skill"</td>
+        <td>通用场景</td>
+      </tr>
+      <tr>
+        <td><strong>GitHub 开源</strong></td>
+        <td>Anthropic 官方有 "ocean agent skill"，非常多好用的 skill，给它链接让它只在这里找</td>
+        <td>有明确需求但不想从零写</td>
+      </tr>
+      <tr>
+        <td><strong>自己写</strong></td>
+        <td>自己的业务流程，通用 skill 不够用</td>
+        <td>个性化业务，如尹亚楠的 AI 答疑 skill</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>尹亚楠的案例特别说明了"为什么必须自己写"——她用了大量自己积累的知识库、自己的书、自己十年答疑的语料，这些东西 GitHub 上找不到，<strong>只能自己写，或者交给专业人员定制</strong>。</p>
+
+  <h3>⭐ 什么值得做成 skill — 第二次法则</h3>
+
+  <div class="pull-quote big">
+    <p>需要做第二次的事情，都值得做成一个 skill；需要用电脑完成的事，都可以做成一个 skill。</p>
+  </div>
+
+  <p>但 skill 有优先级。按以下四条同时满足的程度排序：</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">高频</div>
+      <div class="layer-body">高频发生</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">重复</div>
+      <div class="layer-body">高度重复</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">可判断</div>
+      <div class="layer-body">有判断标准（做得好和不好有客观差异）</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">4</div>
+      <div class="layer-label">高价值</div>
+      <div class="layer-body">能带来高价值</div>
+    </div>
+  </div>
+
+  <p>满足得越多，越值得把它封装成可复用的 skill。</p>
+
+  <h3>🚨 但同时——不要装 100 个 skill</h3>
+
+  <p>现场有同学在后半段专门讲了这点：<strong>装 100 个 skill 不一定是好事</strong>。因为 AI 每次开场要扫一遍所有 skill 的"简介"，skill 越多它脑容量的负担越重。<strong>只装你真的会用的</strong>。</p>
+</article>
+
+<!-- ===== SECTION 3 ===== -->
+<article class="section">
+  <span class="section-index">03 实战第一轮</span>
+  <h2 class="section-h">每个人现场做一个自己的 skill</h2>
+  <p class="section-lead">Vivian 发了一个"母提示词"到微信群，让每个人把自己最耗时、最重要、但过去只能人工做的一个场景扔进去，当场封装一个 skill。10 分钟后几乎每个人都跑出了东西。</p>
+
+  <h3>王龙的"金一南讲稿整理 skill"</h3>
+
+  <p>王龙是做企业家培训的，每次请完大牌讲者（上周末请的金一南将军），讲者会拍着他肩膀说"回头给我整理一个讲稿"。<strong>一个 3 小时的讲稿 ≈ 4 万字</strong>，过去他的工作流是：</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">几年前</div>
+      <div class="layer-body">外包团队分段听录音、人工誊写，好几个人做，靠人工校对</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">讯飞时代</div>
+      <div class="layer-body">讯飞转写 → 扔豆包或 DeepSeek 校正 → 但 4 万字会崩、会出错，Kimi 超过几千字就崩</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">今天现场</div>
+      <div class="layer-body">4 万字扔给 Claude → 细致整理 → 第一版有乱码 → 王龙说"乱码太多你想办法" → Claude 自己分析乱码原因、全部处理干净 → 当场说"<strong>以后还要重复做，给我封装个 skill</strong>" → Claude"连个磕巴都没打"生成了 transcript organizer skill</div>
+    </div>
+  </div>
+
+  <div class="pull-quote big">
+    <p>"你说它值钱不值钱？它一点钱都不值。但你说它重要不重要？它很重要。因为他未来我要想再请的话，这个文档给到他，会说你这个整得太好了——我就说我花了两个星期。这就很重要。"</p>
+  </div>
+
+  <p>这是一号位 skill 的本质：<strong>小而重要的事</strong>——对外体现你的专业度和用心，对内不值得你花两天，过去只能硬扛，现在一次封装永久复用。</p>
+
+  <h3>第二个案例：飞书云文档进知识库</h3>
+
+  <div class="scene">
+    <div class="scene-label">现场 demo</div>
+    <p>有一位同学（用了录音豆+飞书的）现场做了一个 skill：<strong>从飞书自动爬他的云文档变成 MD，下载到本地知识库</strong>。原理是飞书开放了 API / CLI 接口，所以 Claude 可以直接调接口去取。</p>
+    <p>Vivian 补了一个价值判断：<strong>飞书豆的录音是可以的，但它自动生成的会议纪要不要信任</strong>——它走的是豆包模型，总结质量达不到要求。</p>
+    <p>正确用法：用飞书豆/通义录音 → <strong>只取原文</strong> → 喂给 Claude 生成纪要。再往下一步：如果你带电脑开会，根本不需要飞书豆——Vivian 新做的实时录音 skill 在电脑本地直接跑（Whisper 模型），录音 + 转写 + 生成纪要一条龙。</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 4 ===== -->
+<article class="section">
+  <span class="section-index">04 招聘流水线 demo</span>
+  <h2 class="section-h">Vivian 的招聘 skill — 全下午最精华</h2>
+  <p class="section-lead">这是 Vivian 为自己正在招的 AI Agent 产品经理岗搭的一套完整招聘流水线。讲完你会非常直观地感受到——AI 不是帮你效率 +30%，是把整个工作形态换了个物种。</p>
+
+  <h3>背景：新岗位的人才市场在变</h3>
+
+  <p>Vivian 在 Boss 上发了一个 AI Agent 产品经理的 JD，<strong>收到 100 份简历，质量都蛮高</strong>。她对比了一下：过去招过 AI 人才时简历寥寥无几，现在市场在变——AI 人才变多了，这个岗位<strong>没有想象中难招</strong>。</p>
+
+  <h3>完整流水线（每一步都封装成 skill）</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">第一步 · 简历筛选</div>
+      <div class="layer-body">把 7 份候选简历存本地，把 JD 也喂给 AI → 根据 JD 匹配度<strong>自动分梯队</strong>：第一梯队（必约）、第二梯队（可约）、第三梯队（不用推荐）。过去肉眼看 100 份要半天，<strong>现在 10 分钟出报告</strong>。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">第二步 · 出面试题</div>
+      <div class="layer-body">AI 看过所有简历之后，<strong>针对具体候选人出一份专属面试题</strong>：开场白怎么说、项目怎么深挖、核心考察点。甚至主动提醒："他的意向地点是杭州和深圳，你在上海，<strong>一定要问这个问题</strong>"。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">3</div>
+      <div class="layer-label">第三步 · 面试实时录音</div>
+      <div class="layer-body">面试开始前启动录音 skill。过程中候选人讲到专业术语没听懂 → 现场对 AI 说"刚刚那个术语我没听明白，你帮我查一下" → AI 实时给你生成文档链接。<strong>这是飞书录音做不到的</strong>——飞书没有实时。面试完当场 AI 打分 + 填面试备忘 + 生成实操测试题。</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">4</div>
+      <div class="layer-label">第四步 · 记录与题库沉淀</div>
+      <div class="layer-body">所有人的筛选情况、面试情况都进记录文档。面完 10 个人之后，<strong>AI 自动形成公司自己的面试题库</strong>。这个题库可以复用给其他面试官——你可以把顶级 HR 的面试过程录音、封装成 skill，让普通 HR 按这个方法面。</div>
+    </div>
+  </div>
+
+  <h3>为什么要把顶级员工的工作封装成 skill</h3>
+
+  <div class="pull-quote big">
+    <p>"顶级员工很难复制，但 skill 可以批量发。我把顶级 HR 面试的过程、筛选标准封装好，就可以批量给 A、B、C 员工使用。"</p>
+  </div>
+
+  <p>这就是 Vivian 反复说的 <strong>"Skill = 数据员工"</strong> 的真实含义——<strong>公司最优秀的那个人的工作方式，用 skill 复制出无数个他</strong>。</p>
+
+  <h3>可能的下一步：打通 Boss 直聘</h3>
+
+  <p>现在 Vivian 的简历还是 HR 手动下载再喂给 Claude 的。<strong>理论上可以通过 MCP 或浏览器操作直接自动拉简历</strong>——"让 Claude 自己去找有没有开源的 Boss 直聘接口"，如果有就直接用，没有就让 AI 通过模拟用户界面操作去做。这一步留给未来迭代。</p>
+</article>
+
+<!-- ===== SECTION 5 ===== -->
+<article class="section">
+  <span class="section-index">05 信息 → 沉淀</span>
+  <h2 class="section-h">Web Clipper + 视频：把消费变沉淀</h2>
+  <p class="section-lead">过去：刷到好文章 → 点赞收藏 → 再也不看。现在：一键 Add to Obsidian → AI 自动翻译/提炼/分类 → 深度笔记 → 卡片分享到俱乐部。</p>
+
+  <h3>Vivian 现场演示流程</h3>
+
+  <ol>
+    <li>打开微软 AI 战略的英文文章</li>
+    <li>点一下 <strong>Web Clipper</strong> 插件（Chrome/Edge 都有）→ 自动到 Obsidian</li>
+    <li>对 Claude 说："帮我翻译，做中英文对照，深度学习笔记，我想分享给俱乐部"</li>
+    <li>Claude 同时做了三件事：
+      <ul>
+        <li><strong>中英文对照原文</strong>（还会自动标红重点）</li>
+        <li><strong>深度笔记</strong>：吸收点、文章结构、主段分析、架构分析</li>
+        <li><strong>跟 Vivian 业务结合</strong>的提炼——这家公司（Block）的做法对"一号位 AI 进化论"项目有哪些启示</li>
+      </ul>
+    </li>
+    <li>再对 Claude 说："帮我做成卡片"→ 直接做成可转发到微信的卡片</li>
+  </ol>
+
+  <h3>为什么这件事重要</h3>
+
+  <p><strong>因为 AI 认识你</strong>。同样一篇文章，喂给 ChatGPT 只是摘要；喂给认识 Vivian 的 Claude，它会自动做这些事：翻译成中英文对照、提炼出和 Vivian 自己"Company World Model"工作相匹配的点、同时生成三个版本（俱乐部分享稿、公众号素材、个人学习笔记）——<strong>所有这些都不用再招翻译、提炼人、设计师</strong>。</p>
+
+  <div class="pull-quote big">
+    <p>"为什么我一个人可以——这个团队主要就我一个人做——相当于他真的是放大了我十倍的功效。只要我有想法，他就可以帮我执行完成。"</p>
+  </div>
+
+  <h3>视频场景的对应工具</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>工具</th>
+        <th>场景</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Get 笔记</strong></td>
+        <td>B 站视频：给链接 1-2 分钟出全文</td>
+      </tr>
+      <tr>
+        <td><strong>抖音 skill</strong>（Vivian 自己封装了）</td>
+        <td>抖音链接 → 全文 → 梗概</td>
+      </tr>
+      <tr>
+        <td><strong>NotebookLM</strong></td>
+        <td>把优秀视频喂给它学习，可以在 YouTube 里对内容提问</td>
+      </tr>
+      <tr>
+        <td><strong>Claude 原生</strong></td>
+        <td>小宇宙播客 2 小时听不完 → 复制到 Claude 直接解读</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>核心认知</strong>：视频/音频/文章都可以变成 AI 的养料，关键是"喂进去"这一步。</p>
+</article>
+
+<!-- ===== SECTION 6 ===== -->
+<article class="section">
+  <span class="section-index">06 新业务样本</span>
+  <h2 class="section-h">蔡一鸣的 AI 博主事业部</h2>
+  <p class="section-lead">中间穿插的一段，蔡一鸣分享了他正在跑的 AI 博主事业部——这是现场对"AI 如何创造新业务线"最具体的一个案例。</p>
+
+  <h3>他看到的两个信号</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">1</div>
+      <div class="layer-label">需求端在爆炸</li></div>
+      <div class="layer-body">AI 硬件/软件测评视频的需求<strong>一个月能接四五单都接不完，每周都有</strong></div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">2</div>
+      <div class="layer-label">供给端可以无限降成本</div>
+      <div class="layer-body">他的博主用 AI 产初稿、配图、剪辑，<strong>一个人可以带 5 个 agent 并行跑</strong></div>
+    </div>
+  </div>
+
+  <p>他的逻辑：需求端确定的快速通告类测评（几万块、3 万块以内的订单），客户<strong>不会要求非常高的质量</strong>——这种订单完全可以让 AI 写初稿，人工只做终审和少量剪辑。</p>
+
+  <div class="pull-quote">
+    <p>"有了 AI 加速产能的提升，我找到了确定的需求，产能端我找了一个更低成本的方式。一个人带 5 个 agent 就可以干。"</p>
+  </div>
+
+  <p>所以他把这件事做成了一个事业部，正在落地。</p>
+
+  <h3>Vivian 的点评</h3>
+
+  <p>她把这个案例和同学"晴空"的做法归到同一条线：<strong>底层都是用 AI 把一个过去劳动密集的行业变成低成本高杠杆的方式</strong>。差别只是前台的品类——晴空是带货，蔡一鸣是内容营销，LIPRO 是硬件开发，方法论是同一套。</p>
+
+  <p>这就是"<strong>反转 B（管理幅度 ×10）</strong>"在真实业务上的具体呈现。</p>
+</article>
+
+<!-- ===== SECTION 7 ===== -->
+<article class="section">
+  <span class="section-index">07 Karpathy 方法论</span>
+  <h2 class="section-h">从 AI 原理层证明"必须自己下场"</h2>
+  <p class="section-lead">这一段是下午的理论骨架——为什么我们今天这么辛苦地装工具、写 skill。</p>
+
+  <h3>核心认知① AI 其实没有任何记忆</h3>
+
+  <div class="pull-quote big">
+    <p>你每次和他的对话，他都是从零开始给你回复。你有一种幻觉——他非常了解你、了解你之前跟他干了什么——是因为你非常贴心地帮你把相关的信息给他看了。</p>
+  </div>
+
+  <p>大模型本质是一个<strong>概率机器</strong>：你给它一个输入，它按概率输出一段文本。你体感上它是"懂你的"——那是因为背后有个系统把记忆<strong>补给</strong>了它。</p>
+
+  <h3>核心认知② 模型决定天花板，Harness 决定落地率</h3>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-num">M</div>
+      <div class="layer-label">大模型</div>
+      <div class="layer-body">一个脱缰的野马——能力强但无记忆、短上下文、容易跑偏</div>
+    </div>
+    <div class="layer">
+      <div class="layer-num">H</div>
+      <div class="layer-label">Harness</div>
+      <div class="layer-body">驯服这匹野马的系统——每次对话都帮你补齐它需要的所有上下文</div>
+    </div>
+  </div>
+
+  <p><strong>闭源最强两家</strong>：Codex（OpenAI）+ Claude Code（Anthropic）——都是 harness + 模型一整套。<br>
+  <strong>开源代表</strong>：小龙虾、爱马仕——harness 开源给你，模型你可以自己选。</p>
+
+  <h3>核心认知③ 上下文就是 AI 的脑容量——要善待它</h3>
+
+  <p>每次和大模型对话，它的"脑容量"（上下文窗口）——听起来很长，对一个超大项目来说非常短。所以必须做<strong>渐进式披露（Progressive Disclosure）</strong>：</p>
+
+  <ul>
+    <li>Skill 的设计原则：AI 第一眼看到的<strong>不是 skill 内部所有内容</strong>，而是<strong>一个简介标签</strong></li>
+    <li>只有当语义匹配了（比如你说"做一个 PDF"），它才会打开 PDF skill 的详细内容</li>
+    <li><strong>这就是为什么装 100 个 skill 不是好事</strong>——每个 skill 的简介都要占脑容量</li>
+  </ul>
+
+  <p>类比：员工的工作台上可以有 100 个工具，但每次上班第一眼是看工具的标签，而不是把每个工具的说明书都读一遍。</p>
+
+  <h3>核心认知④ 不能全交给 AI——一号位必须保持掌控</h3>
+
+  <div class="pull-quote big">
+    <p>当你决定把一件事情完全给 AI 的时候，AI 在做的时候，有无数个微小选择都是按它的品味去选的。你对产出物的掌控率会非常低。AI 做出的能力不是你的，你也非常没有掌控感。你就是一个不懂食物的厨师。</p>
+  </div>
+
+  <p>所以要<strong>限制自己的野心</strong>：</p>
+  <ul>
+    <li>AI 可以帮你，但你要通过<strong>亲自做任务的切身体验</strong>才能生发出新思考</li>
+    <li>新的跨任务理解、新的创新点，<strong>必须是你自己跑过一遍才能长出来的</strong></li>
+    <li>完全交给 AI = 你变成一个不懂食物的厨师，下不了判断</li>
+  </ul>
+
+  <p>这一段和 Vivian 上午讲的 "反转 C：创始人必须自己下场" 是一个意思——<strong>只是这次是从 AI 的原理层面证明了为什么必须自己下场</strong>。</p>
+
+  <h3>Karpathy 的 vault 方法论</h3>
+
+  <div class="scene">
+    <div class="scene-label">Vault 骨架 · 三条规则</div>
+    <p>Karpathy（前 OpenAI 合伙人、Tesla AI 负责人）在 GitHub 发了一套 vault 搭建的 markdown 文档。现场这位同学把它改造后用在了自己的笔记系统里：</p>
+    <p><strong>raw/ 文件夹</strong>：永久保存的原始资料，不能改。</p>
+    <p><strong>wiki/ 文件夹</strong>：从 raw 派生出来的结构化内容，可以改。</p>
+    <p><strong>固定规则</strong>：回答问题时，AI 先看 wiki，wiki 不够再去看 raw，按约定的顺序翻看文件夹。</p>
+    <p>💡 Karpathy、Vivian 的模板都可以参考，但最终需要整理自己的。</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 8 ===== -->
+<article class="section">
+  <span class="section-index">08 执行纪律</span>
+  <h2 class="section-h">红黄绿灯系统</h2>
+  <p class="section-lead">讲到自己的 CLAUDE.md 时，Vivian 专门展开了红黄绿灯系统——这是她用了很长时间才沉淀下来的执行纪律，强烈推荐同学们建自己的版本。</p>
+
+  <h3>🟢 绿灯（AI 自己跑，不问）</h3>
+
+  <ul>
+    <li>读文件、搜索信息、整理资料</li>
+    <li>跑流水线（公众号、会议处理、客户调研）</li>
+    <li>创建新文件、保存到 output/</li>
+    <li>生成封面、截图、HTML 转换</li>
+    <li><strong>公众号写到草稿箱</strong>（这一条是 Vivian 特意开的绿灯，发布到后台不用等确认）</li>
+  </ul>
+
+  <h3>🟡 黄灯（做完提醒，不打断）</h3>
+
+  <ul>
+    <li>涉及<strong>客户/嘉宾名字</strong>出现在公开内容里 → 做完提醒"要不要隐去"</li>
+    <li><strong>大幅修改现有文件</strong> → 自动另存新版本</li>
+    <li>不确定的业务判断（如文件放哪个夹）→ 先问一下</li>
+  </ul>
+
+  <h3>🔴 红灯（必须问过才能做）</h3>
+
+  <ul>
+    <li>涉及<strong>钱</strong>：付款、定价、合同条款</li>
+    <li><strong>对外发布</strong>：发飞书、发朋友圈、发邮件</li>
+    <li><strong>不可逆删除</strong>：原始文件不能删</li>
+    <li><strong>底层架构变更</strong>：改 CLAUDE.md 核心规则、改文件夹结构</li>
+    <li><strong>涉及第三方</strong>：代你联系客户、回复别人</li>
+  </ul>
+
+  <h3>为什么这套系统重要</h3>
+
+  <p>AI 的能力是把双刃剑——它能帮你批量做事，也能批量犯错。红黄绿灯系统本质上是<strong>把你对每类任务的风险判断预先固化下来</strong>，让 AI 在没有你的情况下也能按你的价值观做决策。</p>
+
+  <div class="pull-quote">
+    <p>这套系统建好之后，90% 的日常任务可以一口气跑完，不再需要你一步步确认。</p>
+  </div>
+</article>
+
+<!-- ===== SECTION 9 ===== -->
+<article class="section">
+  <span class="section-index">09 防分叉机制</span>
+  <h2 class="section-h">backlog：大任务总会长出小分叉</h2>
+  <p class="section-lead">Vivian 在讲 MEMORY.md 时专门介绍了一个她最近发现的好用功能——backlog。</p>
+
+  <h3>场景</h3>
+
+  <p>她在准备这次工作坊课件时遇到的真实问题：</p>
+
+  <ul>
+    <li>正在准备课件 → 冒出一个公众号选题</li>
+    <li>准备课件 → 想到一个 PPT 的优化方向</li>
+    <li>准备课件 → 看到一篇文章想深入探讨</li>
+  </ul>
+
+  <p>一个主线任务，<strong>会同时分叉出 12 个、3 个、4 个子任务</strong>。如果全部当场处理，主线永远完不成；如果不处理，这些想法就丢了。</p>
+
+  <h3>解法：backlog.md</h3>
+
+  <p>对 Claude 说："<strong>把这个记到 backlog</strong>"——它会生成一个 <code>backlog.md</code> 文档，记录：</p>
+
+  <ul>
+    <li>日期 + 任务名</li>
+    <li>来源话题（从哪个主线冒出来的）</li>
+    <li>为什么值得做</li>
+    <li>触发时机（什么时候回来做）</li>
+  </ul>
+
+  <p>下次问起来时，不用再给它复述背景——它从 backlog 里直接读。</p>
+
+  <div class="pull-quote">
+    <p>适用场景：一个大任务里有 10+ 子任务要做的时候，让 Claude 生成类似交接文档的 backlog 特别好用。</p>
+  </div>
+</article>
+
+<!-- ===== QUOTE WALL ===== -->
+<section class="quote-wall" id="quotes">
+  <div class="quote-wall-header">
+    <div class="quote-wall-eyebrow">💎 金句收藏</div>
+    <h2 class="quote-wall-title">这一下午留下的 8 句话</h2>
+  </div>
+  <div class="quote-grid">
+    <div class="quote-card">
+      <p class="quote-card-text">需要做第二次的事情，都值得做成一个 skill。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">在一个土壤上面养好我们所有的东西，不要焦虑。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">顶级员工很难复制，但 skill 可以批量发。</p>
+      <div class="quote-card-attr">— Vivian</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">你说它值钱不值钱？它一点钱都不值。但你说它重要不重要？它很重要。</p>
+      <div class="quote-card-attr">— 王龙（讲稿整理 skill）</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">大模型完全没有记忆，你之所以觉得他懂你，是你贴心地把相关信息给他看了。</p>
+      <div class="quote-card-attr">— Karpathy 方法论</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">Agent = Harness + 大模型。</p>
+      <div class="quote-card-attr">— Karpathy 方法论</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">如果你完全都交给 AI，你就是一个不懂食物的厨师。</p>
+      <div class="quote-card-attr">— Karpathy 方法论</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-card-text">所有拿来的都不是你自己的，没办法让你无心插柳得出奇妙的东西。</p>
+      <div class="quote-card-attr">— Karpathy 方法论</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAKEAWAYS ===== -->
+<section class="takeaways" id="takeaways">
+  <div class="quote-wall-header" style="margin-bottom: 36px;">
+    <div class="quote-wall-eyebrow">📝 带回去的动作</div>
+    <h2 class="quote-wall-title">6 条 Takeaway</h2>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">1</div>
+    <div class="takeaway-body">
+      <h4>这周五前跑 5 个 skill</h4>
+      <p>不求完美，就按"<strong>第二次法则</strong>"——每次做一件事做第二遍的时候，停下来封装成 skill。一周下来会有 5 个。<strong>复用 3 次以上的就继续迭代，用不上的删掉</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">2</div>
+    <div class="takeaway-body">
+      <h4>复刻 Vivian 的招聘 skill 全链路</h4>
+      <p>如果你在招人（几乎每个创始人都在招），把这一套拉出来直接用：简历存本地 + JD 喂 AI → 分梯队；针对每个人定制面试题；面试实时录音 skill；结束自动打分 + 生成实操测试题；10 个人之后沉淀公司面试题库。</p>
+      <p><strong>三个月后，招聘质量一定会上一个台阶</strong>，而且可以复用给其他面试官。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">3</div>
+    <div class="takeaway-body">
+      <h4>建红黄绿灯系统</h4>
+      <p>把 Vivian 那套直接拿过来改——写进你的 CLAUDE.md：<strong>绿灯</strong>日常内容生产、文件处理、跑流水线；<strong>黄灯</strong>涉客户/嘉宾信息、大幅改文件；<strong>红灯</strong>钱、对外发布、删除、架构变更。</p>
+      <p>不建的话，AI 要么每步都问让你崩溃，要么擅自做了让你后怕。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">4</div>
+    <div class="takeaway-body">
+      <h4>装 Web Clipper，把信息消费变成沉淀</h4>
+      <p>Chrome/Edge 装 Web Clipper → 看到好文章一键到 Obsidian → 对 Claude 说"帮我做中英文对照和深度笔记"。<strong>一个月之后你的 vault 里会多出几十篇深度笔记，而不是几百篇未读收藏</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">5</div>
+    <div class="takeaway-body">
+      <h4>不要装 100 个 skill</h4>
+      <p>Skill 不是越多越好，每个 skill 都占 AI 的脑容量。<strong>只装你真的会用的，用不上的定期清理</strong>。</p>
+    </div>
+  </div>
+
+  <div class="takeaway-item">
+    <div class="takeaway-num">6</div>
+    <div class="takeaway-body">
+      <h4>最重要的一条：别完全交给 AI</h4>
+      <p>这一下午最底层的道理只有一条：<strong>AI 放大你，但不替代你下判断</strong>。你必须亲自跑一遍才能长出新的跨任务认知。完全交给 AI = 不懂食物的厨师。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <a href="../" class="footer-back">← 返回工作坊总览</a>
+  <div class="footer-meta">
+    一号位 AI 工作坊 · 2026.04.18-19 · V 聚场<br>
+    主办：<a href="https://vivianai.cn/">Vivian 的 AI 进化论</a> × 一号位 AI 俱乐部<br>
+    <span style="font-size: 12px; color: var(--gray-4); letter-spacing: 0.5px;">学员专享 · 请勿外传</span>
+  </div>
+</footer>
+
+<script>
+  // Password gate
+  const PASS = 'Vivian0418';
+  const gate = document.getElementById('gate');
+  const input = document.getElementById('gateInput');
+  const btn = document.getElementById('gateBtn');
+  const err = document.getElementById('gateError');
+
+  // Check if already unlocked
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1') {
+    gate.classList.add('hidden');
+  }
+
+  function tryUnlock() {
+    const val = input.value.trim();
+    if (val === PASS) {
+      sessionStorage.setItem('workshop0418Unlocked', '1');
+      gate.classList.add('hidden');
+    } else {
+      err.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryUnlock();
+  });
+</script>
+
+</body>
+</html>
