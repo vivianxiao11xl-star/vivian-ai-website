@@ -526,7 +526,8 @@
   <h2>一号位 AI 俱乐部</h2>
   <p>请输入访问口令</p>
   <div class="gate-input-wrap">
-    <input type="password" class="gate-input" id="gateInput" placeholder="口令" autofocus>
+    <input type="text" class="gate-input" id="gateName" placeholder="你的姓名" autofocus>
+    <input type="password" class="gate-input" id="gateInput" placeholder="口令">
     <button class="gate-btn" id="gateBtn">进入</button>
   </div>
   <div class="gate-error" id="gateError">口令不对，再试一下</div>
@@ -936,20 +937,46 @@
   // Password gate (shared across all workshop pages via sessionStorage)
   const PASS = 'Vivian0418';
   const gate = document.getElementById('gate');
+  const nameInput = document.getElementById('gateName');
   const input = document.getElementById('gateInput');
   const btn = document.getElementById('gateBtn');
   const err = document.getElementById('gateError');
 
-  if (sessionStorage.getItem('workshop0418Unlocked') === '1') {
+  function applyWatermark(name) {
+    if (document.getElementById('wm-layer')) return;
+    const now = new Date();
+    const date = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
+    const raw = name + ' · 专属访问 · 请勿外传 · ' + date;
+    const escaped = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="460" height="240" viewBox="0 0 460 240"><text x="20" y="130" transform="rotate(-28 230 120)" font-family="-apple-system, Noto Sans SC, sans-serif" font-size="13" font-weight="600" fill="rgba(0,0,0,0.055)">' + escaped + '</text></svg>';
+    const wm = document.createElement('div');
+    wm.id = 'wm-layer';
+    wm.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:50;background-image:url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '");background-repeat:repeat;user-select:none;';
+    document.body.appendChild(wm);
+  }
+
+  const savedName = sessionStorage.getItem('workshop0418UserName');
+  if (sessionStorage.getItem('workshop0418Unlocked') === '1' && savedName) {
     gate.classList.add('hidden');
+    applyWatermark(savedName);
   }
 
   function tryUnlock() {
+    const name = nameInput.value.trim();
     const val = input.value.trim();
+    if (!name) {
+      err.textContent = '请先填写你的姓名';
+      err.style.display = 'block';
+      nameInput.focus();
+      return;
+    }
     if (val === PASS) {
       sessionStorage.setItem('workshop0418Unlocked', '1');
+      sessionStorage.setItem('workshop0418UserName', name);
       gate.classList.add('hidden');
+      applyWatermark(name);
     } else {
+      err.textContent = '口令不对，再试一下';
       err.style.display = 'block';
       input.value = '';
       input.focus();
@@ -957,6 +984,9 @@
   }
 
   btn.addEventListener('click', tryUnlock);
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') input.focus();
+  });
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') tryUnlock();
   });
