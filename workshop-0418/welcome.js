@@ -121,6 +121,6 @@
       setTimeout(() => wrap.remove(), 500);
     }
     wrap.addEventListener('click', dismiss);
-    setTimeout(dismiss, 2800);
+    setTimeout(dismiss, 5200);
   };
 })();
