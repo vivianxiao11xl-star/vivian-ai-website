@@ -423,11 +423,12 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .moments-card:hover { transform: translateY(-4px); box-shadow: 0 40px 90px rgba(0,0,0,0.16); }
-  /* Top banner: single horizontal strip of 3 photos,
-     wide aspect keeps cells at a balanced landscape crop on all screens */
+  /* Top banner: 2 landscape photos side by side.
+     At aspect-ratio 3:1 each cell is 3:2 — exactly matches photo aspect,
+     so `object-fit: cover` doesn't actually crop anything. */
   .moments-preview {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2px;
     aspect-ratio: 3 / 1;
     overflow: hidden;
@@ -474,7 +475,15 @@
   .moments-card:hover .moments-cta { background: rgba(255,122,89,0.22); gap: 10px; }
   @media (max-width: 640px) {
     .moments-section { padding: 44px 16px; }
-    .moments-preview { aspect-ratio: 3 / 1.2; }
+    /* On mobile, stack the 2 photos vertically so each keeps 3:2 landscape */
+    .moments-preview {
+      grid-template-columns: 1fr;
+      aspect-ratio: auto;
+    }
+    .moments-preview img {
+      width: 100%; height: auto;
+      aspect-ratio: 3 / 2;
+    }
     .moments-body { padding: 24px 22px 28px; }
     .moments-title { font-size: 22px; }
     .moments-lead { font-size: 14px; }
@@ -880,9 +889,8 @@
 <section class="moments-section" id="moments">
   <a href="moments/" class="moments-card">
     <div class="moments-preview">
-      <img src="moments/photos/photo-01.jpg" alt="工作坊温暖瞬间 1" loading="eager" decoding="async" fetchpriority="low">
-      <img src="moments/photos/photo-18.jpg" alt="工作坊温暖瞬间 2" loading="eager" decoding="async" fetchpriority="low">
-      <img src="moments/photos/photo-35.jpg" alt="工作坊温暖瞬间 3" loading="eager" decoding="async" fetchpriority="low">
+      <img src="moments/photos/photo-35.jpg" alt="工作坊温暖瞬间 · 舞台" loading="eager" decoding="async" fetchpriority="low">
+      <img src="moments/photos/photo-01.jpg" alt="工作坊温暖瞬间 · 讲者" loading="eager" decoding="async" fetchpriority="low">
     </div>
     <div class="moments-body">
       <div class="moments-eyebrow">📸 MOMENTS · 温暖瞬间</div>
