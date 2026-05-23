@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一号位 AI 工作坊 · Cohort 02 · 群星谱</title>
+<style>
+  :root {
+    --bg-deep: #050818;
+    --bg-mid: #0d1230;
+    --bg-far: #1a1f4a;
+    --gold: #f5d27a;
+    --gold-soft: #c8a85a;
+    --silver: #b8c1d6;
+    --link-default: rgba(180, 200, 255, 0.15);
+    --link-hover: rgba(245, 210, 122, 0.85);
+    --node-glow: rgba(180, 200, 255, 0.4);
+    --text-primary: #e8ecf7;
+    --text-muted: #8590ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, var(--bg-mid) 0%, var(--bg-deep) 70%);
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", serif;
+    color: var(--text-primary);
+    user-select: none;
+  }
+  /* Star field */
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 4s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.9; }
+  }
+  /* Header */
+  header {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+  header .eyebrow {
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--gold-soft);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, #fff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 8s linear infinite;
+  }
+  @keyframes shimmer {
+    to { background-position: 200% center; }
+  }
+  header .sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    letter-spacing: 2px;
+  }
+  /* Footer */
+  footer {
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
+  /* Canvas */
+  #canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+  }
+  /* Detail panel */
+  #detail {
+    position: fixed;
+    top: 50%;
+    right: 32px;
+    transform: translateY(-50%) translateX(40px);
+    width: 400px;
+    max-height: 75vh;
+    background: linear-gradient(180deg, rgba(20, 25, 60, 0.92), rgba(10, 14, 36, 0.92));
+    border: 1px solid rgba(245, 210, 122, 0.25);
+    border-radius: 12px;
+    padding: 28px 28px 32px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    z-index: 20;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 210, 122, 0.1);
+  }
+  #detail.open {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+    pointer-events: auto;
+  }
+  #detail .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  #detail .close:hover { color: var(--gold); }
+  #detail .num {
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--gold-soft);
+    margin-bottom: 8px;
+  }
+  #detail h2 {
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--gold);
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+  }
+  #detail .company {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+  #detail .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  #detail .tag {
+    background: rgba(245, 210, 122, 0.1);
+    color: var(--gold);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    border: 1px solid rgba(245, 210, 122, 0.25);
+  }
+  #detail h3 {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--gold-soft);
+    margin: 18px 0 8px;
+    text-transform: uppercase;
+  }
+  #detail p, #detail li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+  #detail ul { list-style: none; padding: 0; }
+  #detail ul li {
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  #detail ul li::before {
+    content: "•";
+    color: var(--gold-soft);
+    position: absolute;
+    left: 0;
+  }
+  #detail blockquote {
+    border-left: 2px solid var(--gold);
+    padding-left: 14px;
+    margin: 8px 0;
+    font-style: italic;
+    color: var(--silver);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  /* Hover Tooltip */
+  #tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 30;
+    width: 320px;
+    background: linear-gradient(180deg, rgba(25, 32, 70, 0.96), rgba(12, 16, 40, 0.96));
+    border: 1px solid rgba(245, 210, 122, 0.4);
+    border-radius: 10px;
+    padding: 18px 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.25s, transform 0.25s;
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(245, 210, 122, 0.15);
+  }
+  #tooltip.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+  #tooltip .tt-num {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold-soft);
+    margin-bottom: 4px;
+  }
+  #tooltip .tt-name {
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    margin-bottom: 2px;
+  }
+  #tooltip .tt-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  #tooltip .tt-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: var(--gold-soft);
+    margin: 10px 0 4px;
+    text-transform: uppercase;
+  }
+  #tooltip .tt-want {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  #tooltip .tt-quote {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--silver);
+    font-style: italic;
+    border-left: 2px solid var(--gold);
+    padding-left: 10px;
+    margin-top: 6px;
+  }
+  #tooltip .tt-more {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold-soft);
+    margin-top: 12px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  /* Hint */
+  .hint {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+    z-index: 10;
+    pointer-events: none;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  /* SVG node styling */
+  .node-group { cursor: pointer; }
+  .node-circle {
+    fill: url(#nodeGrad);
+    stroke: rgba(245, 210, 122, 0.5);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 8px rgba(180, 200, 255, 0.3));
+    transition: all 0.3s;
+  }
+  .node-group:hover .node-circle,
+  .node-group.active .node-circle {
+    stroke: var(--gold);
+    stroke-width: 3.5;
+    filter: drop-shadow(0 0 24px rgba(245, 210, 122, 0.9));
+  }
+  /* 增大点击命中区域：透明圆覆盖 */
+  .node-hit {
+    fill: transparent;
+    cursor: pointer;
+  }
+  .node-letter {
+    fill: var(--gold);
+    font-size: 26px;
+    font-weight: 400;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+  }
+  .node-name {
+    fill: var(--text-primary);
+    font-size: 15px;
+    font-weight: 500;
+    text-anchor: middle;
+    pointer-events: none;
+    letter-spacing: 1px;
+  }
+  .node-company {
+    fill: var(--text-muted);
+    font-size: 11px;
+    text-anchor: middle;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+  }
+  .link {
+    stroke: var(--link-default);
+    stroke-width: 1;
+    fill: none;
+    transition: all 0.3s;
+  }
+  .link.active {
+    stroke: var(--link-hover);
+    stroke-width: 2;
+    filter: drop-shadow(0 0 4px var(--link-hover));
+  }
+  .center-circle {
+    fill: none;
+    stroke: rgba(245, 210, 122, 0.3);
+    stroke-width: 1;
+    stroke-dasharray: 3 6;
+    animation: rotate 80s linear infinite;
+    transform-origin: center;
+  }
+  @keyframes rotate {
+    to { transform: rotate(360deg); }
+  }
+  .center-text-main {
+    fill: var(--gold);
+    font-size: 22px;
+    font-weight: 300;
+    text-anchor: middle;
+    letter-spacing: 4px;
+    font-family: "Noto Serif SC", serif;
+  }
+  .center-text-sub {
+    fill: var(--text-muted);
+    font-size: 11px;
+    text-anchor: middle;
+    letter-spacing: 6px;
+  }
+  /* dim non-active when one node is hovered */
+  .dim-mode .node-group:not(.active):not(.related) { opacity: 0.25; }
+  .dim-mode .link:not(.active) { opacity: 0.05; }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<header>
+  <div class="eyebrow">2026 · 0523-0524 · COHORT 02</div>
+  <h1>一号位 AI 工作坊 · 群星谱</h1>
+  <div class="sub">悬停每位成员 · 看见隐藏的连接</div>
+</header>
+
+<svg id="canvas" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <radialGradient id="nodeGrad" cx="30%" cy="30%">
+      <stop offset="0%" stop-color="rgba(245, 210, 122, 0.35)"/>
+      <stop offset="40%" stop-color="rgba(60, 80, 140, 0.6)"/>
+      <stop offset="100%" stop-color="rgba(15, 20, 50, 0.95)"/>
+    </radialGradient>
+    <radialGradient id="centerGrad" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="rgba(245, 210, 122, 0.3)"/>
+      <stop offset="60%" stop-color="rgba(40, 50, 100, 0.4)"/>
+      <stop offset="100%" stop-color="rgba(10, 14, 36, 0)"/>
+    </radialGradient>
+  </defs>
+  <g id="layer-links"></g>
+  <g id="layer-center"></g>
+  <g id="layer-nodes"></g>
+</svg>
+
+<aside id="detail">
+  <button class="close" onclick="closeDetail()">×</button>
+  <div id="detail-content"></div>
+</aside>
+
+<div id="tooltip"></div>
+
+<div class="hint">悬停 → 看画像 + 关联 · 点击 → 查看完整资料</div>
+
+<footer>VIVIAN'S AI · ONE-IN-CHARGE · 一号位 AI 进化论</footer>
+
+<script>
+/* ============ 学员数据 ============ */
+const members = [
+  {
+    id: "yan",
+    num: "01",
+    name: "晏慕龙",
+    short: "晏",
+    enName: "Dr off",
+    company: "深圳尚恩迪科技",
+    role: "Creative Director",
+    mbti: "INFJ",
+    tags: ["设计", "Branding", "AI 早期实践者", "前篮球运动员"],
+    edu: "香港理工大学 · 内衣设计专业。前香港队篮球运动员，膝伤后转设计。",
+    war: "在前公司用 AI 把'服装设计 → 打板' 3 个月 / 70 万的流程压到 1 天解决。",
+    want: "造自己的'全能设计师分身' —— 让 AI 复制业务能力，跟我一起想问题。",
+    quote: "我希望可以把一个业务能力复制出来去干。"
+  },
+  {
+    id: "yangmo",
+    num: "02",
+    name: "杨墨",
+    short: "墨",
+    company: "安永华明（EY · 四大）",
+    role: "高级顾问",
+    mbti: "ESTJ",
+    tags: ["合规咨询", "TMT 大厂", "AI 合规", "出海"],
+    edu: "哥伦比亚大学研究生。曾创业做数据分析。",
+    war: "市面上主要大厂的核心合规交付物多由其团队完成；上市鉴证 + 出海 + AI 合规三栖。",
+    want: "把每日加班到深夜的重复合规交付自动化，把人力释放到真正需要判断的地方。",
+    quote: "极限运动滑雪伤过膝盖 —— 两条韧带都断了。"
+  },
+  {
+    id: "wujuan",
+    num: "03",
+    name: "吴丽娟",
+    short: "丽",
+    company: "沈阳诺依文化传播",
+    role: "总经理",
+    mbti: "ENFP",
+    tags: ["IP 操盘", "私域变现", "前临床心理治疗师", "百万 IP 小阿成"],
+    edu: "前临床心理治疗师，未再从事临床但心理学训练让她做私域特别能抓粉丝需求。",
+    war: "操盘百万 IP「小阿成」；同时运营医疗会议公司承接院士级别学术会议。两家不到 10 人。",
+    want: "把'高专业前端 IP'和'商业变现后端规划'真正打通 —— 前后两端都强，中间靠人力撑不动。",
+    quote: "一年服务院士，一年服务护士。"
+  },
+  {
+    id: "zhang",
+    num: "04",
+    name: "张明昌",
+    short: "鉴",
+    company: "上海鉴上剑技术咨询",
+    role: "创始人 · 法医",
+    mbti: "—",
+    tags: ["法医", "司法鉴定", "医疗纠纷", "AI 小白 🆘"],
+    edu: "本科上海医科大学 · 复旦直博 · 美国留学两次（司法鉴定方向）。曾在学校教书。",
+    war: "司法鉴定全谱系（伤残 / 精神 / 亲子 / 毒物 / 死因）。曾帮被拒赔 150 万意外险打赢翻盘。",
+    want: "千页病历 1-2 天才能看完 → 想用 AI 找出过错细节 + 法医学因果判定 + 起草诉状 + 写陈述书。",
+    quote: "你们意外险有没有买？这韧带损伤有没有伤残定级？"
+  },
+  {
+    id: "rending",
+    num: "05",
+    name: "任丁",
+    short: "任",
+    company: "上海长征医院",
+    role: "心理医生主任",
+    mbti: "—",
+    tags: ["精神科", "肿瘤背景", "IBCLC", "哈佛 PhD+ 博后", "首家综合减压门诊"],
+    edu: "二军大长海医院 → 首批国家公派联培 → 哈佛 PhD+ 博后。三栖背景：乳腺癌靶向治疗 + 精神科 + IBCLC。",
+    war: "把卡巴金哈佛正念减压系统引入国内，今年创建全国第一家综合性减压门诊。4 月与华山还岩主任联合创办首家身心联合减压示范门诊。",
+    want: "全栈 AI 助理 —— 临床数据沉淀、心理健康科普、科研助理、私人助理 四件套。",
+    quote: "与其看到肿瘤患者跟生命末节抗争，不如把着眼点放到生命最前端。"
+  },
+  {
+    id: "wang",
+    num: "06",
+    name: "王栩若",
+    short: "栩",
+    company: "长征医院（任丁学生）",
+    role: "项目助理 · 研二",
+    mbti: "INTJ",
+    tags: ["生化研二", "科普写作", "DeepSeek 实战", "数字分身"],
+    edu: "本科生物学 + 研究生生化与分析生物学。任丁老师在科普作家协会的学生。",
+    war: "用 DeepSeek 在两周内写了 1 万字心理科普短剧剧本。",
+    want: "课题数据严谨描述 + 任老师科普合作高产高质 + 个人成长想搭多个数字分身。",
+    quote: "想要多个数字分身都为我干活。"
+  },
+  {
+    id: "gaoxin",
+    num: "07",
+    name: "高歆",
+    short: "Vivi",
+    enName: "Vivi",
+    company: "上海云基地",
+    role: "合伙人",
+    mbti: "INTP ⟷ INFP",
+    tags: ["产业园合伙人", "1000+ 科技企业", "政府对接", "杨浦区资源池"],
+    edu: "起点是总经理 / 总裁秘书，承接老板战略多 → 转业务做到合伙人。",
+    war: "云基地 10+ 年杨浦科技产业园，孵化器连接 1000+ 家企业，90% 科技 / 科技服务业。",
+    want: "AI+ 产业联盟、企业核心服务升级、政府翻译对接 —— 平台效能提升 = 1000 家企业受益。",
+    quote: "我们要做政府和企业之间的翻译，对接到位的就对，没到位的就等一等不内耗。"
+  },
+  {
+    id: "min",
+    num: "08",
+    name: "闵天宸",
+    short: "宸",
+    company: "New Sailing Limited",
+    role: "供应链开发",
+    mbti: "INFJ ⟷ ESTJ",
+    tags: ["NUS 数据分析", "食品出海", "买菜系", "跨文化"],
+    edu: "新加坡国立大学本硕数据分析。前叮咚 / 美团买菜出身。",
+    war: "New Sailing 从买菜项目策划孵化出来的食品出海团队，他负责数据分析 → 商品开发。",
+    want: "产品手册生成 + 选品逻辑搭建（短期）/ AI 在跨文化跨国出海中扮演什么角色（探索）。",
+    quote: "我是给他们俩（Heidi、Celine）打工的。"
+  },
+  {
+    id: "celine",
+    num: "09",
+    name: "程帆",
+    short: "Celine",
+    enName: "Celine Cheng",
+    company: "New Sailing Limited",
+    role: "联创 · 销售带队",
+    mbti: "ENFJ",
+    tags: ["上海人 · 40 岁", "学法语", "进口食品 → 反向出海", "化妆品 / 香水 BD"],
+    edu: "学法语 → 法语翻译 2-3 年 → 进口食品 → 化妆品 / 香水品牌 BD 3-5 年 → 现在反向把国内产品出海到主流商超。",
+    war: "New Sailing 最资深联创。带销售 + 生鲜采购 + 国内运营 + HR + 行政 + 报税（全包）。",
+    want: "🔴 生鲜天气分析（云南蓝莓尾季雨季提前烂货）+ 初创全包合规节点提醒助理。",
+    quote: "愈难愈好玩，难而正确的事情。"
+  },
+  {
+    id: "heidi",
+    num: "10",
+    name: "陆晓晓",
+    short: "Heidi",
+    enName: "Heidi",
+    company: "New Sailing Limited",
+    role: "联创 · 决策层 · 海外通路",
+    mbti: "ENTJ",
+    tags: ["Monash 海归", "18 岁连续创业者", "8000+ 食品渠道", "前 FBIF / 叮咚买菜出海", "ENTJ 风风火火"],
+    edu: "澳大利亚 Monash University Marketing 专业。18 岁开第一家旅游公司（被携程拿走）→ FBIF 头部食品平台 2-3 年 → 邵明引荐进叮咚买菜出海 → 现在独立做 New Sailing。",
+    war: "团队从 6-7 人 → 100+ 人 → 精简到十几人。把中国蓝莓 / 阳光玫瑰送到海外货架。叮咚被美团收购仅国内事业部，海外独立出来继续抱团出海。",
+    want: "已实战 ：AI 写投融资方案 + 分析比人精细 / AI 写合同比法务高效。下一步：标品 AI 赋能（瓶装水 / 糖类）+ 根据海外不同场景输出。",
+    quote: "出海这条路就回不去了，因为他确实是一个非常有意义的事情。AI 写商业方案、分析投融资比人还精细。"
+  },
+  {
+    id: "huang",
+    num: "11",
+    name: "黄有璨",
+    short: "璨",
+    company: "新个体创业学社",
+    role: "创始人 · OPC 实践者",
+    mbti: "INTJ",
+    tags: ["《运营之光》作者", "三节课创始人", "OPC / OPT 范式", "教育 14 年", "运营 IP 三栖"],
+    edu: "🎓 高中辍学，国家承认最高学历初中（自嘲'保留清白'）。14 年教育行业连续创业。",
+    war: "三节课融资 4 亿 / 估值 30 亿 / 操盘 50%+ 互联网职场人培训。《运营之光》豆瓣最高分 + 销量 100 万+。23 年起做 AI / OPC 公司。",
+    want: "单点 AI 都有解（写文 / 决策 / 方案）—— 难的是让 AI 把'面'串起来：新媒体多账号 AI 矩阵 + 总管 AI + 数据回流数仓。",
+    quote: "AI + OPC + OPT 是未来一种新的组织范式和业务范式。"
+  },
+  {
+    id: "zhiwei",
+    num: "12",
+    name: "黄智威",
+    short: "智",
+    company: "九经书院 + 混沌南京",
+    role: "创始人 · 校长 · 牛首山人文总设计师",
+    mbti: "ENTJ → ENFP → INFP",
+    tags: ["混沌南京校长", "哲学 + 商学 + AI", "牛首山人文总设计师", "中南大学", "几十-几百亿企业 AI 化"],
+    edu: "中南大学。江苏南通如皋人，现居南京。曾在施耐德电气见证大多分销售体系 0→1。",
+    war: "陪天目湖董事长去雅朵看 AI 落地；昨天同时给中国利洲 + 博士中国做 AI 内训。九经书院'纯哲学不玄学'；混沌南京聚焦 1000 万-10 亿创始人战略。",
+    want: "已操盘几十亿到几百亿企业 AI 化 → 来工作坊学'个人怎么用好 AI'（Vivian 的强项，跟自己企业级 AI 形成镜像）。",
+    quote: "我只挑最厉害的操盘手。AI 在企业里面落地的效率真是太吓人了。"
+  },
+  {
+    id: "steven",
+    num: "13",
+    name: "杜鑫磊",
+    short: "Steven",
+    enName: "Steven",
+    company: "上海恒温控制器厂",
+    role: "总经理 · 制造业二代",
+    mbti: "ENTP",
+    tags: ["奥克兰大学", "前富士康苹果手机", "75 年家族企业", "液冷阀门 🔥", "桥水式系统化", "贾维斯梦想"],
+    edu: "新西兰奥克兰大学电子电器工程。富士康做苹果手机 1.5 年 → 2019 年回国接手家族企业（51 年成立的老国企转制）。",
+    war: "客户矩阵：美的 / 格力 / 海尔 / 开利 / 特灵 / 约克 / 大金。当下风口：给液冷做阀门（英维克 / 维谛 → 富士康 / 英伟达供应链）。",
+    want: "公司层：桥水式'把公司当机器' —— 全公司问题沉淀成可复用经验。个人层：建一个贾维斯式数字人 —— 交朋友 / 管公司 / 日常都丢给他。",
+    quote: "我其实挺懒，想建一个自己的数字人，像贾维斯一样，所有东西交给他处理。"
+  }
+];
+
+/* ============ 关联（双向边） ============ */
+const links = [
+  // 膝伤运动三角
+  { a: "yan", b: "yangmo", label: "运动膝伤同款" },
+  { a: "yan", b: "zhang", label: "意外险鉴定" },
+  { a: "yangmo", b: "zhang", label: "意外险 + 合规" },
+  // 心理三人组
+  { a: "wujuan", b: "rending", label: "临床心理同行" },
+  { a: "rending", b: "wang", label: "师生" },
+  { a: "wujuan", b: "wang", label: "心理科普" },
+  // 医疗 × 法医
+  { a: "zhang", b: "rending", label: "科普协会老朋友" },
+  { a: "zhang", b: "wujuan", label: "医疗纠纷 × 医疗会议" },
+  // AI 合规 × 减压
+  { a: "yangmo", b: "rending", label: "AI 合规 × 心理" },
+  // IP 打造
+  { a: "wujuan", b: "rending", label: "IP 路径教练" },
+  // 学术写作
+  { a: "wang", b: "yangmo", label: "高学历写作搭子" },
+  // BB 资源池（与所有人）
+  { a: "gaoxin", b: "yan", label: "1000 家企业客户池" },
+  { a: "gaoxin", b: "yangmo", label: "园区出海企业" },
+  { a: "gaoxin", b: "zhang", label: "政府对接" },
+  { a: "gaoxin", b: "rending", label: "园区心理福利" },
+  { a: "gaoxin", b: "wang", label: "园区资源" },
+  { a: "gaoxin", b: "wujuan", label: "学术资源" },
+  { a: "gaoxin", b: "min", label: "出海企业池" },
+  // 数据分析双胞胎
+  { a: "min", b: "yangmo", label: "NUS × 哥大 数据分析" },
+  // New Sailing 三人组（食品出海铁三角）
+  { a: "celine", b: "min", label: "New Sailing 同事" },
+  { a: "heidi", b: "min", label: "New Sailing 同事" },
+  { a: "celine", b: "heidi", label: "New Sailing 同事" },
+  // Celine 创业全包痛点同盟
+  { a: "celine", b: "rending", label: "创业一人扛多角色" },
+  { a: "celine", b: "gaoxin", label: "运营节点同款" },
+  { a: "celine", b: "zhang", label: "决策方法论" },
+  { a: "celine", b: "wujuan", label: "品牌 BD × 私域" },
+  // Heidi 关联（暂用 New Sailing 三人组的连接）
+  { a: "heidi", b: "gaoxin", label: "出海企业池" },
+  // 黄有璨：现场范式天花板
+  { a: "huang", b: "yan", label: "OPC 范式 / 设计师分身" },
+  { a: "huang", b: "wujuan", label: "IP 操盘师父级" },
+  { a: "huang", b: "rending", label: "医生 IP 业务改造" },
+  { a: "huang", b: "wang", label: "IP 助手 AI 化" },
+  { a: "huang", b: "yangmo", label: "流水线 AI 拆解" },
+  { a: "huang", b: "celine", label: "0→1亿组织建议" },
+  { a: "huang", b: "heidi", label: "0→1亿组织建议" },
+  { a: "huang", b: "gaoxin", label: "范式共修" },
+  { a: "huang", b: "zhang", label: "AI 业务改造" },
+  // 黄智威：双子星 + 全场企业 AI 落地
+  { a: "zhiwei", b: "huang", label: "智威介绍 Vivian / 道德经课同学" },
+  { a: "zhiwei", b: "gaoxin", label: "企业 AI 落地 × 园区" },
+  { a: "zhiwei", b: "yangmo", label: "几十亿企业合规需求" },
+  { a: "zhiwei", b: "celine", label: "出海企业战略陪跑" },
+  { a: "zhiwei", b: "heidi", label: "出海企业战略陪跑" },
+  { a: "zhiwei", b: "min", label: "出海企业战略陪跑" },
+  { a: "zhiwei", b: "wujuan", label: "创业者网络客户池" },
+  { a: "zhiwei", b: "yan", label: "创业者网络客户池" },
+  { a: "zhiwei", b: "zhang", label: "企业健康 / 心理福利" },
+  { a: "zhiwei", b: "rending", label: "企业心理福利需求" },
+  // Heidi 8000+ 食品渠道辐射
+  { a: "heidi", b: "wujuan", label: "医疗食品 / 院士营养跨界" },
+  { a: "heidi", b: "zhiwei", label: "创业者食品出海" },
+  { a: "heidi", b: "huang", label: "18 岁连续创业 × OPC" },
+  { a: "heidi", b: "yangmo", label: "FDA / 多国合规" },
+  // Steven 杜鑫磊：制造业 + 企业系统化
+  { a: "steven", b: "zhiwei", label: "桥水式企业 AI 化 · 智威拿手" },
+  { a: "steven", b: "huang", label: "重度 AI 实操派 / OPC 业务系统" },
+  { a: "steven", b: "gaoxin", label: "杨浦区制造业转型" },
+  { a: "steven", b: "min", label: "苹果 / 买菜系供应链同源" },
+  { a: "steven", b: "heidi", label: "供应链 × 出海客户" },
+  { a: "steven", b: "yangmo", label: "运动伤俱乐部破冰" },
+  // 数字分身 / 贾维斯共修组
+  { a: "steven", b: "yan", label: "数字分身共修" },
+  { a: "steven", b: "wang", label: "数字分身共修" }
+];
+
+/* ============ 画图 ============ */
+const svg = document.getElementById("canvas");
+const linkLayer = document.getElementById("layer-links");
+const centerLayer = document.getElementById("layer-center");
+const nodeLayer = document.getElementById("layer-nodes");
+
+let W = window.innerWidth, H = window.innerHeight;
+function resize() {
+  W = window.innerWidth;
+  H = window.innerHeight;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  draw();
+}
+window.addEventListener("resize", resize);
+
+function draw() {
+  linkLayer.innerHTML = "";
+  centerLayer.innerHTML = "";
+  nodeLayer.innerHTML = "";
+
+  const cx = W / 2;
+  const cy = H / 2 + 10;
+  const R = Math.min(W, H) * 0.36;
+
+  // place each member around circle
+  const positions = {};
+  const n = members.length;
+  members.forEach((m, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const x = cx + R * Math.cos(angle);
+    const y = cy + R * Math.sin(angle);
+    positions[m.id] = { x, y };
+  });
+
+  // center decorative rings
+  for (let r = 50; r <= 100; r += 20) {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", cx);
+    c.setAttribute("cy", cy);
+    c.setAttribute("r", r);
+    c.setAttribute("class", "center-circle");
+    centerLayer.appendChild(c);
+  }
+  // center filled glow
+  const cg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  cg.setAttribute("cx", cx);
+  cg.setAttribute("cy", cy);
+  cg.setAttribute("r", 110);
+  cg.setAttribute("fill", "url(#centerGrad)");
+  centerLayer.appendChild(cg);
+  // center labels
+  const ct1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  ct1.setAttribute("x", cx);
+  ct1.setAttribute("y", cy - 6);
+  ct1.setAttribute("class", "center-text-main");
+  ct1.textContent = "COHORT 02";
+  centerLayer.appendChild(ct1);
+  const ct2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  ct2.setAttribute("x", cx);
+  ct2.setAttribute("y", cy + 18);
+  ct2.setAttribute("class", "center-text-sub");
+  ct2.textContent = "0 5 / 2 3 — 0 5 / 2 4";
+  centerLayer.appendChild(ct2);
+
+  // draw links (curved through center)
+  links.forEach((l, idx) => {
+    const pa = positions[l.a];
+    const pb = positions[l.b];
+    if (!pa || !pb) return;
+    // gentle quadratic curve toward center
+    const mx = (pa.x + pb.x) / 2;
+    const my = (pa.y + pb.y) / 2;
+    const dx = mx - cx;
+    const dy = my - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const pullFactor = dist > 0 ? Math.max(0, 1 - 200 / dist) * 0.7 : 0;
+    const qx = mx - dx * pullFactor;
+    const qy = my - dy * pullFactor;
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", `M ${pa.x},${pa.y} Q ${qx},${qy} ${pb.x},${pb.y}`);
+    path.setAttribute("class", "link");
+    path.dataset.a = l.a;
+    path.dataset.b = l.b;
+    linkLayer.appendChild(path);
+  });
+
+  // draw nodes
+  members.forEach(m => {
+    const { x, y } = positions[m.id];
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "node-group");
+    g.dataset.id = m.id;
+    g.setAttribute("transform", `translate(${x}, ${y})`);
+
+    // 根据节点数自适应大小
+    const nodeR = members.length > 9 ? 32 : 38;
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("r", nodeR);
+    circle.setAttribute("class", "node-circle");
+    g.appendChild(circle);
+
+    // 透明命中区域，覆盖节点 + 下方文字（点击更容易）
+    const hit = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    hit.setAttribute("class", "node-hit");
+    hit.setAttribute("x", -nodeR - 8);
+    hit.setAttribute("y", -nodeR - 8);
+    hit.setAttribute("width", (nodeR + 8) * 2);
+    hit.setAttribute("height", nodeR * 2 + 65);
+    g.appendChild(hit);
+
+    const letter = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    letter.setAttribute("class", "node-letter");
+    letter.setAttribute("y", 0);
+    // 多字符（如 Celine、Heidi）字体缩小
+    if (m.short.length > 1) {
+      letter.setAttribute("style", "font-size: 14px; letter-spacing: 0.5px;");
+    }
+    letter.textContent = m.short;
+    g.appendChild(letter);
+
+    // name below
+    const name = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    name.setAttribute("class", "node-name");
+    name.setAttribute("y", nodeR + 22);
+    name.textContent = m.name;
+    g.appendChild(name);
+
+    const company = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    company.setAttribute("class", "node-company");
+    company.setAttribute("y", nodeR + 40);
+    company.textContent = m.company;
+    g.appendChild(company);
+
+    // events
+    g.addEventListener("mouseenter", (e) => {
+      activate(m.id);
+      showTooltip(m, x, y, cx, cy);
+    });
+    g.addEventListener("mouseleave", () => {
+      deactivate();
+      hideTooltip();
+    });
+    g.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openDetail(m.id);
+    });
+
+    nodeLayer.appendChild(g);
+  });
+}
+
+function activate(id) {
+  document.body.classList.add("dim-mode");
+  // active node
+  document.querySelectorAll(".node-group").forEach(g => {
+    g.classList.toggle("active", g.dataset.id === id);
+  });
+  // related nodes (connected via links)
+  const related = new Set();
+  document.querySelectorAll(".link").forEach(l => {
+    const isRelated = l.dataset.a === id || l.dataset.b === id;
+    l.classList.toggle("active", isRelated);
+    if (isRelated) {
+      related.add(l.dataset.a);
+      related.add(l.dataset.b);
+    }
+  });
+  document.querySelectorAll(".node-group").forEach(g => {
+    if (g.dataset.id !== id && related.has(g.dataset.id)) {
+      g.classList.add("related");
+    }
+  });
+}
+
+function deactivate() {
+  document.body.classList.remove("dim-mode");
+  document.querySelectorAll(".node-group").forEach(g => {
+    g.classList.remove("active", "related");
+  });
+  document.querySelectorAll(".link").forEach(l => l.classList.remove("active"));
+}
+
+function showTooltip(m, nx, ny, cx, cy) {
+  const tt = document.getElementById("tooltip");
+  tt.innerHTML = `
+    <div class="tt-num">NO. ${m.num} / ${String(members.length).padStart(2, "0")} · ${m.mbti}</div>
+    <div class="tt-name">${m.name}${m.enName ? " · " + m.enName : ""}</div>
+    <div class="tt-meta">${m.company} · ${m.role}</div>
+    <div class="tt-label">想用 AI 解决</div>
+    <div class="tt-want">${m.want}</div>
+    <div class="tt-label">现场金句</div>
+    <div class="tt-quote">${m.quote}</div>
+    <div class="tt-more">点击查看完整画像 →</div>
+  `;
+  // 位置：节点向中心反方向偏移，避免遮挡节点；并保证在屏幕内
+  const ttW = 320;
+  const ttH = 280;
+  let dx = nx - cx;
+  let dy = ny - cy;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  dx /= len; dy /= len;
+  let tx = nx + dx * 90 - ttW / 2;
+  let ty = ny + dy * 90 - ttH / 2;
+  // clamp to viewport
+  tx = Math.max(16, Math.min(window.innerWidth - ttW - 16, tx));
+  ty = Math.max(16, Math.min(window.innerHeight - ttH - 16, ty));
+  tt.style.left = tx + "px";
+  tt.style.top = ty + "px";
+  tt.classList.add("show");
+}
+
+function hideTooltip() {
+  document.getElementById("tooltip").classList.remove("show");
+}
+
+function openDetail(id) {
+  const m = members.find(x => x.id === id);
+  if (!m) return;
+  const tagsHtml = m.tags.map(t => `<span class="tag">${t}</span>`).join("");
+  document.getElementById("detail-content").innerHTML = `
+    <div class="num">NO. ${m.num} / ${String(members.length).padStart(2, "0")}</div>
+    <h2>${m.name}${m.enName ? ` · ${m.enName}` : ""}</h2>
+    <div class="company">${m.company} · ${m.role} · ${m.mbti}</div>
+    <div class="tags">${tagsHtml}</div>
+    <h3>背景</h3>
+    <p>${m.edu}</p>
+    <h3>代表战绩</h3>
+    <p>${m.war}</p>
+    <h3>想用 AI 解决</h3>
+    <p>${m.want}</p>
+    <h3>现场金句</h3>
+    <blockquote>${m.quote}</blockquote>
+  `;
+  document.getElementById("detail").classList.add("open");
+}
+
+function closeDetail() {
+  document.getElementById("detail").classList.remove("open");
+}
+
+document.addEventListener("click", (e) => {
+  // click outside any node closes
+  if (!e.target.closest(".node-group") && !e.target.closest("#detail")) {
+    closeDetail();
+  }
+});
+
+/* ============ 星空粒子 ============ */
+const starField = document.getElementById("stars");
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement("div");
+  s.className = "star";
+  s.style.left = Math.random() * 100 + "%";
+  s.style.top = Math.random() * 100 + "%";
+  s.style.animationDelay = (Math.random() * 4) + "s";
+  s.style.animationDuration = (3 + Math.random() * 3) + "s";
+  const size = Math.random() < 0.85 ? 1 : 2;
+  s.style.width = size + "px";
+  s.style.height = size + "px";
+  starField.appendChild(s);
+}
+
+resize();
+</script>
+</body>
+</html>
