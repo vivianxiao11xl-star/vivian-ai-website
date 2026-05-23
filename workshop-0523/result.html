@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>现场亮票 · 一号位 AI 工作坊</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --fg: #f5f5f7;
+    --muted: #6a6a76;
+    --gold: #f5c451;
+    --team-a: #6366f1;
+    --team-b: #10b981;
+    --team-c: #ec4899;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100vh; overflow: hidden; background: var(--bg); color: var(--fg); font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 60%); }
+  .stage { height: 100vh; display: flex; flex-direction: column; padding: 4vh 6vw; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4vh; }
+  .eyebrow { color: var(--gold); font-size: 14px; letter-spacing: 6px; font-weight: 700; text-transform: uppercase; }
+  h1 { font-size: 56px; font-weight: 900; margin: 6px 0 0; letter-spacing: -1px; }
+  .meta { text-align: right; color: var(--muted); font-size: 14px; }
+  .meta .total { color: var(--fg); font-size: 40px; font-weight: 800; line-height: 1; margin-top: 4px; }
+  .meta .total .num { color: var(--gold); }
+
+  .bars { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4vw; align-items: end; padding: 0 2vw 4vh; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 2vh; }
+  .bar-wrap { width: 100%; max-width: 220px; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+  .bar {
+    width: 100%; border-radius: 24px 24px 0 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative; overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    min-height: 14px;
+  }
+  .bar.A { background: linear-gradient(180deg, var(--team-a), #4338ca); }
+  .bar.B { background: linear-gradient(180deg, var(--team-b), #047857); }
+  .bar.C { background: linear-gradient(180deg, var(--team-c), #be185d); }
+  .bar.leader { box-shadow: 0 0 60px rgba(245,196,81,0.5), inset 0 1px 0 rgba(255,255,255,0.3); }
+  .bar.leader::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(245,196,81,0.25), transparent 50%);
+    pointer-events: none;
+  }
+
+  .count {
+    font-size: 80px; font-weight: 900; line-height: 1;
+    margin-top: -10px; margin-bottom: 4px; letter-spacing: -2px;
+    transition: color 0.3s, transform 0.3s;
+  }
+  .leader-tag .count { color: var(--gold); transform: scale(1.05); }
+
+  .team-info { text-align: center; }
+  .badge {
+    width: 72px; height: 72px; border-radius: 18px; margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 900; color: #fff;
+  }
+  .badge.A { background: linear-gradient(135deg, #6366f1, #4338ca); }
+  .badge.B { background: linear-gradient(135deg, #10b981, #047857); }
+  .badge.C { background: linear-gradient(135deg, #ec4899, #be185d); }
+  .team-label { font-size: 20px; font-weight: 700; color: var(--muted); letter-spacing: 1px; }
+  .leader-tag .team-label { color: var(--gold); }
+  .crown { font-size: 36px; line-height: 1; height: 36px; opacity: 0; transition: opacity 0.4s; margin-bottom: 4px; }
+  .leader-tag .crown { opacity: 1; }
+
+  .foot { text-align: center; color: var(--muted); font-size: 13px; letter-spacing: 1px; padding-bottom: 1vh; }
+  .foot .reveal-btn {
+    background: var(--gold); color: #0a0a0f; border: none;
+    padding: 10px 24px; border-radius: 999px; font-size: 13px; font-weight: 700;
+    cursor: pointer; margin-left: 16px; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .foot .reveal-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245,196,81,0.3); }
+  .foot .reveal-btn.revealed { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+  /* Hidden mode: 不显示具体数字，只显示鼓励文案 */
+  body.hidden .count, body.hidden .bar { visibility: hidden; }
+  body.hidden .bar-wrap::after {
+    content: '⋯'; font-size: 80px; color: var(--muted); display: block; text-align: center;
+    line-height: 100%; padding-bottom: 20px;
+  }
+
+  @media (max-width: 900px) {
+    h1 { font-size: 32px; }
+    .count { font-size: 48px; }
+    .badge { width: 52px; height: 52px; font-size: 26px; }
+    .bars { gap: 3vw; }
+  }
+</style>
+</head>
+<body class="hidden">
+<div class="stage">
+  <div class="head">
+    <div>
+      <div class="eyebrow">CEO COPILOT · 现场亮票</div>
+      <h1>谁是今晚最棒的团队？</h1>
+    </div>
+    <div class="meta">
+      已投票
+      <div class="total"><span class="num" id="total">0</span> / 12</div>
+    </div>
+  </div>
+
+  <div class="bars" id="bars">
+    <div class="bar-col" data-team="A">
+      <div class="bar-wrap"><div class="bar A" style="height:0%"></div></div>
+      <div class="count" id="count-A">0</div>
+      <div class="team-info">
+        <div class="crown">👑</div>
+        <div class="badge A">A</div>
+        <div class="team-label">A 队</div>
+      </div>
+    </div>
+    <div class="bar-col" data-team="B">
+      <div class="bar-wrap"><div class="bar B" style="height:0%"></div></div>
+      <div class="count" id="count-B">0</div>
+      <div class="team-info">
+        <div class="crown">👑</div>
+        <div class="badge B">B</div>
+        <div class="team-label">B 队</div>
+      </div>
+    </div>
+    <div class="bar-col" data-team="C">
+      <div class="bar-wrap"><div class="bar C" style="height:0%"></div></div>
+      <div class="count" id="count-C">0</div>
+      <div class="team-info">
+        <div class="crown">👑</div>
+        <div class="badge C">C</div>
+        <div class="team-label">C 队</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    自动刷新中 · 每 1.5 秒更新
+    <button class="reveal-btn" id="reveal-btn" onclick="toggleReveal()">亮票！</button>
+  </div>
+</div>
+
+<script>
+  const API = 'https://abacus.jasoncameron.dev';
+  const NS = 'vivian-ws-0523-x7k2';
+  const TEAMS = ['A', 'B', 'C'];
+
+  let counts = { A: 0, B: 0, C: 0 };
+  let revealed = false;
+
+  function $(id) { return document.getElementById(id); }
+
+  async function fetchAll() {
+    try {
+      const results = await Promise.all(TEAMS.map(t =>
+        fetch(`${API}/get/${NS}/team-${t.toLowerCase()}`).then(r => r.json())
+      ));
+      results.forEach((d, i) => { counts[TEAMS[i]] = d.value || 0; });
+      render();
+    } catch (e) {
+      console.warn('fetch failed', e);
+    }
+  }
+
+  function render() {
+    const total = counts.A + counts.B + counts.C;
+    $('total').textContent = total;
+    const max = Math.max(counts.A, counts.B, counts.C, 1);
+    const leader = total > 0 ? TEAMS.filter(t => counts[t] === max && counts[t] > 0) : [];
+
+    TEAMS.forEach(t => {
+      const col = document.querySelector(`.bar-col[data-team="${t}"]`);
+      const bar = col.querySelector('.bar');
+      const cnt = $(`count-${t}`);
+      const pct = (counts[t] / max) * 100;
+      bar.style.height = pct + '%';
+      cnt.textContent = counts[t];
+      const isLeader = revealed && leader.includes(t);
+      col.classList.toggle('leader-tag', isLeader);
+      bar.classList.toggle('leader', isLeader);
+    });
+  }
+
+  function toggleReveal() {
+    revealed = !revealed;
+    document.body.classList.toggle('hidden', !revealed);
+    const btn = $('reveal-btn');
+    btn.textContent = revealed ? '隐藏' : '亮票！';
+    btn.classList.toggle('revealed', revealed);
+    render();
+  }
+
+  fetchAll();
+  setInterval(fetchAll, 1500);
+</script>
+</body>
+</html>

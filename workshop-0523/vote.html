@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>现场投票 · 一号位 AI 工作坊</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-2: #15151c;
+    --fg: #f5f5f7;
+    --muted: #8a8a96;
+    --gold: #f5c451;
+    --team-a: #6366f1;
+    --team-b: #10b981;
+    --team-c: #ec4899;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: var(--bg); color: var(--fg); font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 60%); }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 40px 24px 60px; min-height: 100vh; display: flex; flex-direction: column; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 4px; font-weight: 700; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 30px; font-weight: 800; margin: 0 0 10px; letter-spacing: -0.5px; }
+  .sub { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 36px; }
+  .step-label { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: 1px; margin-bottom: 18px; }
+  .btns { display: flex; flex-direction: column; gap: 14px; }
+  .team-btn {
+    appearance: none; border: 2px solid rgba(255,255,255,0.08);
+    background: var(--bg-2); color: var(--fg);
+    padding: 22px 24px; border-radius: 16px; font-size: 22px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; text-align: left;
+    display: flex; align-items: center; gap: 16px; font-family: inherit;
+    -webkit-user-select: none; user-select: none;
+  }
+  .team-btn:active { transform: scale(0.98); }
+  .team-btn[data-team="A"]:hover, .team-btn[data-team="A"].selected { border-color: var(--team-a); background: rgba(99,102,241,0.12); }
+  .team-btn[data-team="B"]:hover, .team-btn[data-team="B"].selected { border-color: var(--team-b); background: rgba(16,185,129,0.12); }
+  .team-btn[data-team="C"]:hover, .team-btn[data-team="C"].selected { border-color: var(--team-c); background: rgba(236,72,153,0.12); }
+  .team-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .badge {
+    width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; color: #fff; flex-shrink: 0;
+  }
+  .badge.A { background: linear-gradient(135deg, #6366f1, #4338ca); }
+  .badge.B { background: linear-gradient(135deg, #10b981, #047857); }
+  .badge.C { background: linear-gradient(135deg, #ec4899, #be185d); }
+  .team-name { flex: 1; }
+  .team-sub { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 4px; }
+  .screen { display: none; flex-direction: column; flex: 1; }
+  .screen.active { display: flex; }
+  .back { color: var(--muted); font-size: 13px; background: none; border: none; padding: 0; cursor: pointer; margin-top: 28px; font-family: inherit; }
+  .back:hover { color: var(--fg); }
+
+  /* Done screen */
+  .done-card {
+    text-align: center; padding: 60px 24px;
+    background: linear-gradient(135deg, rgba(245,196,81,0.08), rgba(245,196,81,0.02));
+    border: 1px solid rgba(245,196,81,0.2); border-radius: 24px;
+    margin-top: 40px;
+  }
+  .done-check {
+    width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #d4a017);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px; color: #0a0a0f; font-weight: 900;
+  }
+  .done-title { font-size: 26px; font-weight: 800; margin: 0 0 10px; }
+  .done-vote { color: var(--gold); font-size: 16px; margin-top: 14px; font-weight: 600; }
+  .done-tip { color: var(--muted); font-size: 13px; margin-top: 20px; line-height: 1.6; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: auto; padding-top: 40px; color: var(--muted); font-size: 11px; letter-spacing: 0.5px; }
+
+  /* Loading */
+  .loading { opacity: 0.5; pointer-events: none; }
+  .err { color: #ef4444; font-size: 13px; margin-top: 16px; text-align: center; min-height: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">CEO COPILOT · 发布会</div>
+  <h1>现场投票</h1>
+
+  <!-- Screen 1: 选自己队 -->
+  <div class="screen active" id="screen-self">
+    <p class="sub">本场最佳团队由你们一起选出。<br>第一步：告诉我们 <b style="color:var(--fg)">你是哪个队</b>。</p>
+    <div class="step-label">STEP 1 / 2 · 选择你的队</div>
+    <div class="btns">
+      <button class="team-btn" data-team="A" onclick="pickSelf('A')">
+        <span class="badge A">A</span>
+        <span class="team-name">A 队<div class="team-sub">我是 A 队队员</div></span>
+      </button>
+      <button class="team-btn" data-team="B" onclick="pickSelf('B')">
+        <span class="badge B">B</span>
+        <span class="team-name">B 队<div class="team-sub">我是 B 队队员</div></span>
+      </button>
+      <button class="team-btn" data-team="C" onclick="pickSelf('C')">
+        <span class="badge C">C</span>
+        <span class="team-name">C 队<div class="team-sub">我是 C 队队员</div></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Screen 2: 投票 -->
+  <div class="screen" id="screen-vote">
+    <p class="sub">你是 <b id="self-label" style="color:var(--gold)">—</b>。<br>规则：<b style="color:var(--fg)">不能投自己队</b>，只能从其他两队选一个。</p>
+    <div class="step-label">STEP 2 / 2 · 投出你的一票</div>
+    <div class="btns" id="vote-btns"></div>
+    <div class="err" id="err"></div>
+    <button class="back" onclick="resetSelf()">← 选错队了？重新选</button>
+  </div>
+
+  <!-- Screen 3: 完成 -->
+  <div class="screen" id="screen-done">
+    <div class="done-card">
+      <div class="done-check">✓</div>
+      <div class="done-title">投票成功</div>
+      <div class="done-vote">你投给了 <b id="voted-label">—</b></div>
+      <div class="done-tip">请保持本页面打开。<br>主持人会现场亮票，感谢你的参与 ✨</div>
+    </div>
+  </div>
+
+  <div class="footer">一号位 AI 工作坊 · 0523 · 上海深演智进</div>
+</div>
+
+<script>
+  const API = 'https://abacus.jasoncameron.dev';
+  const NS = 'vivian-ws-0523-x7k2';
+  const LS_KEY = 'vivian_ws_0523_voted';
+  const TEAM_META = {
+    A: { name: 'A 队', cls: 'A' },
+    B: { name: 'B 队', cls: 'B' },
+    C: { name: 'C 队', cls: 'C' },
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+  }
+
+  // 已投过票 → 直接到完成页
+  const past = localStorage.getItem(LS_KEY);
+  if (past) {
+    const v = JSON.parse(past);
+    $('voted-label').textContent = TEAM_META[v.voted].name;
+    show('screen-done');
+  }
+
+  let self = null;
+
+  function pickSelf(team) {
+    self = team;
+    $('self-label').textContent = TEAM_META[team].name;
+    const others = ['A', 'B', 'C'].filter(t => t !== team);
+    const box = $('vote-btns');
+    box.innerHTML = '';
+    others.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'team-btn';
+      btn.dataset.team = t;
+      btn.onclick = () => submitVote(t);
+      btn.innerHTML = `
+        <span class="badge ${t}">${t}</span>
+        <span class="team-name">${TEAM_META[t].name}<div class="team-sub">我把票投给 ${t} 队</div></span>
+      `;
+      box.appendChild(btn);
+    });
+    show('screen-vote');
+  }
+
+  function resetSelf() {
+    self = null;
+    $('err').textContent = '';
+    show('screen-self');
+  }
+
+  async function submitVote(team) {
+    if (!self || team === self) return;
+    $('err').textContent = '';
+    document.querySelectorAll('#vote-btns .team-btn').forEach(b => b.classList.add('loading'));
+    try {
+      const r = await fetch(`${API}/hit/${NS}/team-${team.toLowerCase()}`, { method: 'GET' });
+      if (!r.ok) throw new Error('网络错误');
+      const data = await r.json();
+      localStorage.setItem(LS_KEY, JSON.stringify({ self, voted: team, ts: Date.now(), count: data.value }));
+      $('voted-label').textContent = TEAM_META[team].name;
+      show('screen-done');
+    } catch (e) {
+      $('err').textContent = '投票失败，请检查网络后再试一次';
+      document.querySelectorAll('#vote-btns .team-btn').forEach(b => b.classList.remove('loading'));
+    }
+  }
+</script>
+</body>
+</html>
