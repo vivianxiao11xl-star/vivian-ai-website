@@ -22,6 +22,8 @@ files = [
     'day1-evening.html',
     'day2-morning.html',
     'day2-afternoon.html',
+    'day2-afternoon-vivian.html',
+    'day2-afternoon-challenge.html',
 ]
 
 print("=== Patching encrypted files ===")
