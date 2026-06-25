@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>现场投票 · 0625 一号位 AI 工作坊</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-2: #15151c;
+    --fg: #f5f5f7;
+    --muted: #8a8a96;
+    --gold: #f5c451;
+    --team-a: #6366f1;
+    --team-a-2: #4338ca;
+    --team-b: #10b981;
+    --team-b-2: #047857;
+    --team-c: #ec4899;
+    --team-c-2: #be185d;
+    --team-d: #f97316;
+    --team-d-2: #c2410c;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: var(--bg); color: var(--fg); font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 62%); }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 34px 22px 54px; min-height: 100vh; display: flex; flex-direction: column; }
+  .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: 3.5px; font-weight: 800; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 30px; font-weight: 900; margin: 0 0 10px; letter-spacing: -0.6px; }
+  .sub { color: var(--muted); font-size: 14px; line-height: 1.65; margin: 0 0 28px; }
+  .step-label { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: 1px; margin-bottom: 14px; }
+  .btns { display: flex; flex-direction: column; gap: 12px; }
+  .team-btn {
+    appearance: none; border: 2px solid rgba(255,255,255,0.08);
+    background: var(--bg-2); color: var(--fg);
+    padding: 18px 18px; border-radius: 16px; font-size: 18px; font-weight: 800;
+    cursor: pointer; transition: transform .15s, border-color .15s, background .15s; text-align: left;
+    display: flex; align-items: center; gap: 14px; font-family: inherit;
+    -webkit-user-select: none; user-select: none;
+  }
+  .team-btn:active { transform: scale(0.985); }
+  .team-btn[data-team="A"]:hover, .team-btn[data-team="A"].selected { border-color: var(--team-a); background: color-mix(in srgb, var(--team-a) 18%, transparent); }
+  .badge.A { background: linear-gradient(135deg, var(--team-a), var(--team-a-2)); }
+  .team-btn[data-team="B"]:hover, .team-btn[data-team="B"].selected { border-color: var(--team-b); background: color-mix(in srgb, var(--team-b) 18%, transparent); }
+  .badge.B { background: linear-gradient(135deg, var(--team-b), var(--team-b-2)); }
+  .team-btn[data-team="C"]:hover, .team-btn[data-team="C"].selected { border-color: var(--team-c); background: color-mix(in srgb, var(--team-c) 18%, transparent); }
+  .badge.C { background: linear-gradient(135deg, var(--team-c), var(--team-c-2)); }
+  .team-btn[data-team="D"]:hover, .team-btn[data-team="D"].selected { border-color: var(--team-d); background: color-mix(in srgb, var(--team-d) 18%, transparent); }
+  .badge.D { background: linear-gradient(135deg, var(--team-d), var(--team-d-2)); }
+  .team-btn.loading { opacity: 0.42; pointer-events: none; }
+  .badge {
+    width: 54px; height: 54px; border-radius: 15px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 950; color: #fff; flex-shrink: 0;
+  }
+  .team-name { flex: 1; line-height: 1.25; }
+  .team-sub { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 6px; line-height: 1.4; }
+  .screen { display: none; flex-direction: column; flex: 1; }
+  .screen.active { display: flex; }
+  .back { color: var(--muted); font-size: 13px; background: none; border: none; padding: 0; cursor: pointer; margin-top: 24px; font-family: inherit; }
+  .back:hover { color: var(--fg); }
+  .done-card {
+    text-align: center; padding: 58px 22px;
+    background: linear-gradient(135deg, rgba(245,196,81,0.09), rgba(245,196,81,0.02));
+    border: 1px solid rgba(245,196,81,0.22); border-radius: 24px;
+    margin-top: 34px;
+  }
+  .done-check {
+    width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #d4a017);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px; color: #0a0a0f; font-weight: 950;
+  }
+  .done-title { font-size: 26px; font-weight: 900; margin: 0 0 10px; }
+  .done-vote { color: var(--gold); font-size: 16px; margin-top: 14px; font-weight: 700; }
+  .done-tip { color: var(--muted); font-size: 13px; margin-top: 20px; line-height: 1.65; }
+  .footer { text-align: center; margin-top: auto; padding-top: 34px; color: var(--muted); font-size: 11px; letter-spacing: .5px; }
+  .err { color: #f87171; font-size: 13px; margin-top: 14px; text-align: center; min-height: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">DAY1 · AI 员工发布会</div>
+  <h1>今晚最佳团队投票</h1>
+
+  <div class="screen active" id="screen-self">
+    <p class="sub">每人只有 1 票。<br>第一步：先选择 <b style="color:var(--fg)">你所在的小组</b>，系统会自动隐藏自己的组。</p>
+    <div class="step-label">STEP 1 / 2 · 选择你的组</div>
+    <div class="btns">
+      <button class="team-btn" data-team="A" onclick="pickSelf('A')">
+        <span class="badge A">A</span>
+        <span class="team-name">A 组 · 未来门店 AI 教练<div class="team-sub">李晶蕾、尹春梅、潘锋、张骞</div></span>
+      </button>
+      <button class="team-btn" data-team="B" onclick="pickSelf('B')">
+        <span class="badge B">B</span>
+        <span class="team-name">B 组 · AI 经营驾驶舱<div class="team-sub">马永会、尹滋、李晔、高佳琪</div></span>
+      </button>
+      <button class="team-btn" data-team="C" onclick="pickSelf('C')">
+        <span class="badge C">C</span>
+        <span class="team-name">C 组 · AI 组织复制官<div class="team-sub">刘慧、杨德升、赵俊老师、叶伟强</div></span>
+      </button>
+      <button class="team-btn" data-team="D" onclick="pickSelf('D')">
+        <span class="badge D">D</span>
+        <span class="team-name">D 组 · 品牌增长 AI 员工<div class="team-sub">宁新珂、舒晗、黄智威、任咪咪</div></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-vote">
+    <p class="sub">你是 <b id="self-label" style="color:var(--gold)">—</b>。<br>规则：<b style="color:var(--fg)">不能投自己组</b>，只能从其他 3 组中选择 1 组。</p>
+    <div class="step-label">STEP 2 / 2 · 投出你的一票</div>
+    <div class="btns" id="vote-btns"></div>
+    <div class="err" id="err"></div>
+    <button class="back" onclick="resetSelf()">← 选错组了？重新选</button>
+  </div>
+
+  <div class="screen" id="screen-done">
+    <div class="done-card">
+      <div class="done-check">✓</div>
+      <div class="done-title">投票成功</div>
+      <div class="done-vote">你投给了 <b id="voted-label">—</b></div>
+      <div class="done-tip">本手机已完成投票，不能重复提交。<br>请等待主持人现场亮票 ✨</div>
+    </div>
+  </div>
+
+  <div class="footer">一号位 AI 工作坊 · 0625 · Vivian</div>
+</div>
+
+<script>
+  const API = 'https://abacus.jasoncameron.dev';
+  const NS = 'vivian-ws-0625-day1-vote-v3';
+  const LS_KEY = 'vivian_ws_0625_day1_vote_v1';
+  const TEAMS = ['A','B','C','D'];
+  const TEAM_META = {
+    A: { name: 'A 组', title: '未来门店 AI 教练', members: '李晶蕾、尹春梅、潘锋、张骞', cls: 'A' },
+    B: { name: 'B 组', title: 'AI 经营驾驶舱', members: '马永会、尹滋、李晔、高佳琪', cls: 'B' },
+    C: { name: 'C 组', title: 'AI 组织复制官', members: '刘慧、杨德升、赵俊老师、叶伟强', cls: 'C' },
+    D: { name: 'D 组', title: '品牌增长 AI 员工', members: '宁新珂、舒晗、黄智威、任咪咪', cls: 'D' }
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+  }
+
+  try {
+    const past = localStorage.getItem(LS_KEY);
+    if (past) {
+      const v = JSON.parse(past);
+      $('voted-label').textContent = `${TEAM_META[v.voted].name} · ${TEAM_META[v.voted].title}`;
+      show('screen-done');
+    }
+  } catch (e) { localStorage.removeItem(LS_KEY); }
+
+  let self = null;
+
+  function pickSelf(team) {
+    self = team;
+    $('self-label').textContent = `${TEAM_META[team].name} · ${TEAM_META[team].title}`;
+    const others = TEAMS.filter(t => t !== team);
+    const box = $('vote-btns');
+    box.innerHTML = '';
+    others.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'team-btn';
+      btn.dataset.team = t;
+      btn.onclick = () => submitVote(t);
+      btn.innerHTML = `
+        <span class="badge ${t}">${t}</span>
+        <span class="team-name">${TEAM_META[t].name} · ${TEAM_META[t].title}<div class="team-sub">我把票投给 ${TEAM_META[t].name}</div></span>
+      `;
+      box.appendChild(btn);
+    });
+    show('screen-vote');
+  }
+
+  function resetSelf() {
+    self = null;
+    $('err').textContent = '';
+    show('screen-self');
+  }
+
+  async function submitVote(team) {
+    if (!self || team === self) return;
+    if (localStorage.getItem(LS_KEY)) { show('screen-done'); return; }
+    $('err').textContent = '';
+    document.querySelectorAll('#vote-btns .team-btn').forEach(b => b.classList.add('loading'));
+    try {
+      const r = await fetch(`${API}/hit/${NS}/team-${team.toLowerCase()}`, { method: 'GET', cache: 'no-store' });
+      if (!r.ok) throw new Error('网络错误');
+      const data = await r.json();
+      localStorage.setItem(LS_KEY, JSON.stringify({ self, voted: team, ts: Date.now(), count: data.value }));
+      $('voted-label').textContent = `${TEAM_META[team].name} · ${TEAM_META[team].title}`;
+      show('screen-done');
+    } catch (e) {
+      $('err').textContent = '投票失败，请检查网络后再试一次';
+      document.querySelectorAll('#vote-btns .team-btn').forEach(b => b.classList.remove('loading'));
+    }
+  }
+</script>
+</body>
+</html>
