@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>恭喜冠军组 · 0625 一号位 AI 工作坊</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --fg: #f5f5f7;
+    --muted: #8a8a96;
+    --gold: #f5c451;
+    --gold-2: #fff1a8;
+    --team-a: #6366f1;
+    --team-a-2: #4338ca;
+    --team-b: #10b981;
+    --team-b-2: #047857;
+    --team-c: #ec4899;
+    --team-c-2: #be185d;
+    --team-d: #f97316;
+    --team-d-2: #c2410c;
+    --team: var(--gold);
+    --team-2: #d4a017;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+    background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background:
+      radial-gradient(circle at 50% 18%, rgba(245,196,81,.22), transparent 30%),
+      radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--team) 28%, transparent), transparent 28%),
+      radial-gradient(circle at 80% 18%, color-mix(in srgb, var(--team-2) 22%, transparent), transparent 28%),
+      radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 62%);
+  }
+  .stage {
+    position: relative; width: 100vw; height: 100vh;
+    display: grid; place-items: center; padding: 5vh 7vw;
+  }
+  .halo {
+    position: absolute; width: min(70vw, 760px); height: min(70vw, 760px); border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,196,81,.18), transparent 62%);
+    filter: blur(2px); animation: pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { transform: scale(.96); opacity: .7; } 50% { transform: scale(1.04); opacity: 1; } }
+  .card {
+    position: relative; z-index: 2; text-align: center;
+    width: min(1080px, 100%); padding: 54px 48px 48px;
+    border: 1px solid rgba(245,196,81,.28); border-radius: 36px;
+    background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.035));
+    box-shadow: 0 36px 120px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter: blur(18px);
+  }
+  .eyebrow {
+    color: var(--gold); font-size: 15px; font-weight: 900; letter-spacing: 7px;
+    text-transform: uppercase; margin-bottom: 18px;
+  }
+  .crown { font-size: 88px; line-height: 1; margin-bottom: 10px; filter: drop-shadow(0 14px 30px rgba(245,196,81,.36)); }
+  h1 {
+    margin: 0; font-size: clamp(58px, 9vw, 118px); line-height: .95;
+    letter-spacing: -4px; font-weight: 950;
+    background: linear-gradient(180deg, #fff 0%, var(--gold-2) 45%, var(--gold) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 0 50px rgba(245,196,81,.18);
+  }
+  .winner {
+    margin: 34px auto 18px; display: inline-flex; align-items: center; gap: 22px;
+    padding: 18px 28px 18px 18px; border-radius: 24px;
+    background: rgba(0,0,0,.22); border: 1px solid rgba(255,255,255,.12);
+  }
+  .badge {
+    width: 88px; height: 88px; border-radius: 24px;
+    display: grid; place-items: center; color: #fff;
+    font-size: 48px; font-weight: 950;
+    background: linear-gradient(135deg, var(--team), var(--team-2));
+    box-shadow: 0 20px 52px color-mix(in srgb, var(--team) 42%, transparent);
+  }
+  .winner-text { text-align: left; }
+  .team-name { font-size: 38px; font-weight: 950; letter-spacing: -1px; }
+  .team-title { margin-top: 6px; color: var(--muted); font-size: 20px; font-weight: 650; }
+  .slogan {
+    color: rgba(245,245,247,.88); font-size: clamp(22px, 3.2vw, 36px); line-height: 1.35;
+    font-weight: 800; margin: 24px 0 0;
+  }
+  .sub { color: var(--muted); font-size: 17px; margin-top: 18px; letter-spacing: .5px; }
+  .controls {
+    position: fixed; right: 22px; bottom: 18px; z-index: 5;
+    display: flex; gap: 8px; opacity: .28; transition: opacity .2s;
+  }
+  .controls:hover { opacity: 1; }
+  .controls button {
+    border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); color: var(--fg);
+    border-radius: 999px; padding: 8px 12px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800;
+  }
+  .spark {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+    animation: fall linear infinite; opacity: .9;
+  }
+  @keyframes fall {
+    from { transform: translateY(-12vh) rotate(0deg); opacity: 1; }
+    to { transform: translateY(112vh) rotate(360deg); opacity: .15; }
+  }
+  @media (max-width: 800px) {
+    .card { padding: 42px 24px 34px; border-radius: 28px; }
+    .eyebrow { font-size: 12px; letter-spacing: 4px; }
+    .crown { font-size: 66px; }
+    .winner { gap: 14px; padding: 14px 18px 14px 14px; }
+    .badge { width: 68px; height: 68px; border-radius: 18px; font-size: 36px; }
+    .team-name { font-size: 28px; }
+    .team-title { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="halo"></div>
+  <main class="card">
+    <div class="eyebrow">DAY1 · AI 员工发布会</div>
+    <div class="crown">👑</div>
+    <h1>恭喜冠军组</h1>
+    <div class="winner">
+      <div class="badge" id="badge">冠</div>
+      <div class="winner-text">
+        <div class="team-name" id="teamName">冠军组</div>
+        <div class="team-title" id="teamTitle">今晚最有发布感的 AI 员工团队</div>
+      </div>
+    </div>
+    <div class="slogan">1 小时，把想法变成可发布的 AI 员工。</div>
+    <div class="sub">一号位 AI 工作坊 · 2026.06.25</div>
+  </main>
+  <div class="controls" aria-label="切换冠军组">
+    <button onclick="setWinner('A')">A</button>
+    <button onclick="setWinner('B')">B</button>
+    <button onclick="setWinner('C')">C</button>
+    <button onclick="setWinner('D')">D</button>
+    <button onclick="setWinner('')">通用</button>
+  </div>
+</div>
+<script>
+  const TEAMS = {
+    A: { name: 'A 组', title: '未来门店 AI 教练', color: '#6366f1', color2: '#4338ca' },
+    B: { name: 'B 组', title: 'AI 经营驾驶舱', color: '#10b981', color2: '#047857' },
+    C: { name: 'C 组', title: 'AI 组织复制官', color: '#ec4899', color2: '#be185d' },
+    D: { name: 'D 组', title: '品牌增长 AI 员工', color: '#f97316', color2: '#c2410c' }
+  };
+  function setWinner(team) {
+    const root = document.documentElement;
+    const badge = document.getElementById('badge');
+    const teamName = document.getElementById('teamName');
+    const teamTitle = document.getElementById('teamTitle');
+    const t = TEAMS[(team || '').toUpperCase()];
+    if (!t) {
+      root.style.setProperty('--team', 'var(--gold)');
+      root.style.setProperty('--team-2', '#d4a017');
+      badge.textContent = '冠';
+      teamName.textContent = '冠军组';
+      teamTitle.textContent = '今晚最有发布感的 AI 员工团队';
+      history.replaceState(null, '', location.pathname);
+      return;
+    }
+    root.style.setProperty('--team', t.color);
+    root.style.setProperty('--team-2', t.color2);
+    badge.textContent = team.toUpperCase();
+    teamName.textContent = `${t.name} · 冠军`; 
+    teamTitle.textContent = t.title;
+    history.replaceState(null, '', `${location.pathname}?team=${team.toUpperCase()}`);
+  }
+  function makeSparks() {
+    const stage = document.querySelector('.stage');
+    for (let i = 0; i < 72; i++) {
+      const s = document.createElement('div');
+      s.className = 'spark';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.animationDuration = (4 + Math.random() * 5) + 's';
+      s.style.animationDelay = (-Math.random() * 8) + 's';
+      s.style.width = s.style.height = (4 + Math.random() * 7) + 'px';
+      s.style.background = Math.random() > .5 ? 'var(--gold)' : 'var(--team)';
+      stage.appendChild(s);
+    }
+  }
+  document.addEventListener('keydown', e => {
+    const map = { '1':'A', '2':'B', '3':'C', '4':'D', 'a':'A', 'b':'B', 'c':'C', 'd':'D' };
+    if (map[e.key.toLowerCase()]) setWinner(map[e.key.toLowerCase()]);
+  });
+  makeSparks();
+  setWinner(new URLSearchParams(location.search).get('team') || '');
+</script>
+</body>
+</html>
