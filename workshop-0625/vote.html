@@ -18,9 +18,7 @@
     --team-b-2: #047857;
     --team-c: #ec4899;
     --team-c-2: #be185d;
-    --team-d: #f97316;
-    --team-d-2: #c2410c;
-  }
+      }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; padding: 0; min-height: 100vh; background: var(--bg); color: var(--fg); font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; }
   body { background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg) 62%); }
@@ -45,8 +43,6 @@
   .badge.B { background: linear-gradient(135deg, var(--team-b), var(--team-b-2)); }
   .team-btn[data-team="C"]:hover, .team-btn[data-team="C"].selected { border-color: var(--team-c); background: color-mix(in srgb, var(--team-c) 18%, transparent); }
   .badge.C { background: linear-gradient(135deg, var(--team-c), var(--team-c-2)); }
-  .team-btn[data-team="D"]:hover, .team-btn[data-team="D"].selected { border-color: var(--team-d); background: color-mix(in srgb, var(--team-d) 18%, transparent); }
-  .badge.D { background: linear-gradient(135deg, var(--team-d), var(--team-d-2)); }
   .team-btn.loading { opacity: 0.42; pointer-events: none; }
   .badge {
     width: 54px; height: 54px; border-radius: 15px; display: flex; align-items: center; justify-content: center;
@@ -79,8 +75,8 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">DAY1 · AI 员工发布会</div>
-  <h1>今晚最佳团队投票</h1>
+  <div class="eyebrow">0625 · 现场打分投票</div>
+  <h1>最佳团队投票</h1>
 
   <div class="screen active" id="screen-self">
     <p class="sub">每人只有 1 票。<br>第一步：先选择 <b style="color:var(--fg)">你所在的小组</b>，系统会自动隐藏自己的组。</p>
@@ -98,15 +94,11 @@
         <span class="badge C">C</span>
         <span class="team-name">C 组 · AI 组织复制官<div class="team-sub">刘慧、杨德升、赵俊老师、叶伟强</div></span>
       </button>
-      <button class="team-btn" data-team="D" onclick="pickSelf('D')">
-        <span class="badge D">D</span>
-        <span class="team-name">D 组 · 品牌增长 AI 员工<div class="team-sub">宁新珂、舒晗、黄智威、任咪咪</div></span>
-      </button>
     </div>
   </div>
 
   <div class="screen" id="screen-vote">
-    <p class="sub">你是 <b id="self-label" style="color:var(--gold)">—</b>。<br>规则：<b style="color:var(--fg)">不能投自己组</b>，只能从其他 3 组中选择 1 组。</p>
+    <p class="sub">你是 <b id="self-label" style="color:var(--gold)">—</b>。<br>规则：<b style="color:var(--fg)">不能投自己组</b>，只能从其他 2 组中选择 1 组。</p>
     <div class="step-label">STEP 2 / 2 · 投出你的一票</div>
     <div class="btns" id="vote-btns"></div>
     <div class="err" id="err"></div>
@@ -128,13 +120,12 @@
 <script>
   const API = 'https://abacus.jasoncameron.dev';
   const NS = 'vivian-ws-0625-day1-vote-v3';
-  const LS_KEY = 'vivian_ws_0625_day1_vote_v1';
-  const TEAMS = ['A','B','C','D'];
+  const LS_KEY = 'vivian_ws_0625_abc_vote_v1';
+  const TEAMS = ['A','B','C'];
   const TEAM_META = {
     A: { name: 'A 组', title: '未来门店 AI 教练', members: '李晶蕾、尹春梅、潘锋、张骞', cls: 'A' },
     B: { name: 'B 组', title: 'AI 经营驾驶舱', members: '马永会、尹滋、李晔、高佳琪', cls: 'B' },
-    C: { name: 'C 组', title: 'AI 组织复制官', members: '刘慧、杨德升、赵俊老师、叶伟强', cls: 'C' },
-    D: { name: 'D 组', title: '品牌增长 AI 员工', members: '宁新珂、舒晗、黄智威、任咪咪', cls: 'D' }
+    C: { name: 'C 组', title: 'AI 组织复制官', members: '刘慧、杨德升、赵俊老师、叶伟强', cls: 'C' }
   };
 
   function $(id) { return document.getElementById(id); }
