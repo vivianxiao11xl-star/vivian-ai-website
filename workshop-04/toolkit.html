@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>工作坊武器库 · Cohort 04</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #1d1d1f;
+    --gray-1: #4a4a4f;
+    --gray-2: #6e6e73;
+    --gray-3: #86868b;
+    --gray-4: #d2d2d7;
+    --bg: #fafaf9;
+    --bg-card: #ffffff;
+    --blue: #0071e3;
+    --blue-soft: #2997ff;
+    --blue-bg: rgba(0,113,227,0.08);
+    --warm: #ea580c;
+    --warm-2: #c2410c;
+    --warm-bg: rgba(234,88,12,0.08);
+    --gold: #FFC857;
+    --border: rgba(0,0,0,0.06);
+    --border-soft: rgba(0,0,0,0.04);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--gray-1);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,249,0.88);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 24px;
+    height: 54px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand {
+    font-size: 14px; font-weight: 700; color: var(--black);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--warm));
+    flex-shrink: 0;
+  }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a {
+    font-size: 13px; color: var(--gray-2); font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--black); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 130px 24px 64px;
+    max-width: 880px; margin: 0 auto; text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; color: var(--blue);
+    background: var(--blue-bg); padding: 7px 18px;
+    border-radius: 20px; margin-bottom: 28px; letter-spacing: 2px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 64px); font-weight: 900;
+    line-height: 1.08; letter-spacing: -2px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #1d1d1f 30%, #0071e3 70%, #ea580c 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub {
+    font-size: 18px; color: var(--gray-2); line-height: 1.7;
+    max-width: 640px; margin: 0 auto 40px; font-weight: 400;
+  }
+  .hero-meta {
+    display: flex; justify-content: center; gap: 48px;
+    padding-top: 32px; border-top: 1px solid var(--border); flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-size: 32px; font-weight: 800; color: var(--black); letter-spacing: -0.5px; }
+  .hero-stat-label { font-size: 12px; color: var(--gray-3); margin-top: 4px; }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 80px 24px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    display: inline-block; font-size: 12px; font-weight: 700;
+    color: var(--blue); letter-spacing: 3px;
+    margin-bottom: 14px; text-transform: uppercase;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 40px); font-weight: 800;
+    letter-spacing: -1px; line-height: 1.2; color: var(--black); margin-bottom: 14px;
+  }
+  .section-lead {
+    font-size: 17px; color: var(--gray-2); max-width: 640px; line-height: 1.65;
+  }
+
+  /* ===== STUDENTS ===== */
+  #students { background: #fff; }
+  .students-header { text-align: center; margin-bottom: 48px; }
+  .student-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+  .student-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .student-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.07); }
+  .student-avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900; color: #fff;
+  }
+  .av-1  { background: linear-gradient(135deg, #c2185b, #f48fb1); }
+  .av-2  { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+  .av-3  { background: linear-gradient(135deg, #6a1b9a, #ce93d8); }
+  .av-4  { background: linear-gradient(135deg, #2e7d32, #81c784); }
+  .av-5  { background: linear-gradient(135deg, #00695c, #4dd0e1); }
+  .av-6  { background: linear-gradient(135deg, #e65100, #ffb74d); }
+  .av-7  { background: linear-gradient(135deg, #283593, #7986cb); }
+  .av-8  { background: linear-gradient(135deg, #f57f17, #fff176); }
+  .av-9  { background: linear-gradient(135deg, #b71c1c, #ef9a9a); }
+  .av-10 { background: linear-gradient(135deg, #1b5e20, #a5d6a7); }
+  .av-11 { background: linear-gradient(135deg, #01579b, #80cbc4); }
+  .av-12 { background: linear-gradient(135deg, #bf360c, #ff8a65); }
+  .av-13 { background: linear-gradient(135deg, #4527a0, #b39ddb); }
+  .student-name { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+  .student-co   { font-size: 12px; color: var(--gray-3); line-height: 1.4; }
+
+  .galaxy-banner {
+    margin-top: 36px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    border-radius: 16px; padding: 24px 32px;
+    text-decoration: none; color: inherit;
+    transition: filter 0.2s, transform 0.2s;
+  }
+  .galaxy-banner:hover { filter: brightness(1.12); transform: translateY(-2px); }
+  .galaxy-star { font-size: 28px; }
+  .galaxy-text h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .galaxy-text p  { font-size: 13px; color: rgba(255,255,255,0.55); }
+  .galaxy-arrow   { font-size: 20px; color: var(--gold); margin-left: auto; }
+
+  /* ===== NOTES ===== */
+  #notes { background: var(--bg); }
+  .day-label {
+    font-size: 14px; font-weight: 700; color: var(--blue);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-top: 40px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .day-date { font-size: 14px; color: var(--gray-3); font-weight: 400; letter-spacing: 0; }
+  .notes-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+  }
+  .note-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px 28px;
+    display: flex; flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none; color: inherit;
+  }
+  .note-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
+  .note-time { font-size: 11px; color: var(--gray-3); margin-bottom: 8px; }
+  .note-title { font-size: 18px; font-weight: 800; color: var(--black); letter-spacing: -0.3px; margin-bottom: 10px; }
+  .note-quote {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13.5px; color: var(--gray-2); line-height: 1.7;
+    margin-bottom: 16px; flex: 1;
+  }
+  .note-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .note-tag {
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; background: var(--blue-bg); color: var(--blue);
+  }
+  .note-tag.warm { background: var(--warm-bg); color: var(--warm-2); }
+  .note-link { font-size: 13px; font-weight: 600; color: var(--blue); }
+
+  .note-card.pending {
+    border-style: dashed; opacity: 0.65; cursor: default; pointer-events: none;
+  }
+  .note-card.pending:hover { transform: none; box-shadow: none; }
+  .note-status { font-size: 12px; color: var(--gray-3); margin-bottom: 8px; }
+
+  /* ===== ARSENAL ===== */
+  #arsenal { background: #fff; }
+  .arsenal-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    margin-top: 40px;
+  }
+  @media (max-width: 900px) {
+    .arsenal-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .arsenal-category {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px;
+  }
+  .cat-icon { font-size: 24px; margin-bottom: 12px; }
+  .cat-name {
+    font-size: 15px; font-weight: 800; color: var(--black);
+    margin-bottom: 4px; letter-spacing: -0.2px;
+  }
+  .cat-desc { font-size: 12px; color: var(--gray-3); margin-bottom: 18px; }
+  .tool-list { display: flex; flex-direction: column; gap: 10px; }
+  .tool-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+    transition: box-shadow 0.2s;
+  }
+  .tool-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+  .tool-emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .tool-body { flex: 1; }
+  .tool-name { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 2px; }
+  .tool-desc { font-size: 12px; color: var(--gray-2); line-height: 1.5; }
+  .tool-link {
+    display: inline-block; margin-top: 6px;
+    font-size: 11px; font-weight: 600; color: var(--blue);
+    background: var(--blue-bg); padding: 3px 10px; border-radius: 20px;
+    text-decoration: none;
+  }
+
+  /* ===== MOMENTS TEASER ===== */
+  #moments { background: var(--bg); }
+  .moments-teaser {
+    margin-top: 40px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #0a0a0a;
+    position: relative;
+  }
+  .moments-photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    height: 340px;
+    overflow: hidden;
+  }
+  .moments-photo-strip img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    display: block;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+  }
+  .moments-photo-strip img:hover { opacity: 1; }
+  .moments-teaser-body {
+    padding: 32px 36px 36px;
+    background: linear-gradient(180deg, #111 0%, #0a0a0a 100%);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+  }
+  .moments-teaser-info { flex: 1; min-width: 220px; }
+  .moments-teaser-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 3px;
+    color: #ff9f7a; margin-bottom: 10px; text-transform: uppercase;
+  }
+  .moments-teaser-title {
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    font-size: 26px; font-weight: 700; color: #fff;
+    line-height: 1.3; margin-bottom: 14px;
+  }
+  .moments-teaser-stats {
+    display: flex; gap: 28px; flex-wrap: wrap;
+  }
+  .moments-teaser-stat { }
+  .moments-teaser-stat-num {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 22px; font-weight: 800;
+    background: linear-gradient(135deg, #ff7a59, #ffb38a);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .moments-teaser-stat-label {
+    font-size: 11px; color: rgba(255,255,255,0.45);
+    letter-spacing: 1.5px; margin-top: 2px;
+  }
+  .moments-teaser-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 50px;
+    background: rgba(255,122,89,0.15);
+    border: 1px solid rgba(255,122,89,0.3);
+    color: #ff9f7a; font-size: 14px; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    flex-shrink: 0;
+  }
+  .moments-teaser-btn:hover {
+    background: rgba(255,122,89,0.25);
+    border-color: rgba(255,122,89,0.5);
+    transform: translateX(3px);
+  }
+  @media(max-width: 720px) {
+    .moments-photo-strip { height: 220px; grid-template-columns: 1fr; }
+    .moments-photo-strip img:nth-child(n+2) { display: none; }
+    .moments-teaser-body { padding: 24px 22px 28px; }
+    .moments-teaser-title { font-size: 22px; }
+    .moments-teaser-btn { width: 100%; justify-content: center; }
+  }
+
+  /* ===== QUOTE BANNER ===== */
+  /* ===== CERTIFICATE DUO ===== */
+  .cert-duo {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin-top: 40px; max-width: 1100px; margin-left: auto; margin-right: auto;
+  }
+  .cert-duo-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--gray-3); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 720px) { .cert-duo { grid-template-columns: 1fr; } }
+
+  /* ===== QUOTE WALL ===== */
+  .quotes-section {
+    padding: 60px 24px;
+    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d35 100%);
+  }
+  .quotes-section .section-inner { max-width: 1100px; }
+  .quotes-section .section-eyebrow { color: rgba(255,255,255,0.4); }
+  .quote-wall {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-top: 32px;
+  }
+  .qw-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 24px 22px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .qw-card p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px; font-weight: 500; line-height: 1.75;
+    color: rgba(255,255,255,0.85); flex: 1;
+  }
+  .qw-card p strong {
+    background: linear-gradient(135deg, #60a5fa, #fbbf24);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .qw-attr {
+    margin-top: 16px; font-size: 12px;
+    color: rgba(255,255,255,0.35); letter-spacing: 1px;
+  }
+  @media (max-width: 900px) { .quote-wall { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .quote-wall { grid-template-columns: 1fr; } }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 24px 60px; text-align: center;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-brand { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 10px; }
+  .footer-meta { font-size: 13px; color: var(--gray-3); line-height: 1.8; }
+  .footer-meta a { color: var(--blue); }
+
+  /* ===== GALAXY IFRAME EMBED ===== */
+  .galaxy-embed-wrap {
+    margin-top: 36px;
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    background: #050818;
+    position: relative;
+  }
+  .galaxy-embed-wrap iframe {
+    display: block; width: 100%; height: 720px; border: none;
+  }
+  .galaxy-caption {
+    background: #050818; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .galaxy-caption-text { font-size: 12px; color: rgba(255,255,255,0.38); }
+  .galaxy-caption-link {
+    font-size: 12px; font-weight: 600; color: #f5d27a;
+    text-decoration: none; letter-spacing: 0.3px;
+  }
+  .galaxy-caption-link:hover { color: #fde68a; }
+
+  /* ===== PROMPT EXPAND / COPY ===== */
+  .prompt-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px;
+    transition: box-shadow 0.2s;
+  }
+  .prompt-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+  .prompt-header { display: flex; align-items: flex-start; gap: 12px; }
+  .prompt-header .tool-emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .prompt-header .tool-body { flex: 1; }
+  .prompt-toggle {
+    font-size: 11px; font-weight: 600; color: var(--blue);
+    background: var(--blue-bg); padding: 3px 10px; border-radius: 20px;
+    border: none; cursor: pointer; margin-top: 6px; display: inline-block;
+    font-family: inherit;
+  }
+  .prompt-toggle:hover { background: rgba(0,113,227,0.14); }
+  .prompt-content {
+    display: none; margin-top: 12px;
+    background: #f0f4fa; border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace; font-size: 11.5px;
+    color: #2d3748; line-height: 1.75; white-space: pre-wrap; word-break: break-word;
+    border: 1px solid rgba(0,113,227,0.1);
+  }
+  .prompt-copy-btn {
+    margin-top: 10px; display: inline-block;
+    font-size: 11px; font-weight: 600; color: #fff;
+    background: var(--blue); padding: 5px 14px; border-radius: 20px;
+    border: none; cursor: pointer; font-family: inherit;
+    transition: background 0.2s;
+  }
+  .prompt-copy-btn.copied { background: #16a34a; }
+
+  /* ===== VIVIAN 精选 FRAME ===== */
+  .arsenal-category.vivian-pick {
+    background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 60%, #fde68a 100%);
+    border: 2px solid #f59e0b;
+    position: relative;
+  }
+  .vivian-pick-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fff; font-size: 11px; font-weight: 800;
+    padding: 4px 12px; border-radius: 20px; letter-spacing: 0.8px;
+    margin-bottom: 6px; box-shadow: 0 2px 8px rgba(245,158,11,0.3);
+  }
+  .vivian-pick-author {
+    font-size: 11px; color: #92400e; font-weight: 600;
+    margin-bottom: 14px; letter-spacing: 0.3px;
+  }
+  .vivian-pick .cat-icon { font-size: 24px; }
+  .vivian-pick .cat-name { color: #78350f; }
+  .vivian-pick .cat-desc { color: #92400e; }
+  .vivian-pick .tool-item {
+    border-color: rgba(245,158,11,0.25); background: rgba(255,255,255,0.75);
+  }
+  .vivian-pick .tool-item:hover { box-shadow: 0 4px 14px rgba(245,158,11,0.14); }
+  .vivian-pick .tool-link { background: rgba(245,158,11,0.14); color: #b45309; }
+  .vivian-pick .tool-link:hover { background: rgba(245,158,11,0.22); }
+
+  /* ===== 高质量信息源 ===== */
+  .intel-platform-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--blue); background: var(--blue-bg);
+    padding: 3px 10px; border-radius: 20px;
+    margin: 10px 0 8px;
+  }
+  .intel-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 0; border-bottom: 1px solid var(--border);
+  }
+  .intel-item:last-of-type { border-bottom: none; }
+  .intel-name { font-size: 13px; font-weight: 600; color: var(--black); }
+  .intel-tag {
+    font-size: 10px; font-weight: 600; padding: 2px 8px;
+    border-radius: 20px; background: var(--bg); color: var(--gray-2);
+    border: 1px solid var(--border); white-space: nowrap;
+  }
+  .intel-tag.self {
+    background: rgba(0,113,227,0.08); color: var(--blue); border-color: rgba(0,113,227,0.2);
+  }
+  /* Vivian精选 子标题 */
+  .intel-section-label {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--gray-2); text-transform: uppercase;
+    padding: 8px 0 6px; border-top: 1px solid var(--border); margin-top: 8px;
+  }
+  .intel-section-label:first-child { border-top: none; margin-top: 0; }
+
+  /* ===== TWIN CHALLENGE ===== */
+  .twin-section { text-align: center; margin-top: 56px; }
+  .twin-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700;
+    color: var(--brand-gold); letter-spacing: 3px;
+    text-transform: uppercase; margin-bottom: 18px;
+    padding: 6px 18px; border: 1px solid rgba(0,113,227,.28);
+    border-radius: 999px; background: rgba(0,113,227,.05);
+  }
+  .twin-title {
+    font-size: clamp(28px, 4vw, 42px); font-weight: 900;
+    color: var(--text-primary); line-height: 1.15;
+    letter-spacing: -1px; margin-bottom: 14px;
+  }
+  .twin-sub {
+    font-size: 15px; color: var(--text-subtle);
+    line-height: 1.75; max-width: 640px; margin: 0 auto;
+  }
+  .twin-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 22px; margin-top: 36px;
+  }
+  .twin-card {
+    position: relative; overflow: hidden;
+    border-radius: 24px; padding: 48px 44px 40px;
+    text-align: left; color: #fff; text-decoration: none;
+    display: flex; flex-direction: column; min-height: 380px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .twin-card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.18); }
+  .twin-card.warm   { background: linear-gradient(135deg, #E07A3D 0%, #B8521F 100%); }
+  .twin-card.cool   { background: linear-gradient(135deg, #2563EB 0%, #1E3A8A 100%); }
+  .twin-card::after {
+    content: ''; position: absolute; right: -60px; bottom: -60px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: rgba(255,255,255,0.07); pointer-events: none;
+  }
+  .twin-card-eyebrow {
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    opacity: 0.92; margin-bottom: 26px;
+  }
+  .twin-card-title {
+    font-size: clamp(30px, 4.2vw, 42px); font-weight: 900;
+    line-height: 1.2; margin-bottom: 18px; color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .twin-card-meta {
+    font-size: 14.5px; opacity: 0.88; margin-bottom: 22px;
+    line-height: 1.6; font-weight: 600;
+  }
+  .twin-card-quote {
+    font-size: 16.5px; line-height: 1.7; opacity: 0.94;
+    margin-bottom: 32px; flex: 1; font-style: italic;
+  }
+  .twin-card-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    align-self: flex-start;
+    padding: 12px 26px; border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 999px; font-size: 14.5px; font-weight: 600;
+    color: #fff; background: rgba(255,255,255,0.1);
+    transition: background .2s;
+  }
+  .twin-card:hover .twin-card-cta { background: rgba(255,255,255,0.22); }
+
+  /* ===== RESPONSIVE ===== */
+  /* Desktop: 2-col Day2 notes grid (not inline style, safe for mobile override) */
+  .notes-grid-2col { grid-template-columns: repeat(2, 1fr); }
+  .notes-grid-3col { grid-template-columns: repeat(3, 1fr); }
+
+  @media (max-width: 720px) {
+    /* nav */
+    .nav-inner { padding: 0 16px; }
+    .nav-links { gap: 12px; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; font-size: 12px; }
+    .nav-links::-webkit-scrollbar { display: none; }
+    /* hero */
+    .hero { padding: 100px 20px 40px; }
+    .hero h1 { font-size: 34px; letter-spacing: -1px; }
+    .hero-sub { font-size: 15px; line-height: 1.65; }
+    .hero-meta { gap: 22px; }
+    .hero-stat-num { font-size: 26px; }
+    /* sections */
+    section { padding: 52px 20px; }
+    .section-title { font-size: 24px; letter-spacing: -0.5px; }
+    .section-lead { font-size: 15px; }
+    /* students */
+    .student-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .student-card { padding: 16px 12px; }
+    .student-avatar { width: 52px; height: 52px; font-size: 18px; }
+    /* galaxy banner */
+    .galaxy-banner { padding: 18px 20px; gap: 12px; }
+    .galaxy-text h3 { font-size: 14px; }
+    /* notes */
+    .notes-grid { grid-template-columns: 1fr; }
+    .notes-grid-2col { grid-template-columns: 1fr; }
+    .notes-grid-3col { grid-template-columns: 1fr; }
+    .note-card { padding: 20px 20px; }
+    .note-title { font-size: 16px; }
+    /* twin */
+    .twin-section { margin-top: 44px; }
+    .twin-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 28px; }
+    .twin-card { padding: 36px 28px 30px; min-height: 300px; border-radius: 20px; }
+    .twin-card-eyebrow { font-size: 12px; margin-bottom: 20px; }
+    .twin-card-title { font-size: 28px; margin-bottom: 14px; }
+    .twin-card-meta { font-size: 13.5px; margin-bottom: 18px; }
+    .twin-card-quote { font-size: 15px; margin-bottom: 24px; }
+    .twin-card-cta { font-size: 13.5px; padding: 11px 22px; }
+    /* arsenal */
+    .arsenal-grid { grid-template-columns: 1fr; }
+    /* moments teaser */
+    .moments-photo-strip { height: 220px; grid-template-columns: 1fr; }
+    .moments-photo-strip img:nth-child(n+2) { display: none; }
+    .moments-teaser-body { padding: 22px 20px 26px; }
+    .moments-teaser-title { font-size: 21px; }
+    .moments-teaser-stats { gap: 18px; }
+    .moments-teaser-stat-num { font-size: 18px; }
+    .moments-teaser-btn { width: 100%; justify-content: center; text-align: center; }
+    /* cert */
+    .cert-duo { grid-template-columns: 1fr; }
+    /* quotes */
+    .quotes-banner { padding: 36px 22px; border-radius: 16px; }
+    .quotes-banner p { font-size: 17px; }
+    .quote-wall { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 400px) {
+    .hero h1 { font-size: 28px; }
+    .hero-eyebrow { font-size: 10px; letter-spacing: 1px; padding: 6px 12px; }
+    .section-title { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner"><a href="#" class="nav-brand"><span class="nav-dot"></span><span>一号位 AI 工作坊</span></a><ul class="nav-links"><li><a href="index.html#students">学员</a></li><li><a href="index.html#notes">课程笔记</a></li><li><a href="#arsenal">武器库</a></li><li><a href="index.html#connections">连接机会</a></li></ul></div></nav>
+<header class="hero"><span class="hero-eyebrow">COHORT 03 · ARSENAL</span><h1>工作坊武器库</h1><p class="hero-sub">沿用第二次工作坊的武器库设计形式：把 Skill、模板、工具和高质量信源放在同一套可展开、可复制的卡片里。</p></header>
+
+<section id="arsenal">
+<div class="section-inner">
+  <div class="section-eyebrow">武器库</div>
+  <h2 class="section-title">Cohort 04 工作坊武器库</h2>
+  <p class="section-lead">每一期都可以复用的 Claude Code Skills、Vivian 精选系列、独立工具、高质量信息源——按第二次工作坊的武器库样式完整保留。</p>
+
+  <div class="arsenal-grid">
+
+    <div class="arsenal-category">
+      <div class="cat-icon">⚡</div>
+      <div class="cat-name">Claude Code Skills</div>
+      <div class="cat-desc">可直接安装使用的 Skill 集合 · Vivian 实战用过</div>
+      <div class="tool-list">
+
+        <div class="prompt-item">
+          <div class="prompt-header">
+            <span class="tool-emoji">📮</span>
+            <div class="tool-body">
+              <div class="tool-name">一键发布公众号 Skill · Vivian 自建</div>
+              <div class="tool-desc">Markdown 文章 → 自动排版 → 推送微信公众号草稿箱</div>
+              <button class="prompt-toggle">查看 Skill 指令 ↓</button>
+            </div>
+          </div>
+          <pre class="prompt-content">---
+name: publish-wechat
+description: 将 Markdown 文章一键排版成符合微信公众号风格的 HTML，并通过微信公众号 API 推送到草稿箱，实现零手动排版发布
+triggers: ["发公众号", "推公众号", "一键发布", "公众号发布", "帮我发公众号"]
+---
+
+## 角色定义
+你是 Vivian 的公众号发布助手。你熟悉微信公众号的排版规范、阅读习惯、视觉美感，能把 Markdown 文章转成开箱即用的公众号 HTML，并调用微信公众号 API 推送到草稿箱。
+
+## 处理流程
+1. 读取 @USER.md 获取作者风格偏好
+2. 读取目标 Markdown 文章
+3. 对照 Vivian 历史公众号文章风格（如有样本文件则 @ 进来）
+4. 生成符合微信公众号规范的 HTML：
+   - 字体：微信默认字体，正文 16px/17px，行高 1.8
+   - 配色：主色调与个人 IP 色系一致
+   - 段落间距：清晰呼吸感，不拥挤
+   - 标题层级：清晰区分 H1/H2/H3 视觉差异
+   - 图片占位：如有图片说明则生成占位提示
+5. 生成 10 个备选标题（含吸睛钩子词 + SEO 关键词）
+6. 生成 3 个朋友圈转发文案（150字以内，带话题标签）
+7. 调用微信公众号 API 推送到草稿箱（需提前配置 appid + secret）
+
+## 输出规范
+- 先输出 10 个标题候选，等待确认后再处理正文
+- HTML 文件命名：YYYY-MM-DD-文章关键词.html
+- 草稿箱推送成功后输出：文章标题 + 草稿 ID + 预览链接
+
+## 质量标准
+- 标题必须有 3 个以上带数字的版本（数字标题点击率更高）
+- 正文不允许有"首先/其次/最后"等模板词汇
+- 每段不超过 150 字，超过自动拆段</pre>
+          <button class="prompt-copy-btn">复制 Skill</button>
+        </div>
+
+        <div class="prompt-item">
+          <div class="prompt-header">
+            <span class="tool-emoji">🎙️</span>
+            <div class="tool-body">
+              <div class="tool-name">Claude Code 录音 Skill · Vivian 自建</div>
+              <div class="tool-desc">实时录音 → 转写 → 自动生成会议笔记 / 学习摘要</div>
+              <button class="prompt-toggle">查看 Skill 指令 ↓</button>
+            </div>
+          </div>
+          <pre class="prompt-content">---
+name: recording
+description: 启动 Mac 麦克风录音并实时转写，停止后自动生成会议纪要或学习笔记骨架
+triggers: ["录音", "开始录音", "录音，", "帮我录音", "recording"]
+---
+
+## 角色定义
+你是 Vivian 的录音助手。当听到「录音」触发词时，立刻启动 Mac 麦克风录音 + 实时转写流程；中途说「总结」做中场聚合（不停录）；说「停」时停止录音并自动生成结构化笔记。
+
+## 触发规则
+- 「录音，[主题]」→ 启动录音，以主题命名文件
+- 「总结」→ 不停录，输出到目前为止的核心要点（5条以内）
+- 「停」→ 停止录音，进入后处理流水线
+
+## 后处理流程（说「停」后自动触发）
+1. 调用 Whisper 做精准转写（优先于实时转写版本）
+2. 生成会议笔记骨架：
+   - 📋 核心结论（3-5条）
+   - ✅ 行动项（人 + 事 + DDL 格式）
+   - 🔑 关键决策
+   - ❓ 待确认事项
+3. 文件存储到 vault/recordings/YYYY-MM-DD-主题.md
+
+## 输出规范
+- 行动项格式：【人名】+ 【做什么】+ 【什么时候前】
+- 关键结论每条控制在 50 字以内
+- 如果有多个发言人，标注发言者姓名</pre>
+          <button class="prompt-copy-btn">复制 Skill</button>
+        </div>
+
+        <div class="tool-item">
+          <span class="tool-emoji">🏛️</span>
+          <div class="tool-body">
+            <div class="tool-name">Anthropic 官方 Skills</div>
+            <div class="tool-desc">官方出品标准 Skill 库，最权威的参考模板</div>
+            <a href="https://github.com/anthropics/claude-code-skills" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">🌟</span>
+          <div class="tool-body">
+            <div class="tool-name">Awesome Claude Code</div>
+            <div class="tool-desc">社区精选 Claude Code Skill 合集 · 持续更新</div>
+            <a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">🤖</span>
+          <div class="tool-body">
+            <div class="tool-name">Awesome Agent Skills</div>
+            <div class="tool-desc">Agent 专项 Skill 资源库</div>
+            <a href="https://github.com/libukai/awesome-agent-skills" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="arsenal-category">
+      <div class="cat-icon">📚</div>
+      <div class="cat-name">精选资源库</div>
+      <div class="cat-desc">工作坊同款 · 一号位 AI 时代值得收藏的精选资源</div>
+      <div class="tool-list">
+
+        <div class="intel-section-label">🧠 AI 思维框架</div>
+        <div class="tool-item">
+          <span class="tool-emoji">🎓</span>
+          <div class="tool-body">
+            <div class="tool-name">Karpathy · LLM101n</div>
+            <div class="tool-desc">Andrej Karpathy 开源 LLM 教程 · 理解 AI 底层逻辑</div>
+            <a href="https://github.com/karpathy/LLM101n" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">🏗️</span>
+          <div class="tool-body">
+            <div class="tool-name">Garry Tan · YC CLAUDE.md</div>
+            <div class="tool-desc">YC 掌门人的 Claude Code 配置模板 · 一号位 AI 系统必参考</div>
+            <a href="https://github.com/garrytan" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+
+        <div class="intel-section-label" style="margin-top:16px;">🎨 视觉生成（Zara Zhang 系列）</div>
+        <div class="tool-item">
+          <span class="tool-emoji">🖼️</span>
+          <div class="tool-body">
+            <div class="tool-name">Frontend Slides</div>
+            <div class="tool-desc">用 Claude Code 生成漂亮前端幻灯片 · 工作坊演示同款</div>
+            <a href="https://github.com/zarazhangrui/frontend-slides" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">💎</span>
+          <div class="tool-body">
+            <div class="tool-name">Beautiful HTML Templates</div>
+            <div class="tool-desc">高质量 HTML 视觉模板集合 · 快速出好看的交付物</div>
+            <a href="https://github.com/zarazhangrui/beautiful-html-templates" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arsenal-category">
+      <div class="cat-icon">🔧</div>
+      <div class="cat-name">实用工具</div>
+      <div class="cat-desc">课上实际演示的应用与工作流桥接工具</div>
+      <div class="tool-list">
+
+        <div class="intel-section-label" style="margin-bottom:4px;">🛠 应用 &amp; 桥接</div>
+        <div class="tool-item">
+          <span class="tool-emoji">💊</span>
+          <div class="tool-body">
+            <div class="tool-name">Amphetamine</div>
+            <div class="tool-desc">防止 Mac 休眠，跑 Agent 任务时必备</div>
+            <a href="https://apps.apple.com/app/amphetamine/id937984704" target="_blank" class="tool-link">App Store →</a>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">🏃</span>
+          <div class="tool-body">
+            <div class="tool-name">Hermes Agent</div>
+            <div class="tool-desc">轻量级 AI Agent 运行框架</div>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">📎</span>
+          <div class="tool-body">
+            <div class="tool-name">Web Clipper</div>
+            <div class="tool-desc">一键剪藏网页到 Obsidian · 知识库建设必备插件</div>
+            <a href="https://obsidian.md/clipper" target="_blank" class="tool-link">下载插件 →</a>
+          </div>
+        </div>
+        <div class="tool-item">
+          <span class="tool-emoji">🪶</span>
+          <div class="tool-body">
+            <div class="tool-name">Feishu Claude Code Bridge</div>
+            <div class="tool-desc">飞书 × Claude Code 工作流桥接 · 把 AI 输出直接推进飞书</div>
+            <a href="https://github.com/zarazhangrui/feishu-claude-code-bridge" target="_blank" class="tool-link">GitHub →</a>
+          </div>
+        </div>
+
+        <div class="intel-section-label" style="margin-top:14px; margin-bottom:4px;">📝 SKILL.md 官方格式模板</div>
+        <div class="prompt-item">
+          <div class="prompt-header">
+            <span class="tool-emoji">📝</span>
+            <div class="tool-body">
+              <div class="tool-name">SKILL.md 格式模板</div>
+              <div class="tool-desc">Anthropic 官方标准格式 · 复制后填空即可</div>
+              <button class="prompt-toggle">查看模板 ↓</button>
+            </div>
+          </div>
+          <pre class="prompt-content">---
+name: 你的-skill-名称（英文+连字符）
+description: 一句话说明：这个Skill在什么场景下做什么事情
+triggers: ["触发词1", "触发词2", "触发词3"]
+---
+
+## 角色定义
+你是 [用户名] 的 [角色]。当 [触发词] 出现时，执行以下工作流。
+
+## 工作流程
+1. [第一步]——对应 3C 卡片 C2 的步骤
+2. [第二步]
+3. [第三步]
+（步骤越细，AI 执行越稳定）
+
+## 输出规范
+- 格式：[Markdown / HTML / 飞书文档 / 纯文本]
+- 长度：[字数限制 / 页数要求]
+- 必含字段：[字段1 / 字段2 / 字段3]
+
+## 约束
+- ❌ 不要：[禁止事项，例：不要编造数据]
+- ✅ 必须：[强制要求，例：每条结论必须有依据]
+- 质量标准：[输出可直接使用，不需要二次编辑]</pre>
+          <button class="prompt-copy-btn">复制模板</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="arsenal-category">
+      <div class="cat-icon">📡</div>
+      <div class="cat-name">高质量信息源</div>
+      <div class="cat-desc">AI 时代一号位值得关注的信号源</div>
+      <div class="tool-list" style="gap:0;">
+
+        <div class="intel-platform-badge">微信公众号</div>
+        <div class="intel-item"><span class="intel-name">量子位</span><span class="intel-tag">AI 资讯</span></div>
+        <div class="intel-item"><span class="intel-name">卡兹克</span><span class="intel-tag">AI 实战</span></div>
+        <div class="intel-item"><span class="intel-name">硅星人Pro</span><span class="intel-tag">硅谷深度</span></div>
+        <div class="intel-item"><span class="intel-name">张小珺Jùn</span><span class="intel-tag">Anthropic</span></div>
+        <div class="intel-item"><span class="intel-name">科技早知道</span><span class="intel-tag">每日早报</span></div>
+        <div class="intel-item"><span class="intel-name">Vivian的AI进化论</span><span class="intel-tag self">本人</span></div>
+
+        <div class="intel-platform-badge" style="margin-top:14px;">X · Twitter</div>
+        <div class="intel-item"><span class="intel-name">@karpathy</span><span class="intel-tag">AI 教育者</span></div>
+        <div class="intel-item"><span class="intel-name">@sama</span><span class="intel-tag">OpenAI</span></div>
+        <div class="intel-item"><span class="intel-name">@garrytan</span><span class="intel-tag">YC 掌门</span></div>
+        <div class="intel-item"><span class="intel-name">@zarazhangrui</span><span class="intel-tag">AI 开发</span></div>
+
+        <div class="intel-platform-badge" style="margin-top:14px;">YouTube</div>
+        <div class="intel-item"><span class="intel-name">Andrej Karpathy</span><span class="intel-tag">技术科普</span></div>
+        <div class="intel-item"><span class="intel-name">Y Combinator</span><span class="intel-tag">创业方法</span></div>
+        <div class="intel-item"><span class="intel-name">Lex Fridman</span><span class="intel-tag">深度访谈</span></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+
+<footer><div class="footer-inner"><div class="footer-brand">一号位 AI 工作坊 · Cohort 04</div><div class="footer-meta">2026.06.25–26 · 学员专享资料 · 请勿外传<br>主理人：<a href="https://vivianai.cn">Vivian（肖荔）</a> · 一号位 AI 俱乐部</div></div></footer>
+<script>
+// ===== 提示词模板：展开 + 一键复制 =====
+document.querySelectorAll('.prompt-item').forEach(function(item) {
+  var toggleBtn = item.querySelector('.prompt-toggle');
+  var content   = item.querySelector('.prompt-content');
+  var copyBtn   = item.querySelector('.prompt-copy-btn');
+
+  if (toggleBtn && content) {
+    toggleBtn.addEventListener('click', function() {
+      var isOpen = content.style.display === 'block';
+      content.style.display = isOpen ? 'none' : 'block';
+      toggleBtn.textContent  = isOpen ? '查看提示词 ↓' : '收起 ↑';
+      if (!isOpen && copyBtn) copyBtn.style.display = 'inline-block';
+      if (isOpen  && copyBtn) copyBtn.style.display = 'none';
+    });
+  }
+
+  if (copyBtn && content) {
+    copyBtn.style.display = 'none'; // hide until expanded
+    copyBtn.addEventListener('click', function() {
+      var text = content.textContent.trim();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function() {
+          copyBtn.textContent = '✓ 已复制！';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = '复制提示词';
+            copyBtn.classList.remove('copied');
+          }, 2200);
+        });
+      } else {
+        // fallback for older browsers
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        copyBtn.textContent = '✓ 已复制！';
+        copyBtn.classList.add('copied');
+        setTimeout(function() {
+          copyBtn.textContent = '复制提示词';
+          copyBtn.classList.remove('copied');
+        }, 2200);
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>
