@@ -1,5 +1,5 @@
 ---
-title: 05-7天Action行动转化包
+title: Action-7天行动转化包
 source: 第三次私董会现场录音
 date: 2026-08-12
 ---

@@ -1,10 +1,10 @@
 ---
-title: 03-从个人10倍到Agent-readable组织
+title: 03-Vivian分享-从个人10倍到Agent-readable组织
 source: 第三次私董会现场录音
 date: 2026-08-12
 ---
 
-# 03-从个人10倍到Agent-readable组织
+# Vivian 分享：从个人 10× 到 Agent-readable 组织
 
 Vivian 的主题分享：个人提效之后，组织如何重建会议、数据、招聘、协作与公开学习机制。
 
