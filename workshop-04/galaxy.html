@@ -27,6 +27,8 @@
   .nav-link:hover{color:#fff}
   .present-btn{border:0;border-radius:999px;background:var(--lime);color:#111;padding:10px 17px;font-size:13px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:8px}
   .present-btn:hover{transform:translateY(-1px)}
+  .qr-btn{border:1px solid rgba(255,255,255,.22);border-radius:999px;background:transparent;color:#fff;padding:9px 14px;font-size:12px;font-weight:850;cursor:pointer;white-space:nowrap}
+  .qr-btn:hover{border-color:var(--lime);color:var(--lime)}
 
   .hero{background:var(--ink);color:#fff;min-height:720px;position:relative;overflow:hidden}
   .hero::before{content:"";position:absolute;width:620px;height:620px;border-radius:50%;background:var(--blue);filter:blur(110px);opacity:.24;right:-170px;top:-230px}
@@ -108,6 +110,15 @@
   .footer{background:#111;color:rgba(255,255,255,.55);padding:28px 30px;font-size:12px}
   .footer-inner{max-width:1380px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
+  .qr-modal{position:fixed;inset:0;z-index:190;background:rgba(0,0,0,.78);display:none;place-items:center;padding:24px;backdrop-filter:blur(12px)}
+  .qr-modal.open{display:grid}
+  .qr-card{width:min(440px,100%);background:#fff;color:#111;padding:34px;position:relative;text-align:center;box-shadow:0 30px 100px rgba(0,0,0,.5)}
+  .qr-card h2{font-size:29px;letter-spacing:-.04em;margin:8px 0 20px}
+  .qr-card img{width:260px;height:260px;margin:0 auto 18px;border:1px solid #ddd}
+  .qr-card code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:#666;word-break:break-all}
+  .qr-close{position:absolute;right:12px;top:12px;width:36px;height:36px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:20px;cursor:pointer}
+  .qr-hint{font-size:13px;color:#666;line-height:1.6;margin-bottom:18px}
+
   .stage{position:fixed;inset:0;z-index:200;background:#0a0a0a;color:#fff;display:none;grid-template-rows:64px minmax(0,1fr) 104px}
   .stage.open{display:grid}
   .stage-top{display:flex;align-items:center;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.12);gap:16px}
@@ -139,7 +150,7 @@
     .intro,.insight-head{grid-template-columns:1fr;gap:24px}.embed-fan{opacity:.55;width:60%}.embed-copy{max-width:520px}
   }
   @media(max-width:700px){
-    .nav-inner{height:56px;padding:0 16px}.nav-link{display:none}.brand{font-size:11px}.present-btn{padding:9px 12px;font-size:11px}
+    .nav-inner{height:56px;padding:0 16px}.nav-link,.qr-btn{display:none}.brand{font-size:11px}.present-btn{padding:9px 12px;font-size:11px}
     .hero-inner{padding:74px 18px 38px}.hero h1{font-size:58px}.hero-copy{font-size:16px}.hero-stats{gap:26px}.hero-stack{height:340px}.stack-note{top:42%;right:1%;font-size:10px}.hero-shot{border-width:5px}
     .page-shell{padding:62px 16px 80px}.intro{margin-bottom:34px}.filter-note{width:100%;margin:8px 0 0}.gallery-grid{gap:16px}.work-card,.work-card.featured{grid-column:span 12}.featured .shot-wrap{aspect-ratio:16/10}.work-body{padding:19px}.work-title{font-size:22px}
     .insight{margin-top:74px;padding-top:58px}.insight-grid{grid-template-columns:1fr}.insight-card{border-right:0;border-bottom:1px solid var(--line);min-height:190px}.insight-card:last-child{border-bottom:0}.insight-card h3{margin-top:28px}.closing{margin-top:65px;padding:34px 24px;display:block}.closing p{margin-top:18px}
@@ -157,6 +168,7 @@
     <a class="nav-link" href="index.html">返回工作坊首页</a>
     <a class="nav-link" href="#works">作品</a>
     <a class="nav-link" href="#insights">观察</a>
+    <button class="qr-btn" id="qrBtn" type="button">▦ 手机扫码</button>
     <button class="present-btn" id="presentBtn" type="button"><span>▶</span> 大屏放映</button>
   </div>
 </nav>
@@ -187,8 +199,8 @@
       </div>
       <div class="hero-stats">
         <div class="stat"><b>10</b><span>课堂作品</span></div>
-        <div class="stat"><b>9</b><span>在线站点</span></div>
-        <div class="stat"><b>1</b><span>链接待补</span></div>
+        <div class="stat"><b>10</b><span>在线站点</span></div>
+        <div class="stat"><b>4</b><span>表达方向</span></div>
         <div class="stat"><b>1上午</b><span>从 Context 到上线</span></div>
       </div>
     </div>
@@ -220,9 +232,9 @@
   </div>
 
   <div class="gallery-grid" id="gallery">
-    <article class="work-card featured" data-category="personal" data-title="汪丽娜｜创始人与 AI 增长" data-desc="把创始人身份、增长方法与 AI 协同压缩成一条有力量的个人定位。" data-image="assets/learner-sites/wang-lina.webp" data-url="">
-      <figure class="shot-wrap preview-trigger"><img src="assets/learner-sites/wang-lina.webp" alt="汪丽娜个人网站课堂截图" loading="eager"><span class="work-number">01</span><span class="work-status">课堂截图 · 链接待补</span></figure>
-      <div class="work-body"><div class="work-meta"><span class="tag red">Founder</span><span class="tag">个人表达</span></div><h3 class="work-title">汪丽娜｜创始人与 AI 增长</h3><p class="work-desc">黑白红的高反差视觉，把“高人效小团队”和“不可替代真价值”变成第一屏就能记住的定位。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览 ↗</button><span class="no-link">原站链接待补</span></div></div>
+    <article class="work-card featured" data-category="personal" data-title="汪丽娜｜创始人与 AI 增长" data-desc="把创始人身份、增长方法与 AI 协同压缩成一条有力量的个人定位。" data-image="assets/learner-sites/wang-lina.webp" data-url="https://wang-lina-growth.hexiaobo.chatgpt.site/">
+      <figure class="shot-wrap preview-trigger"><img src="assets/learner-sites/wang-lina.webp" alt="汪丽娜个人网站课堂截图" loading="eager"><span class="work-number">01</span><span class="work-status">Online</span></figure>
+      <div class="work-body"><div class="work-meta"><span class="tag red">Founder</span><span class="tag">个人表达</span></div><h3 class="work-title">汪丽娜｜创始人与 AI 增长</h3><p class="work-desc">黑白红的高反差视觉，把“高人效小团队”和“不可替代真价值”变成第一屏就能记住的定位。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览</button><a class="work-open" href="https://wang-lina-growth.hexiaobo.chatgpt.site/" target="_blank" rel="noopener">打开原站 ↗</a></div></div>
     </article>
 
     <article class="work-card" data-category="role" data-title="庄珂嘉｜商用制冷阀件销售" data-desc="区域、客户、产品与增长主线，一屏建立 B2B 专业可信度。" data-image="assets/learner-sites/zhuang-kejia.webp" data-url="https://012455d765fb494083a27a4d5d45dd61.app.workbuddy.link/">
@@ -250,14 +262,14 @@
       <div class="work-body"><div class="work-meta"><span class="tag blue">Valuation</span><span class="tag">专业信任</span></div><h3 class="work-title">刘鋆睿｜Valuation Advisory</h3><p class="work-desc">“让价值有据可循”成为整站锚点，并把评估范围、职业经历、公开项目与可标准化的 AI 工作链路串在一起。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览</button><a class="work-open" href="https://sherlock-liu-valuation.gangadyalbrunetti.chatgpt.site/" target="_blank" rel="noopener">打开原站 ↗</a></div></div>
     </article>
 
-    <article class="work-card featured" data-category="business" data-title="上恒 STF｜企业官网" data-desc="从公司介绍升级为产品、行业、选型、替代评估和工程支持入口。" data-image="assets/learner-sites/stf-company.webp" data-url="https://sh-stf.vercel.app/">
+    <article class="work-card featured" data-category="business" data-title="Steven｜上恒 STF 企业官网" data-desc="从公司介绍升级为产品、行业、选型、替代评估和工程支持入口。" data-image="assets/learner-sites/stf-company.webp" data-url="https://sh-stf.vercel.app/">
       <figure class="shot-wrap preview-trigger"><img src="assets/learner-sites/stf-company.webp" alt="上海恒温控制器厂企业网站预览"><span class="work-number">07</span><span class="work-status">Team Build · Online</span></figure>
-      <div class="work-body"><div class="work-meta"><span class="tag green">Enterprise</span><span class="tag">团队作品</span></div><h3 class="work-title">上恒 STF｜企业官网</h3><p class="work-desc">不只讲企业历史，而是按客户任务组织产品、行业、资料、选型、替代评估与工程师联系，让官网开始承担业务入口。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览</button><a class="work-open" href="https://sh-stf.vercel.app/" target="_blank" rel="noopener">打开原站 ↗</a></div></div>
+      <div class="work-body"><div class="work-meta"><span class="tag green">Enterprise</span><span class="tag">团队作品</span></div><h3 class="work-title">Steven｜上恒 STF 企业官网</h3><p class="work-desc">不只讲企业历史，而是按客户任务组织产品、行业、资料、选型、替代评估与工程师联系，让官网开始承担业务入口。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览</button><a class="work-open" href="https://sh-stf.vercel.app/" target="_blank" rel="noopener">打开原站 ↗</a></div></div>
     </article>
 
-    <article class="work-card" data-category="role" data-title="Janey｜成本、流程与制造运营" data-desc="把成本、价格、交付与跨部门流程统一到可执行的事实里。" data-image="assets/learner-sites/janey-qian.webp" data-url="https://janey-cost-operations.stevendu123456.chatgpt.site/janey">
-      <figure class="shot-wrap preview-trigger"><img src="assets/learner-sites/janey-qian.webp" alt="Janey 财务与制造运营网站预览"><span class="work-number">08</span><span class="work-status">Online</span></figure>
-      <div class="work-body"><div class="work-meta"><span class="tag blue">Operations</span><span class="tag">财务管理</span></div><h3 class="work-title">Janey｜成本、流程与制造运营</h3><p class="work-desc">把财务从“记录结果”推进到“参与创造秩序”，围绕成本、价格、排程、采购追料和异常闭环形成完整叙事。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览</button><a class="work-open" href="https://janey-cost-operations.stevendu123456.chatgpt.site/janey" target="_blank" rel="noopener">打开原站 ↗</a></div></div>
+    <article class="work-card" data-category="role" data-title="钱殷（Janey）｜成本、流程与制造运营" data-desc="把成本、价格、交付与跨部门流程统一到可执行的事实里。" data-image="assets/learner-sites/janey-qian.webp" data-url="https://janey-cost-operations.stevendu123456.chatgpt.site/janey">
+      <figure class="shot-wrap preview-trigger"><img src="assets/learner-sites/janey-qian.webp" alt="钱殷 Janey 财务与制造运营网站预览"><span class="work-number">08</span><span class="work-status">Online</span></figure>
+      <div class="work-body"><div class="work-meta"><span class="tag blue">Operations</span><span class="tag">财务管理</span></div><h3 class="work-title">钱殷（Janey）｜成本、流程与制造运营</h3><p class="work-desc">把财务从“记录结果”推进到“参与创造秩序”，围绕成本、价格、排程、采购追料和异常闭环形成完整叙事。</p><div class="work-actions"><button class="work-preview preview-trigger" type="button">大屏预览</button><a class="work-open" href="https://janey-cost-operations.stevendu123456.chatgpt.site/janey" target="_blank" rel="noopener">打开原站 ↗</a></div></div>
     </article>
 
     <article class="work-card" data-category="business" data-title="emoju 逸莫集｜品牌主页" data-desc="把产品风味、渠道布局、内容策略和目标人群变成可滚动的品牌故事。" data-image="assets/learner-sites/emoju.webp" data-url="https://emojukonjac.danielfilali816.chatgpt.site/">
@@ -289,6 +301,17 @@
 
 <footer class="footer"><div class="footer-inner"><span>一号位 AI 工作坊 · Cohort 04 · 课堂作品展</span><span>2026.08.22 · Shanghai · 持续更新</span></div></footer>
 
+<div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" aria-label="手机扫码打开作品展">
+  <div class="qr-card">
+    <button class="qr-close" id="qrClose" type="button" aria-label="关闭">×</button>
+    <div class="section-kicker">SCAN TO OPEN</div>
+    <h2>手机扫码，带走作品展</h2>
+    <p class="qr-hint">适合下午大屏展示时邀请全场扫码，手机可继续查看原站。</p>
+    <img src="assets/gallery-qr.png" alt="第四期课堂网站作品展二维码">
+    <code>vivianai.cn/workshop-04/galaxy.html</code>
+  </div>
+</div>
+
 <div class="stage" id="stage" role="dialog" aria-modal="true" aria-label="作品放映模式">
   <div class="stage-top"><strong>COHORT 04 · 课堂作品展</strong><span class="stage-count" id="stageCount">01 / 10</span><span class="stage-spacer"></span><span class="stage-count">← → 切换 · ESC 退出</span><button class="stage-close" id="stageClose" type="button" aria-label="关闭">×</button></div>
   <div class="stage-main"><button class="stage-arrow" id="stagePrev" type="button" aria-label="上一张">‹</button><div class="stage-media"><img id="stageImage" src="" alt=""></div><button class="stage-arrow" id="stageNext" type="button" aria-label="下一张">›</button></div>
@@ -307,6 +330,7 @@
   }));
 
   const works=cards.map(card=>({title:card.dataset.title,desc:card.dataset.desc,image:card.dataset.image,url:card.dataset.url||''}));
+  const qrModal=document.getElementById('qrModal');
   const stage=document.getElementById('stage');
   const stageImage=document.getElementById('stageImage');
   const stageTitle=document.getElementById('stageTitle');
@@ -322,6 +346,11 @@
   function openStage(index=0){current=index;renderStage();stage.classList.add('open');document.body.style.overflow='hidden';stage.querySelector('.stage-close').focus();}
   function closeStage(){stage.classList.remove('open');document.body.style.overflow='';}
   function moveStage(delta){current=(current+delta+works.length)%works.length;renderStage();}
+  function openQr(){qrModal.classList.add('open');document.body.style.overflow='hidden';document.getElementById('qrClose').focus();}
+  function closeQr(){qrModal.classList.remove('open');document.body.style.overflow='';}
+  document.getElementById('qrBtn').addEventListener('click',openQr);
+  document.getElementById('qrClose').addEventListener('click',closeQr);
+  qrModal.addEventListener('click',event=>{if(event.target===qrModal) closeQr();});
   document.getElementById('presentBtn').addEventListener('click',()=>openStage(0));
   document.getElementById('presentHero').addEventListener('click',()=>openStage(0));
   document.getElementById('stageClose').addEventListener('click',closeStage);
@@ -329,6 +358,7 @@
   document.getElementById('stageNext').addEventListener('click',()=>moveStage(1));
   cards.forEach((card,index)=>card.querySelectorAll('.preview-trigger').forEach(el=>el.addEventListener('click',()=>openStage(index))));
   document.addEventListener('keydown',event=>{
+    if(qrModal.classList.contains('open')){if(event.key==='Escape') closeQr();return;}
     if(!stage.classList.contains('open')) return;
     if(event.key==='Escape') closeStage();
     if(event.key==='ArrowLeft') moveStage(-1);
