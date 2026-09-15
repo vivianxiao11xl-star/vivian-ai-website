@@ -1,4 +1,4 @@
-/* 原图链接提供无 JavaScript 回退；大图支持键盘与触摸。 */
+/* 网页大图链接提供无 JavaScript 回退；大图支持键盘与触摸。 */
 (() => {
   const links = Array.from(document.querySelectorAll('.album-open'));
   const dialog = document.querySelector('.photo-dialog');
