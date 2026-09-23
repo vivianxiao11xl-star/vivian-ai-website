@@ -3,7 +3,7 @@
 - Build: Staticrypt 3.5.4
 - Cohort: Cohort 06
 - Password gate: Cohort 01 dark-star template
-- Protected pages: 7
+- Protected pages: 9
 - Remember window: 7 days
 - Source of truth: the matching `workshop-*-source/` directory in the private vault
 
