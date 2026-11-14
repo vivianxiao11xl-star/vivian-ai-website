@@ -1,7 +1,7 @@
 # 一号位 AI 工作坊网站部署版
 
 - Build: Staticrypt 3.5.4
-- Cohort: 金匙医学 2026.11.14–15
+- Cohort: 金匙医学 11月14–15日
 - Password gate: Cohort 01 dark-star template
 - Protected pages: 13
 - Remember window: 7 days
