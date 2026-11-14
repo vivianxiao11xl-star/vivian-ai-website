@@ -3,7 +3,7 @@
 - Build: Staticrypt 3.5.4
 - Cohort: 金匙医学 11月14–15日
 - Password gate: Cohort 01 dark-star template
-- Protected pages: 13
+- Protected pages: 15
 - Remember window: 7 days
 - Source of truth: the matching `workshop-*-source/` directory in the private vault
 
