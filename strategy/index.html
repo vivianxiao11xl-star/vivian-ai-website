@@ -402,7 +402,7 @@ function stopMic(){if(listening&&rec)rec.stop()}
 function render(){
   stopMic();
   const app=$("#app");
-  const top=`<div class="top noprint"><div class="brand">创始人战略自问<small>你的战略，一页纸说清楚</small></div>
+  const top=`<div class="top noprint"><div class="brand" onclick="go('home')" style="cursor:pointer" title="回到首页">← 创始人战略自问<small>回到首页</small></div>
    <div>${st.view!=="home"?`<a class="link" href="map.html" target="_blank" style="text-decoration:none">学习图</a><button class="link" onclick="go('overview')">全部问题</button><button class="link" onclick="go('page')">看一页纸</button>`:""}</div></div>`;
   app.classList.toggle("home",st.view==="home");
   if(st.view==="home") app.innerHTML=home();
@@ -532,6 +532,7 @@ function md(){
 function copyMd(){navigator.clipboard.writeText(md()).then(()=>toast("已复制"),()=>toast("复制失败，请用下载"))}
 function dlMd(){const b=new Blob([md()],{type:"text/markdown"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=(st.company||"战略")+"-一页纸.md";a.click()}
 
+st.view="home"; // 每次打开都从首页开始，首页有“继续梳理”按钮
 document.addEventListener("keydown",e=>{if(st.view==="q"&&(e.metaKey||e.ctrlKey)&&e.key==="Enter"){next()}});
 render();
 </script>
